@@ -1,0 +1,106 @@
+/**
+@file   LuaState.hpp
+@brief  Help lua and C++.
+*/
+
+
+#ifndef _LUAPP_STATE_HPP_
+#define _LUAPP_STATE_HPP_
+
+#include "LuaAdapter.hpp"
+#include "LuaWrapper.hpp"
+
+
+namespace lua{
+
+
+//-----------------ClassTypeFilter-----------------start
+template<typename F>
+struct ClassTypeFilter{};
+
+template<typename R,typename C>
+struct ClassTypeFilter<R (C::*)()>
+{
+	typedef C ClassType;
+};
+template<typename R,typename C,typename A1>
+struct ClassTypeFilter<R (C::*)(A1)>
+{
+	typedef C ClassType;
+};
+template<typename R,typename C,typename A1,typename A2>
+struct ClassTypeFilter<R (C::*)(A1,A2)>
+{
+	typedef C ClassType;
+};
+//-----------------ClassTypeFilter-----------------end
+
+
+class State
+{
+	public:
+
+		State():hLua((lua::Handle)0)
+		{}
+
+		~State()
+		{
+			if(hLua)Drop();
+		}
+
+		/// Let lua script could use given class type.
+		template<typename C>
+		void RegisterClass(const char *class_name)
+		{
+			adapter::Adapter<C>::Register(hLua,class_name);
+		}
+
+		template<typename F>
+		void RegisterMemberFunction(const char *func_name,F fn)
+		{
+			typedef typename ClassTypeFilter<F>::ClassType C;
+			struct adapter::Adapter<C>::Pack     myF( Str(func_name),adapter::GetProxy(fn));
+			adapter::Adapter<C>::mList.push_back(myF);
+		}
+
+		template<typename F>
+		void RegisterFunction(const char *func_name,F fn)
+		{
+			wrapper::RegisterFunction(hLua,func_name,fn);
+		}
+
+		int Init()
+		{
+			hLua=lua::CreateHandle();
+			lua::OpenLibs(hLua);
+			return (int)1;
+		}
+
+		void Drop()
+		{
+			lua::DestroyHandle(hLua);
+			hLua=(lua::Handle)0;
+		}
+
+		int DoScript(const char *str)
+		{
+			lua::DoScript(hLua,str);
+			return (int)1;
+		}
+
+		int DoScript(lua::Str &str)
+		{
+			lua::DoScript(hLua,str.c_str());
+			return (int)1;
+		}
+
+	private:
+
+		lua::Handle      hLua;
+};
+
+
+
+}//namespace lua
+
+#endif//_LUAPP_STATE_HPP_
