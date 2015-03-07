@@ -5,7 +5,6 @@
 
 
 #include <cstdio>
-#include <cstdlib>
 #include "luapp.hpp"
 
 
@@ -16,7 +15,7 @@ object = MyClass()
 
 param = 6
 
-num = object:Count(param)
+num = object:Count(param,0.1,0.2,"Good"," job")
 
 print("Answer is " .. param .. "+1 = " .. num)
 
@@ -38,10 +37,19 @@ class MyClass
 			printf("do MyClass::~MyClass()\n");
 		}
 
-		lua::Int Count(lua::Int num)
+		lua::Int Count( lua::Int num01,
+		                lua::Num num02,
+		                lua::Num num03,
+		                lua::Str num04,
+		                lua::Str num05)
 		{
-			printf("do MyClass::Count()\n");
-			return num+1;
+			printf("do MyClass::Count() start\n");
+
+			printf("param2+param3=%f\n",num02+num03);
+			printf("param4+param5=%s\n",(num04+num05).c_str());
+
+			printf("do MyClass::Count() end\n");
+			return num01+1;
 		}
 };
 

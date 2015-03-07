@@ -4,7 +4,7 @@ It's a simple tool for lua. To help you using lua in C++ style. There is a featu
 - To register the class and member function into lua.
 
 ### Version
-0.0.1
+0.0.2
 
 ### License
 MIT

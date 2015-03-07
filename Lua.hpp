@@ -15,15 +15,21 @@
 
 namespace lua{
 
+/*
+Those date type have worked in luapp.
+You can't use the other date type to work with luapp.
+*/
+typedef double          Num;
+//typedef int             Bool;   Do I need it?
+typedef int             Int;
+typedef std::string     Str;
+
+
 
 typedef void* Handle;               // lua::Handle as lua_State*
 typedef int (*CFunction) (void*);   // lua::CFunction as lua_CFunction
 typedef const char* Name;
 
-typedef double          Num;
-typedef int             Bool;
-typedef int             Int;
-typedef std::string     Str;
 
 Handle  CreateHandle();
 void    DestroyHandle(Handle);
