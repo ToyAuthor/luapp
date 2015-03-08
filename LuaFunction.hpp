@@ -14,34 +14,6 @@
 namespace lua{
 
 
-//----------------------tools----------------------start
-void PushVarToLua(lua::Handle hLua,lua::Int t)
-{
-	lua::PushInteger(hLua,t);
-}
-void PushVarToLua(lua::Handle hLua,lua::Num t)
-{
-	lua::PushNumber(hLua,t);
-}
-void PushVarToLua(lua::Handle hLua,lua::Str t)
-{
-	lua::PushString(hLua,t);
-}
-void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
-{
-	*t=(lua::Int)lua::CheckInteger(hLua,i);
-}
-void CheckVarFromLua(lua::Handle hLua,lua::Num *t,int i)
-{
-	*t=(lua::Num)lua::CheckNumber(hLua,i);
-}
-void CheckVarFromLua(lua::Handle hLua,lua::Str *t,int i)
-{
-	*t=lua::CheckString(hLua,i);
-}
-//----------------------tools----------------------end
-
-
 
 template<typename R>
 struct Function{};

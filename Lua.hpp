@@ -31,6 +31,7 @@ typedef int (*CFunction) (void*);   // lua::CFunction as lua_CFunction
 typedef const char* Name;
 
 
+
 Handle  CreateHandle();
 void    DestroyHandle(Handle);
 int     PCall(        Handle,int,int,int);
@@ -66,6 +67,35 @@ int     GetTop(       Handle);
 /*
 void    Remove(       Handle,int index);             // It's doesn't work in lua v5.3.0 on Windows.
 */
+
+
+//----------------------tools----------------------start
+inline void PushVarToLua(Handle hLua,Int t)
+{
+	PushInteger(hLua,t);
+}
+inline void PushVarToLua(lua::Handle hLua,lua::Num t)
+{
+	lua::PushNumber(hLua,t);
+}
+inline void PushVarToLua(lua::Handle hLua,lua::Str t)
+{
+	lua::PushString(hLua,t);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
+{
+	*t=(lua::Int)lua::CheckInteger(hLua,i);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Num *t,int i)
+{
+	*t=(lua::Num)lua::CheckNumber(hLua,i);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Str *t,int i)
+{
+	*t=lua::CheckString(hLua,i);
+}
+//----------------------tools----------------------end
+
 
 }//namespace lua
 
