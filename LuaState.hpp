@@ -109,6 +109,27 @@ class State
 			return (int)1;
 		}
 
+		void GetGlobal(lua::Int *t,const char *name)
+		{
+			lua::GetGlobal(hLua,name);
+			*t=(lua::Int)lua::CheckInteger(hLua,-1);
+			lua::Pop(hLua,1);
+		}
+
+		void GetGlobal(lua::Num *t,const char *name)
+		{
+			lua::GetGlobal(hLua,name);
+			*t=(lua::Num)lua::CheckNumber(hLua,-1);
+			lua::Pop(hLua,1);
+		}
+
+		void GetGlobal(lua::Str *t,const char *name)
+		{
+			lua::GetGlobal(hLua,name);
+			*t=lua::CheckString(hLua,-1);
+			lua::Pop(hLua,1);
+		}
+
 	private:
 
 		lua::Handle      hLua;

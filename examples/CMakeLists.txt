@@ -1,3 +1,4 @@
 add_subdirectory(HelloWorld)
 add_subdirectory(FunctionIntoLua)
 add_subdirectory(ClassIntoLua)
+add_subdirectory(GetGlobalVariable)
