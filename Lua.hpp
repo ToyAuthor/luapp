@@ -33,7 +33,7 @@ typedef const char* Name;
 
 Handle  CreateHandle();
 void    DestroyHandle(Handle);
-
+int     PCall(        Handle,int,int,int);
 void    OpenLibs(     Handle);
 int     DoScript(     Handle,Name filename);
 void    NewTable(     Handle);

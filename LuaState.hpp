@@ -9,6 +9,7 @@
 
 #include "LuaAdapter.hpp"
 #include "LuaWrapper.hpp"
+#include "LuaFunction.hpp"
 
 
 namespace lua{
@@ -128,6 +129,13 @@ class State
 			lua::GetGlobal(hLua,name);
 			*t=lua::CheckString(hLua,-1);
 			lua::Pop(hLua,1);
+		}
+
+		template<typename F>
+		void GetFunction(const char *name,lua::Function<F> *func)
+		{
+			func->hLua=hLua;
+			func->mFuncName=name;
 		}
 
 	private:

@@ -19,6 +19,10 @@ void DestroyHandle(Handle handle)
 {
 	lua_close((lua_State*)handle);
 }
+int PCall(Handle handle,int num01,int num02,int num03)
+{
+	return lua_pcall((lua_State*)handle,num01,num02,num03);
+}
 void OpenLibs(Handle handle)
 {
 	luaL_openlibs((lua_State*)handle);
