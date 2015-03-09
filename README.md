@@ -63,7 +63,7 @@ int main()
 
 	lua.RegisterMemberFunction("Count",&MyClass::Count);
 
-	lua.DoScript("../script/ClassIntoLua.lua");
+	lua.DoScript("ClassIntoLua.lua");
 
 	return 0;
 }
