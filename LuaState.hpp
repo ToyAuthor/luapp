@@ -10,6 +10,7 @@
 #include "LuaAdapter.hpp"
 #include "LuaWrapper.hpp"
 #include "LuaFunction.hpp"
+#include "LuaFunctionExt.hpp"
 
 
 namespace lua{
@@ -133,6 +134,13 @@ class State
 
 		template<typename F>
 		void GetFunction(const char *name,lua::Function<F> *func)
+		{
+			func->hLua=hLua;
+			func->mFuncName=name;
+		}
+
+		template<typename R,typename P>
+		void GetFunction(const char *name,lua::FunctionExt<R,P> *func)
 		{
 			func->hLua=hLua;
 			func->mFuncName=name;
