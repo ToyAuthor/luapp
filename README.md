@@ -12,7 +12,7 @@ There are few features in luapp.
 0.1.5
 
 ### License
-MIT
+MIT  
 Copyright (c) 2015 ToyAuthor
 
 ### Example
@@ -21,8 +21,6 @@ Copyright (c) 2015 ToyAuthor
 -- ClassIntoLua.lua
 
 object = MyClass()
-
-param = 6
 
 num = object:Count(3,4)
 
