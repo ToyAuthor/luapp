@@ -64,7 +64,7 @@ void GetTable(Handle handle,int index)
 }
 void GetField(Handle handle,int index, const char *k)
 {
-	lua_getfield ((lua_State*)handle,index,k);
+	lua_getfield((lua_State*)handle,index,k);
 }
 int SetMetaTable(Handle handle,int index)
 {

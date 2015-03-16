@@ -17,7 +17,7 @@ set(EXECUTABLE_OUTPUT_PATH ${PROJECT_BINARY_DIR})
 
 add_executable(${NAME} GetGlobalVariable.cpp)
 
-target_link_libraries(${NAME} luapp)
+target_link_libraries(${NAME} ${LUAPP_LIBRARY_NAME})
 
 
 if(MSVC)
