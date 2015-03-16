@@ -13,7 +13,10 @@ There are few features in luapp.
 
 ### License
 MIT  
-Copyright (c) 2015 ToyAuthor
+Copyright (c) 2015 ToyAuthor  
+Actually,I don't care if you follow license or not.
+You can just only keep lua's copyright.
+I'd appreciate it if you keep my name in you project.
 
 ### Example
 
