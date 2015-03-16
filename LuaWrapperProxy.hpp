@@ -74,7 +74,6 @@ struct Proxy00<void> : public ProxyReturn<void>
 	}
 };
 
-
 //------------------------------------------------------------
 
 template<typename R,typename A1>
@@ -84,13 +83,7 @@ struct Proxy01 : public ProxyReturn<R>
 	Proxy01(){}
 	Proxy01(Func fn):func01(fn){}
 
-	A1      p1;
 	Func    func01;
-
-	void GetValue01(lua::Handle L)
-	{
-		CheckVarFromLua(L,&p1,1);
-	}
 
 	template<typename tagR>
 	void DoFunction(lua::Handle L,tagR (*fn)(A1),A1 p1)
@@ -105,7 +98,8 @@ struct Proxy01 : public ProxyReturn<R>
 
 	int Do(lua::Handle L)
 	{
-		GetValue01(L);
+		A1      p1;
+		lua::CheckVarFromLua(L,&p1,1);
 		DoFunction(L,func01,p1);
 		return (int)1;
 	}
@@ -114,20 +108,14 @@ struct Proxy01 : public ProxyReturn<R>
 //------------------------------------------------------------
 
 template<typename R,typename A1,typename A2>
-struct Proxy02 : public Proxy01<R,A1>
+struct Proxy02 : public ProxyReturn<R>
 {
 	typedef R (*Func)(A1,A2);
 
 	Proxy02(){}
 	Proxy02(Func fn):func02(fn){}
-	A2      p2;
-	Func    func02;
 
-	void GetValue02(lua::Handle L)
-	{
-		this->GetValue01(L);
-		CheckVarFromLua(L,&p2,2);
-	}
+	Func    func02;
 
 	template<typename tagR>
 	void DoFunction(lua::Handle L,tagR (*fn)(A1,A2),A1 p1,A2 p2)
@@ -142,8 +130,11 @@ struct Proxy02 : public Proxy01<R,A1>
 
 	int Do(lua::Handle L)
 	{
-		GetValue02(L);
-		DoFunction(L,func02,this->p1,p2);
+		A1      p1;
+		A2      p2;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		DoFunction(L,func02,p1,p2);
 		return (int)1;
 	}
 };
@@ -151,20 +142,14 @@ struct Proxy02 : public Proxy01<R,A1>
 //------------------------------------------------------------
 
 template<typename R,typename A1,typename A2,typename A3>
-struct Proxy03 : public Proxy02<R,A1,A2>
+struct Proxy03 : public ProxyReturn<R>
 {
 	typedef R (*Func)(A1,A2,A3);
 
 	Proxy03(){}
 	Proxy03(Func fn):func03(fn){}
-	A3      p3;
-	Func    func03;
 
-	void GetValue03(lua::Handle L)
-	{
-		this->GetValue02(L);
-		CheckVarFromLua(L,&p3,3);
-	}
+	Func    func03;
 
 	template<typename tagR>
 	void DoFunction(lua::Handle L,tagR (*fn)(A1,A2,A3),A1 p1,A2 p2,A3 p3)
@@ -179,8 +164,13 @@ struct Proxy03 : public Proxy02<R,A1,A2>
 
 	int Do(lua::Handle L)
 	{
-		GetValue03(L);
-		DoFunction(L,func03,this->p1,this->p2,p3);
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		DoFunction(L,func03,p1,p2,p3);
 		return (int)1;
 	}
 };
@@ -188,20 +178,14 @@ struct Proxy03 : public Proxy02<R,A1,A2>
 //------------------------------------------------------------
 
 template<typename R,typename A1,typename A2,typename A3,typename A4>
-struct Proxy04 : public Proxy03<R,A1,A2,A3>
+struct Proxy04 : public ProxyReturn<R>
 {
 	typedef R (*Func)(A1,A2,A3,A4);
 
 	Proxy04(){}
 	Proxy04(Func fn):func04(fn){}
-	A4      p4;
-	Func    func04;
 
-	void GetValue04(lua::Handle L)
-	{
-		this->GetValue03(L);
-		CheckVarFromLua(L,&p4,4);
-	}
+	Func    func04;
 
 	template<typename tagR>
 	void DoFunction(lua::Handle L,tagR (*fn)(A1,A2,A3,A4),A1 p1,A2 p2,A3 p3,A4 p4)
@@ -216,8 +200,15 @@ struct Proxy04 : public Proxy03<R,A1,A2,A3>
 
 	int Do(lua::Handle L)
 	{
-		GetValue04(L);
-		DoFunction(L,func04,this->p1,this->p2,this->p3,p4);
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		DoFunction(L,func04,p1,p2,p3,p4);
 		return (int)1;
 	}
 };
@@ -225,20 +216,14 @@ struct Proxy04 : public Proxy03<R,A1,A2,A3>
 //------------------------------------------------------------
 
 template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5>
-struct Proxy05 : public Proxy04<R,A1,A2,A3,A4>
+struct Proxy05 : public ProxyReturn<R>
 {
 	typedef R (*Func)(A1,A2,A3,A4,A5);
 
 	Proxy05(){}
 	Proxy05(Func fn):func05(fn){}
-	A5      p5;
-	Func    func05;
 
-	void GetValue05(lua::Handle L)
-	{
-		this->GetValue04(L);
-		CheckVarFromLua(L,&p5,5);
-	}
+	Func    func05;
 
 	template<typename tagR>
 	void DoFunction(lua::Handle L,tagR (*fn)(A1,A2,A3,A4,A5),A1 p1,A2 p2,A3 p3,A4 p4,A5 p5)
@@ -253,8 +238,17 @@ struct Proxy05 : public Proxy04<R,A1,A2,A3,A4>
 
 	int Do(lua::Handle L)
 	{
-		GetValue05(L);
-		DoFunction(L,func05,this->p1,this->p2,this->p3,this->p4,p5);
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		DoFunction(L,func05,p1,p2,p3,p4,p5);
 		return (int)1;
 	}
 };

@@ -19,7 +19,7 @@ print("Hello lua")
 
 int main()
 {
-	lua::State    lua;
+	lua::State<>    lua;
 
 	lua.Init();
 	lua.DoScript("../script/simple.lua");

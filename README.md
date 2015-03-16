@@ -3,13 +3,13 @@ It's a simple tool for lua.
 To help you using lua in C++ style.
 There are few features in luapp.
 
-- To register the class and member function into lua.
-- To register the global function into lua.
-- Get global variable of lua script.
-- Call global function of lua script in C++.
+- To register the class and member function from C++ into lua.
+- To register the global function from C++ into lua.
+- Get global variable of lua script from C++.
+- Call global function of lua script from C++.
 
 ### Version
-0.1.5
+0.1.6
 
 ### License
 MIT  
@@ -53,7 +53,7 @@ class MyClass
 
 int main()
 {
-	lua::State    lua;
+	lua::State<>    lua;
 
 	lua.Init();
 

@@ -52,7 +52,7 @@ struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5)>
 };
 //-----------------ClassTypeFilter-----------------end
 
-
+template<int N=0>
 class State
 {
 	public:
@@ -69,21 +69,21 @@ class State
 		template<typename C>
 		void RegisterClass(const char *class_name)
 		{
-			adapter::Adapter<C>::Register(hLua,class_name);
+			adapter::Adapter<C,N>::Register(hLua,class_name);
 		}
 
 		template<typename F>
 		void RegisterMemberFunction(const char *func_name,F fn)
 		{
 			typedef typename ClassTypeFilter<F>::ClassType C;
-			struct adapter::Adapter<C>::Pack     myF( Str(func_name),adapter::GetProxy(fn));
-			adapter::Adapter<C>::mList.push_back(myF);
+			struct adapter::Adapter<C,N>::Pack     myF( Str(func_name),adapter::GetProxy(fn));
+			adapter::Adapter<C,N>::mList.push_back(myF);
 		}
 
 		template<typename F>
 		void RegisterFunction(const char *func_name,F fn)
 		{
-			wrapper::RegisterFunction(hLua,func_name,fn);
+			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn);
 		}
 
 		int Init()

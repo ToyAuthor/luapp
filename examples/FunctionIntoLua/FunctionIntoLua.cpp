@@ -31,7 +31,7 @@ lua::Int MyFunction(lua::Int num)
 
 int main()
 {
-	lua::State    lua;
+	lua::State<>    lua;
 
 	lua.Init();
 

@@ -17,7 +17,7 @@ namespace adapter{
 
 
 
-template<typename C>
+template<typename C,int N>
 class Adapter
 {
 	public:
@@ -52,15 +52,15 @@ class Adapter
 		                      const char*    str   ///< Name of class
 		                      )
 		{
-			Adapter<C>::mClassName=str;
+			Adapter<C,N>::mClassName=str;
 
-			lua::PushFunction(L, &Adapter<C>::constructor);
+			lua::PushFunction(L, &Adapter<C,N>::constructor);
 			lua::SetGlobal(L, mClassName.c_str());
 
 			lua::NewMetaTable(L, mClassName.c_str());
 
 			lua::PushString(L, "__gc");
-			lua::PushFunction(L, &Adapter<C>::gc_obj);
+			lua::PushFunction(L, &Adapter<C,N>::gc_obj);
 			lua::SetTable(L, -3);
 
 			lua::Pop(L,1);
@@ -89,11 +89,11 @@ class Adapter
 			lua::SetMetaTable(L, -2);
 			lua::SetTable(L, -3);
 
-			for (int i = Adapter<C>::mList.size()-1; i>=0; i--)
+			for (int i = Adapter<C,N>::mList.size()-1; i>=0; i--)
 			{
-				lua::PushString(L, Adapter<C>::mList[i].mName.c_str());
+				lua::PushString(L, Adapter<C,N>::mList[i].mName.c_str());
 				lua::PushNumber(L, i);
-				lua::PushClosure(L, &Adapter<C>::thunk, 1);
+				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
 			}
 
@@ -108,12 +108,12 @@ class Adapter
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, mClassName.c_str()));
 			lua::Pop(L, 1);
 
-			return	Adapter<C>::mList[i].mProxy->Do(L,*obj);
+			return	Adapter<C,N>::mList[i].mProxy->Do(L,*obj);
 		}
 };
 
-template <typename C>Str                                  Adapter<C>::mClassName;
-template <typename C>typename Adapter<C>::PackList        Adapter<C>::mList;
+template <typename C,int N>Str                                  Adapter<C,N>::mClassName;
+template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::mList;
 
 
 

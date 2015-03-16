@@ -35,7 +35,7 @@ int main()
 {
 	using lua::Int;
 
-	lua::State    lua;
+	lua::State<>    lua;
 
 	lua.Init();
 

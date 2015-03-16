@@ -13,7 +13,6 @@ set(LUAPP_LIBRARY_DIR ${PROJECT_BINARY_DIR})
 
 set(SOURCE
 	Lua.cpp
-	LuaWrapper.cpp
 	)
 
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})

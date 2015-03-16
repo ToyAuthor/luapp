@@ -108,7 +108,7 @@ double CheckNumber(Handle handle,int index)
 }
 int CheckInteger(Handle handle,int index)
 {
-	return luaL_checkinteger((lua_State*)handle,index);
+	return (int)luaL_checkinteger((lua_State*)handle,index);
 }
 Str CheckString(Handle handle,int index)
 {
