@@ -254,6 +254,39 @@ struct Proxy05 : public ProxyReturn<R>
 };
 
 //------------------------------------------------------------
+//------------------------------------------------------------
+
+template<typename C,typename R,typename A1>
+struct ProxyBind01 : public ProxyReturn<R>
+{
+	typedef R (C::*Func)(A1);
+	ProxyBind01(){}
+	ProxyBind01(Func fn,C *obj):func01(fn),obj01(obj){}
+
+	Func    func01;
+	C*      obj01;
+
+	template<typename tagR>
+	void DoFunction(lua::Handle L,tagR (C::*fn)(A1),C *obj,A1 p1)
+	{
+		this->ReturnValue(L,(obj->*fn)(p1));
+	}
+
+	void DoFunction(lua::Handle  ,void (C::*fn)(A1),C *obj,A1 p1)
+	{
+		(obj->*fn)(p1);
+	}
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		lua::CheckVarFromLua(L,&p1,1);
+		DoFunction(L,func01,obj01,p1);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
 
 template <typename R>
 static Proxy* GetProxy(R(*f)())
@@ -289,6 +322,14 @@ template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5
 static Proxy* GetProxy(R(*f)(A1,A2,A3,A4,A5))
 {
 	return (Proxy*)new Proxy05<R,A1,A2,A3,A4,A5>(f);
+}
+
+//------------------------------------------------------------
+
+template <typename C,typename R,typename A1>
+static Proxy* GetProxy(R(C::*f)(A1),C *obj)
+{
+	return (Proxy*)new ProxyBind01<C,R,A1>(f,obj);
 }
 
 //------------------------------------------------------------

@@ -58,6 +58,23 @@ class Wrapper
 			lua::SetGlobal(L, str.c_str());
 		}
 
+		template <typename F,typename C>
+		static void RegisterFunction( lua::Handle    L,
+		                              const char*    name,
+		                              F              fn,
+		                              C*             obj
+		                              )
+		{
+			Str                 str(name);
+
+			struct Pack         func(str,GetProxy(fn,obj));
+			mFuncList.push_back(func);
+
+			lua::PushNumber(L, mFuncList.size()-1);
+			lua::PushClosure(L, &thunk, 1);
+			lua::SetGlobal(L, str.c_str());
+		}
+
 	private:
 
 		static PackList        mFuncList;
