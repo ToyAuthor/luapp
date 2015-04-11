@@ -85,18 +85,19 @@ class State
 			adapter::Adapter<C,N>::mList.push_back(myF);
 		}
 
-		/// The member function would be look like a global function in lua.
+		/// For global function.
+		template<typename F>
+		void RegisterFunction(const char *func_name,F fn)
+		{
+			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn);
+		}
+
+		/// For member function. The member function would be look like a global function in lua.
 		template<typename F,typename C>
 		void RegisterFunction(const char *func_name,F fn,C *obj)
 		{
 			// check class type here
 			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn,obj);
-		}
-
-		template<typename F>
-		void RegisterFunction(const char *func_name,F fn)
-		{
-			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn);
 		}
 
 		int Init()

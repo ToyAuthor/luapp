@@ -1,6 +1,6 @@
 
 print("Member function Into Lua")
 
-num = PrintMyWord("好吃好吃")
+num = PrintMyWord("good")
 
 print("Return value is " .. num)

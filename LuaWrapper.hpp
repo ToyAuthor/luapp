@@ -43,6 +43,7 @@ class Wrapper
 				}
 		};
 
+		// For global function.
 		template <typename F>
 		static void RegisterFunction( lua::Handle    L,
 		                              const char*    name,
@@ -58,6 +59,7 @@ class Wrapper
 			lua::SetGlobal(L, str.c_str());
 		}
 
+		// For member function.
 		template <typename F,typename C>
 		static void RegisterFunction( lua::Handle    L,
 		                              const char*    name,
