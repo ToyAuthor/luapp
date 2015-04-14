@@ -520,6 +520,49 @@ struct ProxyBind05 : public ProxyReturn<R>
 
 //------------------------------------------------------------
 
+template<typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+struct ProxyBind06 : public ProxyReturn<R>
+{
+	typedef R (C::*Func)(A1,A2,A3,A4,A5,A6);
+
+	ProxyBind06(){}
+	ProxyBind06(Func fn,C *c):func(fn),obj(c){}
+
+	Func    func;
+	C*      obj;
+
+	template<typename tagR>
+	void DoFunction(lua::Handle L,C *c,tagR (C::*fn)(A1,A2,A3,A4,A5,A6),A1 p1,A2 p2,A3 p3,A4 p4,A5 p5,A6 p6)
+	{
+		this->ReturnValue(L,(c->*fn)(p1,p2,p3,p4,p5,p6));
+	}
+
+	void DoFunction(lua::Handle  ,C *c,void (C::*fn)(A1,A2,A3,A4,A5,A6),A1 p1,A2 p2,A3 p3,A4 p4,A5 p5,A6 p6)
+	{
+		(c->*fn)(p1,p2,p3,p4,p5,p6);
+	}
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		DoFunction(L,obj,func,p1,p2,p3,p4,p5,p6);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
 template <typename C,typename R>
 static Proxy* GetProxy(R(C::*f),C *obj)
 {
@@ -554,6 +597,12 @@ template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,
 static Proxy* GetProxy(R(C::*f)(A1,A2,A3,A4,A5),C *obj)
 {
 	return (Proxy*)new ProxyBind05<C,R,A1,A2,A3,A4,A5>(f,obj);
+}
+
+template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+static Proxy* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6),C *obj)
+{
+	return (Proxy*)new ProxyBind06<C,R,A1,A2,A3,A4,A5,A6>(f,obj);
 }
 
 //------------------------------------------------------------
