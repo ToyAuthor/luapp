@@ -35,23 +35,23 @@ print("3 +4 = " .. num)
 
 class MyClass
 {
-	public:
+public:
 
-		MyClass()
-		{
-			printf("do MyClass::MyClass()\n");
-		}
+	MyClass()
+	{
+		printf("do MyClass::MyClass()\n");
+	}
 
-		~MyClass()
-		{
-			printf("do MyClass::~MyClass()\n");
-		}
+	~MyClass()
+	{
+		printf("do MyClass::~MyClass()\n");
+	}
 
-		lua::Int Count( lua::Int num01,
-		                lua::Int num02)
-		{
-			return num01+num02;
-		}
+	lua::Int Count( lua::Int num01,
+	                lua::Int num02)
+	{
+		return num01+num02;
+	}
 };
 
 int main()
