@@ -12,8 +12,6 @@
 /* CallFunctionFromLua.lua
 -----------------------------------------------------
 
-package.path = package.path .. ";../script/?.lua"
-
 local std = require "std"
 
 function func(a, b, c)
@@ -43,7 +41,9 @@ int main()
 
 	lua.Init();
 
-	lua.DoScript("../script/CallFunctionFromLua.lua");
+	lua.AddSearchPath("../script");
+
+	lua.DoScript("CallFunctionFromLua.lua");
 
 	lua::Function<Int(Int,Int,Int)>   func;
 

@@ -62,6 +62,10 @@ void GetTable(Handle handle,int index)
 {
 	lua_gettable((lua_State*)handle,index);
 }
+void SetField(Handle handle,int index, const char *name)
+{
+	lua_setfield((lua_State*)handle,index,name);
+}
 void GetField(Handle handle,int index, const char *k)
 {
 	lua_getfield((lua_State*)handle,index,k);

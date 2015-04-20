@@ -44,6 +44,7 @@ void    SetGlobal(    Handle,Name var);
 void    GetGlobal(    Handle,Name var);
 void    SetTable(     Handle,int index);
 void    GetTable(     Handle,int index);
+void    SetField(     Handle,int index, Name name);
 void    GetField(     Handle,int index, Name k);
 int     SetMetaTable( Handle,int index);
 void    GetMetaTable( Handle,Name name);

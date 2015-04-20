@@ -1,6 +1,3 @@
-
-package.path = package.path .. ";../script/?.lua"
-
 local std = require "std"
 
 function func(a, b, c)

@@ -57,6 +57,7 @@ struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6)>
 };
 //-----------------ClassTypeFilter-----------------end
 
+
 template<int N=0>
 class State
 {
@@ -77,6 +78,7 @@ class State
 			adapter::Adapter<C,N>::Register(hLua,class_name);
 		}
 
+		/// Let lua script could use given member function. You can't use it without RegisterClass().
 		template<typename F>
 		void RegisterMemberFunction(const char *func_name,F fn)
 		{
@@ -85,14 +87,17 @@ class State
 			adapter::Adapter<C,N>::mList.push_back(myF);
 		}
 
-		/// For global function.
+		/// Let lua script could use given global function.
 		template<typename F>
 		void RegisterFunction(const char *func_name,F fn)
 		{
 			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn);
 		}
 
-		/// For member function. The member function would be look like a global function in lua.
+		/**
+		Let lua script could use given member function.
+		The member function will be look like a global function in lua.
+		*/
 		template<typename F,typename C>
 		void RegisterFunction(const char *func_name,F fn,C *obj)
 		{
@@ -104,6 +109,11 @@ class State
 		{
 			hLua=lua::CreateHandle();
 			lua::OpenLibs(hLua);
+
+			if(IsScriptPathExist())
+			{
+				AddScriptPathToLua();
+			}
 			return (int)1;
 		}
 
@@ -113,39 +123,54 @@ class State
 			hLua=(lua::Handle)0;
 		}
 
+		int DoScript(lua::Str str)
+		{
+			if(IsScriptPathExist())
+			{
+				str=mScriptPath+str;
+				lua::DoScript(hLua,str.c_str());
+			}
+			else
+				lua::DoScript(hLua,str.c_str());
+
+			return (int)1;
+		}
+
 		int DoScript(const char *str)
 		{
-			lua::DoScript(hLua,str);
-			return (int)1;
+			return DoScript(lua::Str(str));
 		}
 
-		int DoScript(lua::Str &str)
+		/// Tell luapp where to read those lua scripts.
+		void AddSearchPath(const char *path)
 		{
-			lua::DoScript(hLua,str.c_str());
-			return (int)1;
+			mScriptPath=path;
+			mScriptPath+="/";
+			if(hLua)
+			{
+				AddScriptPathToLua();
+			}
 		}
 
-		void GetGlobal(lua::Int *t,const char *name)
+		/// Set global variable to lua script. Don't try to send function.
+		template<typename T>
+		void SetGlobal(T t,const char *name)
+		{
+			PushVarToLua(hLua,t);
+			lua::SetGlobal(hLua,name);
+		//	lua::Pop(hLua,1);
+		}
+
+		/// Get global variable from lua script.
+		template<typename T>
+		void GetGlobal(T *t,const char *name)
 		{
 			lua::GetGlobal(hLua,name);
-			*t=(lua::Int)lua::CheckInteger(hLua,-1);
+			CheckVarFromLua(hLua,t,-1);
 			lua::Pop(hLua,1);
 		}
 
-		void GetGlobal(lua::Num *t,const char *name)
-		{
-			lua::GetGlobal(hLua,name);
-			*t=(lua::Num)lua::CheckNumber(hLua,-1);
-			lua::Pop(hLua,1);
-		}
-
-		void GetGlobal(lua::Str *t,const char *name)
-		{
-			lua::GetGlobal(hLua,name);
-			*t=lua::CheckString(hLua,-1);
-			lua::Pop(hLua,1);
-		}
-
+		/// Get global function(only one return value).
 		template<typename F>
 		void GetFunction(const char *name,lua::Function<F> *func)
 		{
@@ -153,6 +178,7 @@ class State
 			func->mFuncName=name;
 		}
 
+		/// Get global function(more than one return value).
 		template<typename R,typename P>
 		void GetFunction(const char *name,lua::FunctionExt<R,P> *func)
 		{
@@ -160,9 +186,39 @@ class State
 			func->mFuncName=name;
 		}
 
+		void Call(lua::Str name)
+		{
+			Call(name.c_str());
+		}
+
+		/// Calling function only for "void(void)".
+		void Call(const char *name)
+		{
+			lua::GetGlobal(hLua,name);
+			lua::PCall(hLua,0,0,0);
+		}
+
 	private:
 
+		void AddScriptPathToLua()
+		{
+			lua::GetGlobal(hLua,"package");
+			lua::GetField(hLua,-1, "path");
+			lua::Str  path=lua::CheckString(hLua,-1);
+			path=mScriptPath+"?.lua;"+path;
+			lua::Pop(hLua,1);
+			lua::PushString(hLua,path);
+			lua::SetField(hLua,-2, "path");
+			lua::Pop(hLua,1);
+		}
+
+		int IsScriptPathExist()
+		{
+			return !mScriptPath.empty();
+		}
+
 		lua::Handle      hLua;
+		lua::Str         mScriptPath;
 };
 
 

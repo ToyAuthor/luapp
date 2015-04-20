@@ -237,6 +237,49 @@ struct Function<R(A1,A2,A3,A4,A5)>
 	lua::Str         mFuncName;
 };
 
+template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+struct Function<void(A1,A2,A3,A4,A5,A6)>
+{
+	void operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6) const
+	{
+		lua::GetGlobal(hLua,mFuncName.c_str());
+		PushVarToLua(hLua,a1);
+		PushVarToLua(hLua,a2);
+		PushVarToLua(hLua,a3);
+		PushVarToLua(hLua,a4);
+		PushVarToLua(hLua,a5);
+		PushVarToLua(hLua,a6);
+		lua::PCall(hLua,6,0,0);
+	}
+	lua::Handle      hLua;
+	lua::Str         mFuncName;
+};
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+struct Function<R(A1,A2,A3,A4,A5,A6)>
+{
+	R operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6) const
+	{
+		lua::GetGlobal(hLua,mFuncName.c_str());
+		PushVarToLua(hLua,a1);
+		PushVarToLua(hLua,a2);
+		PushVarToLua(hLua,a3);
+		PushVarToLua(hLua,a4);
+		PushVarToLua(hLua,a5);
+		PushVarToLua(hLua,a6);
+		lua::PCall(hLua,6,1,0);
+
+		R   result;
+		CheckVarFromLua(hLua,&result,-1);
+
+		lua::Pop(hLua,1);
+
+		return result;
+	}
+	lua::Handle      hLua;
+	lua::Str         mFuncName;
+};
+
 
 }//namespace lua
 
