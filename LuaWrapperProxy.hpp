@@ -347,7 +347,7 @@ static Proxy* GetProxy(R(*f)(A1,A2,A3,A4,A5,A6))
 template<typename C,typename R>
 struct ProxyBind00 : public ProxyReturn<R>
 {
-	typedef R(C::*Func)();
+	typedef R (C::*Func)();
 
 	ProxyBind00(){}
 	ProxyBind00(Func fn,C *c):func(fn),obj(c){}
@@ -366,7 +366,7 @@ template<typename C>
 struct ProxyBind00<C,void> : public ProxyReturn<void>
 {
 	typedef void R;
-	typedef R(C::*Func)();
+	typedef R (C::*Func)();
 
 	ProxyBind00(){}
 	ProxyBind00(Func fn,C *c):func(fn),obj(c){}
@@ -612,7 +612,7 @@ struct ProxyBind06 : public ProxyReturn<R>
 //------------------------------------------------------------
 
 template <typename C,typename R>
-static Proxy* GetProxy(R(C::*f),C *obj)
+static Proxy* GetProxy(R(C::*f)(),C *obj)
 {
 	return (Proxy*)new ProxyBind00<C,R>(f,obj);
 }

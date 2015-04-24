@@ -186,16 +186,74 @@ class State
 			func->mFuncName=name;
 		}
 
+		/// Call global function without return value.
 		void Call(lua::Str name)
 		{
-			Call(name.c_str());
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PCall(hLua,0,0,0);
 		}
 
-		/// Calling function only for "void(void)".
-		void Call(const char *name)
+		template<typename A1>
+		void Call(lua::Str name,A1 a1)
 		{
-			lua::GetGlobal(hLua,name);
-			lua::PCall(hLua,0,0,0);
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PCall(hLua,1,0,0);
+		}
+
+		template<typename A1,typename A2>
+		void Call(lua::Str name,A1 a1,A2 a2)
+		{
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PushVarToLua(hLua,a2);
+			lua::PCall(hLua,2,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3)
+		{
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PushVarToLua(hLua,a2);
+			lua::PushVarToLua(hLua,a3);
+			lua::PCall(hLua,3,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4)
+		{
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PushVarToLua(hLua,a2);
+			lua::PushVarToLua(hLua,a3);
+			lua::PushVarToLua(hLua,a4);
+			lua::PCall(hLua,4,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5)
+		{
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PushVarToLua(hLua,a2);
+			lua::PushVarToLua(hLua,a3);
+			lua::PushVarToLua(hLua,a4);
+			lua::PushVarToLua(hLua,a5);
+			lua::PCall(hLua,5,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
+		{
+			lua::GetGlobal(hLua,name.c_str());
+			lua::PushVarToLua(hLua,a1);
+			lua::PushVarToLua(hLua,a2);
+			lua::PushVarToLua(hLua,a3);
+			lua::PushVarToLua(hLua,a4);
+			lua::PushVarToLua(hLua,a5);
+			lua::PushVarToLua(hLua,a6);
+			lua::PCall(hLua,6,0,0);
 		}
 
 	private:

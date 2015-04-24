@@ -1,6 +1,6 @@
 /**
 @file   CallFunctionFromLua.cpp
-@brief  Show you how to call a global function from lua script.
+@brief  Show you how to call a global function of lua script.
 */
 
 
