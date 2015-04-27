@@ -23,7 +23,7 @@ typedef double          Num;
 //typedef int             Bool;   Do I need it?
 typedef int             Int;
 typedef std::string     Str;
-
+typedef void*           Ptr;   // pointer
 
 
 typedef void* Handle;               // lua::Handle as lua_State*
@@ -59,6 +59,8 @@ double  CheckNumber(  Handle,int index);
 int     CheckInteger( Handle,int index);
 Str     CheckString(  Handle,int index);
 void*   CheckUserData(Handle,int ud, Name tname);
+void    PushPointer(  Handle,Ptr num);
+Ptr     CheckPointer( Handle,int index);
 double  ToNumber(     Handle,int index);
 int     UpValueIndex(        int index);
 void    Pop(          Handle,int num);
@@ -83,6 +85,10 @@ inline void PushVarToLua(lua::Handle hLua,lua::Str t)
 {
 	lua::PushString(hLua,t);
 }
+inline void PushVarToLua(lua::Handle hLua,lua::Ptr t)
+{
+	lua::PushPointer(hLua,t);
+}
 inline void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
 {
 	*t=(lua::Int)lua::CheckInteger(hLua,i);
@@ -94,6 +100,10 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Num *t,int i)
 inline void CheckVarFromLua(lua::Handle hLua,lua::Str *t,int i)
 {
 	*t=lua::CheckString(hLua,i);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
+{
+	*t=lua::CheckPointer(hLua,i);
 }
 //----------------------tools----------------------end
 

@@ -26,8 +26,10 @@ Those date type have worked in luapp.
 You can't use the other date type to work with luapp.
 */
 typedef double          Num;
+//typedef int             Bool;   Do I need it?
 typedef int             Int;
 typedef std::string     Str;
+typedef void*           Ptr;   // pointer
 
 
 
@@ -147,6 +149,20 @@ inline void* CheckUserData(Handle h,int ud, Name tname)
 {
 	return luaL_checkudata(h, ud, tname);
 }
+inline void PushPointer(Handle h,Ptr num)
+{
+	lua_pushlightuserdata(h,num);
+}
+inline Ptr CheckPointer(Handle h,int index)
+{
+//	if (lua_islightuserdata(h, index))
+//        luaL_typerror(h, index, "lightuserdata");
+
+    return (Ptr)lua_topointer(h, index);
+
+//	return (Ptr)luaL_checkudata(h,index)
+//	return (Ptr)luaL_checklightudata(h,index);
+}
 inline double ToNumber(Handle h,int index)
 {
 	return lua_tonumber(h,index);
@@ -182,6 +198,10 @@ inline void PushVarToLua(lua::Handle hLua,lua::Str t)
 {
 	lua::PushString(hLua,t);
 }
+inline void PushVarToLua(lua::Handle hLua,lua::Ptr t)
+{
+	lua::PushPointer(hLua,t);
+}
 inline void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
 {
 	*t=(lua::Int)lua::CheckInteger(hLua,i);
@@ -193,6 +213,10 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Num *t,int i)
 inline void CheckVarFromLua(lua::Handle hLua,lua::Str *t,int i)
 {
 	*t=lua::CheckString(hLua,i);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
+{
+	*t=lua::CheckPointer(hLua,i);
 }
 //----------------------tools----------------------end
 

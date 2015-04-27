@@ -142,6 +142,14 @@ int GetTop(Handle handle)
 {
 	return lua_gettop((lua_State*)handle);
 }
+void PushPointer(Handle handle,Ptr num)
+{
+	lua_pushlightuserdata((lua_State*)handle,num);
+}
+Ptr CheckPointer(Handle handle,int index)
+{
+    return (Ptr)lua_topointer((lua_State*)handle, index);
+}
 
 /*
 void Remove(Handle handle,int index)
