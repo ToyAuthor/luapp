@@ -47,7 +47,11 @@ int main()
 
 	lua::Function<Int(Int,Int,Int)>   func;
 
+//	lua::FunctionExt<void(Int,Int),void(Int,Int,Int)>   func;   // For multiple return value.
+
 	lua.GetFunction("func",&func);
+
+	lua.Call("func2",1,2,3);    // For function without return value.
 
 	printf("Return value is %d\n",func(1,2,3));
 

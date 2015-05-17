@@ -5,11 +5,12 @@ There are few features in luapp.
 
 - To register the class from C++ into lua.
 - To register the global function or member function from C++ into lua.
+- Set global variable of lua script from C++.
 - Get global variable of lua script from C++.
 - Call global function of lua script from C++.
 
 ### Version
-0.2.0
+0.3.0
 
 ### License
 MIT  
@@ -60,9 +61,9 @@ int main()
 
 	lua.Init();
 
-	lua.RegisterClass<MyClass>("MyClass");
-
 	lua.RegisterMemberFunction("Count",&MyClass::Count);
+
+	lua.RegisterClassEx<MyClass>("MyClass");
 
 	lua.DoScript("ClassIntoLua.lua");
 

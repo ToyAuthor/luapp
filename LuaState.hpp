@@ -78,7 +78,16 @@ class State
 			adapter::Adapter<C,N>::Register(hLua,class_name);
 		}
 
-		/// Let lua script could use given member function. You can't use it without RegisterClass().
+		/** Let lua script could use given class type.
+		It have a faster constructor. But lua need to store more information.
+		Call it after every each RegisterMemberFunction().*/
+		template<typename C>
+		void RegisterClassEx(const char *class_name)
+		{
+			adapter::Adapter<C,N>::RegisterEx(hLua,class_name);
+		}
+
+		/// Let lua script could use given member function. You can't use it without RegisterClass() or RegisterClassEx().
 		template<typename F>
 		void RegisterMemberFunction(const char *func_name,F fn)
 		{
@@ -96,12 +105,12 @@ class State
 
 		/**
 		Let lua script could use given member function.
-		The member function will be look like a global function in lua.
+		This member function will be look like a global function in lua.
 		*/
 		template<typename F,typename C>
 		void RegisterFunction(const char *func_name,F fn,C *obj)
 		{
-			// check class type here
+			// Add class type checked here some times later.
 			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn,obj);
 		}
 
@@ -158,7 +167,6 @@ class State
 		{
 			PushVarToLua(hLua,t);
 			lua::SetGlobal(hLua,name);
-		//	lua::Pop(hLua,1);
 		}
 
 		/// Get global variable from lua script.

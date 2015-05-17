@@ -60,9 +60,9 @@ int main()
 
 	lua.Init();
 
-	lua.RegisterClass<MyClass>("MyClass");                 // Lua script has class now.
-
 	lua.RegisterMemberFunction("Count",&MyClass::Count);   // Lua script has member function now.
+
+	lua.RegisterClass<MyClass>("MyClass");                 // Lua script has class now.
 
 	lua.DoScript("../script/ClassIntoLua.lua");
 
