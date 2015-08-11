@@ -1,6 +1,6 @@
 /**
-@file   CallFunctionFromLua.cpp
-@brief  Show you how to call a global function of lua script.
+@file   MultipleLuaFile.cpp
+@brief  Show you how to use multiple lua files.
 */
 
 
@@ -9,11 +9,13 @@
 #include "luapp.hpp"
 
 
-/* CallFunctionFromLua.lua
+/* MultipleLuaFile.lua
 -----------------------------------------------------
 
+local std = require "std"
+
 function func(a, b, c)
-	local   x=a+b+c
+	local   x=std.sum(a,b,c)
 	print( a .. "+" .. b .. "+" .. c .. "=" .. x)
 	return x
 end
@@ -30,7 +32,9 @@ int main()
 
 	lua.Init();
 
-	lua.DoScript("../script/CallFunctionFromLua.lua");
+	lua.AddSearchPath("../script");// Add the path of "std.lua" file.
+
+	lua.DoScript("MultipleLuaFile.lua");
 
 	lua::Function<Int(Int,Int,Int)>   func;
 
