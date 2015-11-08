@@ -121,7 +121,7 @@ class State
 
 			if(IsScriptPathExist())
 			{
-				AddScriptPathToLua();
+				AddScriptPathToLua(mScriptPath);
 			}
 			return (int)1;
 		}
@@ -150,14 +150,25 @@ class State
 			return DoScript(lua::Str(str));
 		}
 
-		/// Tell luapp where to read those lua scripts.
-		void AddSearchPath(const char *path)
+		/// Tell luapp where to read main lua scripts.
+		void AddMainPath(const char *path)
 		{
 			mScriptPath=path;
 			mScriptPath+="/";
 			if(hLua)
 			{
-				AddScriptPathToLua();
+				AddScriptPathToLua(mScriptPath);
+			}
+		}
+
+		/// Tell luapp where to read more lua scripts.
+		void AddSearchPath(const char *path)
+		{
+			lua::Str  str(path);
+			str+="/";
+			if(hLua)
+			{
+				AddScriptPathToLua(str);
 			}
 		}
 
@@ -266,12 +277,12 @@ class State
 
 	private:
 
-		void AddScriptPathToLua()
+		void AddScriptPathToLua(lua::Str str)
 		{
 			lua::GetGlobal(hLua,"package");
 			lua::GetField(hLua,-1, "path");
 			lua::Str  path=lua::CheckString(hLua,-1);
-			path=mScriptPath+"?.lua;"+path;
+			path=str+"?.lua;"+path;
 			lua::Pop(hLua,1);
 			lua::PushString(hLua,path);
 			lua::SetField(hLua,-2, "path");
