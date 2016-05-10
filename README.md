@@ -15,10 +15,6 @@ To help you using lua in C++ style.
 ### Version
 1.0.0
 
-### License
-luapp   The MIT License   Copyright (c) 2015-2016 ToyAuthor  
-lua     The MIT License   Copyright (c) 1994-2015 Lua.org, PUC-Rio.
-
 ### Example
 
 ```lua
