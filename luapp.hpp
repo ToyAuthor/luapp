@@ -8,6 +8,6 @@
 #ifndef _LUAPP_HPP_
 #define _LUAPP_HPP_
 
-#include "LuaState.hpp"
+#include "luapp/State.hpp"
 
 #endif//_LUAPP_HPP_

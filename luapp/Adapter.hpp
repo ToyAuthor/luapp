@@ -1,5 +1,5 @@
 /**
-@file   LuaAdapter.hpp
+@file   Adapter.hpp
 @brief  Help lua and C++.
 */
 
@@ -8,7 +8,7 @@
 #define _LUAPP_ADAPTER_HPP_
 
 
-#include "LuaAdapterProxy.hpp"
+#include "luapp/AdapterProxy.hpp"
 
 
 

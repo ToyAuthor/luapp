@@ -1,5 +1,5 @@
 /**
-@file   LuaFunction.hpp
+@file   Function.hpp
 @brief  Let you call the function come from lua.
 */
 
@@ -7,7 +7,7 @@
 #define _LUAPP_FUNCTION_HPP_
 
 
-#include "Lua.hpp"
+#include "luapp/Standard.hpp"
 
 
 

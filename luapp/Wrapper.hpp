@@ -1,5 +1,5 @@
 /**
-@file   LuaWrapper.hpp
+@file   Wrapper.hpp
 @brief  Help lua and C++.
 */
 
@@ -8,7 +8,7 @@
 #define _LUAPP_WRAPPER_HPP_
 
 
-#include "LuaWrapperProxy.hpp"
+#include "luapp/WrapperProxy.hpp"
 
 
 

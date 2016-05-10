@@ -1,5 +1,5 @@
 /**
-@file   LuaWrapperProxy.hpp
+@file   WrapperProxy.hpp
 @brief  To get all of parameters.
 */
 
@@ -8,7 +8,7 @@
 #define _LUAPP_WRAPPER_PROXY_HPP_
 
 
-#include "Lua.hpp"
+#include "luapp/Standard.hpp"
 
 
 namespace lua{

@@ -1,22 +1,16 @@
 /**
-@file   Lua.hpp
+@file   Standard.hpp
 @brief  It's just a wrapper of lua.
 */
 
-#ifndef _LUA_HPP_
-#define _LUA_HPP_
+#ifndef _LUA_STANDARD_HPP_
+#define _LUA_STANDARD_HPP_
 
-
-extern "C" {
-#include "lua.h"
-#include "lualib.h"
-#include "lauxlib.h"
-}
 
 
 #include <vector>
 #include <string>
-
+#include "lua.hpp"
 
 
 namespace lua{
@@ -237,4 +231,4 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
 
 }//namespace lua
 
-#endif//_LUA_HPP_
+#endif//_LUA_STANDARD_HPP_

@@ -1,5 +1,5 @@
 /**
-@file   LuaState.hpp
+@file   State.hpp
 @brief  Help lua and C++.
 */
 
@@ -7,10 +7,10 @@
 #ifndef _LUAPP_STATE_HPP_
 #define _LUAPP_STATE_HPP_
 
-#include "LuaAdapter.hpp"
-#include "LuaWrapper.hpp"
-#include "LuaFunction.hpp"
-#include "LuaFunctionExt.hpp"
+#include "luapp/Adapter.hpp"
+#include "luapp/Wrapper.hpp"
+#include "luapp/Function.hpp"
+#include "luapp/FunctionExt.hpp"
 
 
 namespace lua{

@@ -1,5 +1,5 @@
 /**
-@file   LuaAdapterProxy.hpp
+@file   AdapterProxy.hpp
 @brief  To get all of parameters.
 */
 
@@ -8,8 +8,7 @@
 #define _LUAPP_ADAPTER_PROXY_HPP_
 
 
-#include "Lua.hpp"
-
+#include "luapp/Standard.hpp"
 
 
 namespace lua{

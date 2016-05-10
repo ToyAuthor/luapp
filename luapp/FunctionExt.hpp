@@ -1,5 +1,5 @@
 /**
-@file   LuaFunctionExt.hpp
+@file   FunctionExt.hpp
 @brief  A multiple return value version of "LuaFunction.hpp".
 <pre>
 It's not finish yet(maybe never do).
@@ -11,7 +11,7 @@ Too many template have to be done.
 #define _LUAPP_FUNCTION_EXT_HPP_
 
 
-#include "Lua.hpp"
+#include "luapp/Standard.hpp"
 
 
 
