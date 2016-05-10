@@ -3,8 +3,8 @@
 @brief  It's just a wrapper of lua.
 */
 
-#ifndef _LUA_STANDARD_HPP_
-#define _LUA_STANDARD_HPP_
+#ifndef _LUAPP_STANDARD_HPP_
+#define _LUAPP_STANDARD_HPP_
 
 
 
@@ -231,4 +231,4 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
 
 }//namespace lua
 
-#endif//_LUA_STANDARD_HPP_
+#endif//_LUAPP_STANDARD_HPP_
