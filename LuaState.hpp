@@ -132,17 +132,19 @@ class State
 			hLua=(lua::Handle)0;
 		}
 
+		lua::Str GetError()
+		{
+			return lua::GetError(hLua);
+		}
+
 		int DoScript(lua::Str str)
 		{
 			if(IsScriptPathExist())
 			{
 				str=mScriptPath+str;
-				lua::DoScript(hLua,str.c_str());
 			}
-			else
-				lua::DoScript(hLua,str.c_str());
 
-			return (int)1;
+			return lua::DoScript(hLua,str.c_str());
 		}
 
 		int DoScript(const char *str)
@@ -174,7 +176,7 @@ class State
 
 		/// Set global variable to lua script. Don't try to send function.
 		template<typename T>
-		void SetGlobal(T t,const char *name)
+		void SetGlobal(const char *name,T t)
 		{
 			PushVarToLua(hLua,t);
 			lua::SetGlobal(hLua,name);
@@ -182,7 +184,7 @@ class State
 
 		/// Get global variable from lua script.
 		template<typename T>
-		void GetGlobal(T *t,const char *name)
+		void GetGlobal(const char *name,T t)
 		{
 			lua::GetGlobal(hLua,name);
 			CheckVarFromLua(hLua,t,-1);

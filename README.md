@@ -1,23 +1,23 @@
 # luapp
-It's a simple tool for lua.
+It's a simple tool for lua.  
 To help you using lua in C++ style.
-There are few features in luapp.
 
-- To register the class from C++ into lua.
-- To register the global function or member function from C++ into lua.
-- Set global variable of lua script from C++.
-- Get global variable of lua script from C++.
-- Call global function of lua script from C++.
+### Features
+- [x] Header file only.
+- [x] To register the class from C++ into lua.
+- [x] To register the global function or member function from C++ into lua.
+- [x] Read/Add global variable of lua script from C++.
+- [x] Call global function of lua script from C++.
+- [-] Create lua module support.
+- [-] Let lua script embedded in C++.
+- [-] Design a C++ container to simulate lua table.
 
 ### Version
 0.4.0
 
 ### License
-MIT  
-Copyright (c) 2015 ToyAuthor  
-Actually,I don't care if you follow license or not.
-You can just only keep lua's copyright.
-I'd appreciate it if you keep my name in your project.
+luapp   The MIT License   Copyright (c) 2015-2016 ToyAuthor  
+lua     The MIT License   Copyright (c) 1994-2015 Lua.org, PUC-Rio.
 
 ### Example
 
@@ -28,10 +28,12 @@ object = MyClass()
 
 num = object:Count(3,4)
 
-print("3 +4 = " .. num)
+print("3 + 4 = " .. num)
 ```
 
 ```c++
+// main.cpp
+
 #include "luapp.hpp"
 
 class MyClass

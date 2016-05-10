@@ -30,7 +30,9 @@ int main()
 
 	lua.Init();
 
-	lua.DoScript("../script/CallFunctionFromLua.lua");
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
+	lua.DoScript("CallFunctionFromLua.lua");
 
 	lua::Function<Int(Int,Int,Int)>   func;
 

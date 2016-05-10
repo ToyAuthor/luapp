@@ -66,9 +66,11 @@ int main()
 
 	lua.Init();
 
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
 	lua.RegisterFunction("PrintMyWord",&MyClass::Count2,&myClass);
 
-	lua.DoScript("../script/MemberFunctionIntoLua.lua");
+	lua.DoScript("MemberFunctionIntoLua.lua");
 
 	return EXIT_SUCCESS;
 }

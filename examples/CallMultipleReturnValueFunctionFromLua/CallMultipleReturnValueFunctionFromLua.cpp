@@ -30,7 +30,9 @@ int main()
 
 	lua.Init();
 
-	lua.DoScript("../script/CallMultipleReturnValueFunctionFromLua.lua");
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
+	lua.DoScript("CallMultipleReturnValueFunctionFromLua.lua");
 
 	lua::FunctionExt<void(Int,Int,Int),void(void)>   func;
 

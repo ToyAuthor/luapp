@@ -7,11 +7,11 @@ set(CMAKE_BUILD_TYPE Release)
 # Build lua.
 add_subdirectory(lua)
 
+add_definitions(-DLUAPP_SCRIPT_PATH="${PROJECT_SOURCE_DIR}/script/")
 
 set(LUAPP_INCLUDE_DIR ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/lua)
 set(LUAPP_LIBRARY_NAME "lua")
 set(LUAPP_LIBRARY_DIR ${PROJECT_BINARY_DIR}/lua)
 
 
-file(COPY ${PROJECT_SOURCE_DIR}/examples/script DESTINATION ${PROJECT_BINARY_DIR}/examples)
 add_subdirectory(examples)

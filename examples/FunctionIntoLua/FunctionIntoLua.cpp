@@ -35,9 +35,11 @@ int main()
 
 	lua.Init();
 
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
 	lua.RegisterFunction("NumberPlus",&MyFunction);   // Lua script has MyFunction() now.
 
-	lua.DoScript("../script/FunctionIntoLua.lua");
+	lua.DoScript("FunctionIntoLua.lua");
 
 	return EXIT_SUCCESS;
 }

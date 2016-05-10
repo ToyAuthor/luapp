@@ -25,11 +25,13 @@ int main()
 
 	lua.Init();
 
-	lua.DoScript("../script/GetGlobalVariable.lua");
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
+	lua.DoScript("GetGlobalVariable.lua");
 
 	lua::Str   power;
 
-	lua.GetGlobal(&power,"lua_power");
+	lua.GetGlobal("lua_power",&power);
 
 	printf("Power was turn %s\n",power.c_str());
 

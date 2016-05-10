@@ -6,6 +6,7 @@
 
 #include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
@@ -60,11 +61,16 @@ int main()
 
 	lua.Init();
 
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+
 	lua.RegisterMemberFunction("Count",&MyClass::Count);   // Lua script has member function now.
 
 	lua.RegisterClass<MyClass>("MyClass");                 // Lua script has class now.
 
-	lua.DoScript("../script/ClassIntoLua.lua");
+	if( ! lua.DoScript("ClassIntoLua.lua") )
+	{
+		std::cout<<lua.GetError()<<std::endl;
+	}
 
 	return EXIT_SUCCESS;
 }

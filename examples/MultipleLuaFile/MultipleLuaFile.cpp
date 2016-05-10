@@ -32,7 +32,7 @@ int main()
 
 	lua.Init();
 
-	lua.AddMainPath("../script");// Add the path of "std.lua" file.
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
 
 	lua.DoScript("MultipleLuaFile.lua");
 

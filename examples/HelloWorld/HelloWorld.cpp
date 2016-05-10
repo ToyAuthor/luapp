@@ -22,7 +22,8 @@ int main()
 	lua::State<>    lua;
 
 	lua.Init();
-	lua.DoScript("../script/simple.lua");
+	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+	lua.DoScript("simple.lua");
 
 	return EXIT_SUCCESS;
 }

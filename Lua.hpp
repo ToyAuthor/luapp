@@ -22,14 +22,13 @@ extern "C" {
 namespace lua{
 
 /*
-Those date type have worked in luapp.
-You can't use the other date type to work with luapp.
-*/
+ * Only following date types could work in luapp.
+ * You can't use the other date type to work with luapp.
+ */
 typedef double          Num;
-//typedef int             Bool;   Do I need it?
 typedef int             Int;
 typedef std::string     Str;
-typedef void*           Ptr;   // pointer
+typedef void*           Ptr;
 
 
 
@@ -55,11 +54,26 @@ inline void OpenLibs(Handle h)
 {
 	luaL_openlibs(h);
 }
+inline Str GetError(Handle h)
+{
+	Str  str(lua_tostring(h, -1));
+	lua_pop(h, 1);
+
+	return str;
+}
 inline int DoScript(Handle h,Name filename)
 {
-	luaL_loadfile(h,filename);
-	lua_pcall(h,0,0,0);
-	return 0;
+	if( luaL_loadfile(h,filename) )
+	{
+		return 0;
+	}
+
+	if( lua_pcall(h,0,0,0) )
+	{
+		return 0;
+	}
+
+	return 1;
 }
 inline void NewTable(Handle h)
 {
@@ -186,9 +200,9 @@ inline int GetTop(Handle h)
 
 
 //----------------------tools----------------------start
-inline void PushVarToLua(Handle hLua,Int t)
+inline void PushVarToLua(lua::Handle hLua,lua::Int t)
 {
-	PushInteger(hLua,t);
+	lua::PushInteger(hLua,t);
 }
 inline void PushVarToLua(lua::Handle hLua,lua::Num t)
 {
