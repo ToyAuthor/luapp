@@ -27,10 +27,78 @@ typedef void*           Ptr;
 
 
 typedef lua_State* Handle;
-typedef int (*CFunction) (Handle);   // lua::CFunction as lua_CFunction
+typedef int (*CFunction) (Handle);   // lua::CFunction as lua_CFunction.
 typedef const char* Name;
 
+// A function register for lua.
+class FuncReg
+{
+	public:
 
+		// lua::FunctionRegister::Item as luaL_Reg.
+		struct Item
+		{
+			Item():name(NULL),func(NULL){}
+			Name       name;
+			CFunction  func;
+		};
+
+		FuncReg():mIndex(0),mSize(4),mData(0)
+		{
+			mData = new Item [mSize];
+		}
+
+		~FuncReg()
+		{
+			delete [] mData;
+		}
+
+		void Add(std::string name, CFunction func)
+		{
+			mNameList.push_back(name);
+
+			mData[mIndex].name = mNameList[mNameList.size()-1].c_str();
+			mData[mIndex].func = func;
+			mIndex++;
+
+			if ( mIndex+1 == mSize )
+			{
+				get_more_memory();
+			}
+		}
+
+		Item* _get()
+		{
+			return mData;
+		}
+
+	private:
+
+		void get_more_memory()
+		{
+			mSize = mSize*2;
+
+			Item    *new_block = new Item [mSize];
+
+			for ( int i=0 ; mData[i].name!=NULL ; i++ )
+			{
+				new_block[i] = mData[i];
+			}
+
+			delete [] mData;
+			mData = new_block;
+		}
+
+		int     mIndex;
+		int     mSize;
+		Item    *mData;
+		std::vector<std::string>   mNameList;
+};
+
+inline void NewModule(Handle h,FuncReg &reg)
+{
+	luaL_newlib(h,(luaL_Reg*)(reg._get()));
+}
 
 inline Handle CreateHandle()
 {

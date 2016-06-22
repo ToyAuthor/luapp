@@ -8,12 +8,12 @@ To help you using lua in C++ style.
 - [x] To register the global function or member function from C++ into lua.
 - [x] Read/Add global variable of lua script from C++.
 - [x] Call global function of lua script from C++.
-- [ ] Create lua module support.
+- [x] Create lua module support.
 - [ ] Let lua script embedded in C++.
 - [ ] Design a C++ container to simulate lua table.
 
 ### Version
-1.0.0
+1.1.0
 
 ### Example
 

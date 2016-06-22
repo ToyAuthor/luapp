@@ -1,14 +1,24 @@
 
 project(lua)
 
+if(WIN32)
+	add_definitions(-DLUA_BUILD_AS_DLL)
+endif()
+
 if(MINGW)
 	add_definitions(-O2 -g -Wall -Wextra -Werror)
 elseif(UNIX)
-	add_definitions(-O2 -g -Wall -Wextra -Werror -fPIC -DLUA_USE_POSIX)
+	# You need use dlopen if you want to create C extension module.
+	#add_definitions(-O2 -g -Wall -Wextra -Werror -fPIC -DLUA_USE_LINUX)
+	add_definitions(-O2 -g -Wall -Wextra -Werror -fPIC -DLUA_USE_POSIX -DLUA_USE_DLOPEN)
 	include_directories(/usr/include)
-	link_directories(/usr/lib)
-endif()
 
+	if(CMAKE_SIZEOF_VOID_P EQUAL 8)
+		link_directories(/usr/lib/x86_64-linux-gnu)
+	else()
+		link_directories(/usr/lib)
+	endif()
+endif()
 
 set(SOURCE
 	lapi.c
@@ -49,9 +59,14 @@ set(SOURCE
 
 set_source_files_properties(${SOURCE} PROPERTIES LANGUAGE C)
 
-
 set(LIBRARY_OUTPUT_PATH ${PROJECT_BINARY_DIR})
-add_library(lua STATIC ${SOURCE})
+
+add_library(lua SHARED ${SOURCE})
+
+if(UNIX)
+	# Link them if you want to create C extension module.
+	target_link_libraries(lua dl m)
+endif()
 
 if(MSVC)
 	set_target_properties( lua PROPERTIES

@@ -50,7 +50,7 @@ class Adapter
 
 		// It's a general way to register class.
 		static void Register( lua::Handle    L,    ///< Handle of lua
-		                      const char*    str   ///< Name of class
+		                      lua::Str       str   ///< Name of class
 		                      )
 		{
 			Adapter<C,N>::mClassName=str;                      // ...
@@ -59,17 +59,12 @@ class Adapter
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
 			lua::SetGlobal(L, mClassName.c_str());             // ...
 
-			//--------Create a metatable for userdata--------
-			lua::NewMetaTable(L, (mClassName+"_ud").c_str());  // ... [T]
-			lua::PushString(L, "__gc");                        // ... [T] ["__gc"]
-			lua::PushFunction(L, &Adapter<C,N>::gc_obj);       // ... [T] ["__gc"] [F]
-			lua::SetTable(L, -3);                              // ... [T]
-			lua::Pop(L,1);                                     // ...
+			BuildMetaTableForUserdata(L);
 		}
 
 		// Call it after every member function was registed at mList[].
 		static void RegisterEx( lua::Handle    L,    ///< Handle of lua
-		                        const char*    str   ///< Name of class
+		                        lua::Str       str   ///< Name of class
 		                        )
 		{
 			Adapter<C,N>::mClassName=str;                      // ...
@@ -78,16 +73,38 @@ class Adapter
 			lua::PushFunction(L, &Adapter<C,N>::constructor2); // ... [F]
 			lua::SetGlobal(L, mClassName.c_str());             // ...
 
-			//--------Create a metatable for userdata--------
+			BuildMetaTableForUserdata(L);
+			BuildMetaTableForMemberFunction(L);
+		}
+
+		// Return a lua function.
+		static lua::CFunction GetConstructor( lua::Handle    L,    ///< Handle of lua
+		                                      lua::Str       str   ///< Name of class
+		                                      )
+		{
+			Adapter<C,N>::mClassName=str;
+
+			BuildMetaTableForUserdata(L);
+			BuildMetaTableForMemberFunction(L);
+
+			return &Adapter<C,N>::constructor2;
+		}
+
+	private:
+
+		static Str         mClassName;
+
+		static void BuildMetaTableForUserdata(lua::Handle L)
+		{
 			lua::NewMetaTable(L, (mClassName+"_ud").c_str());  // ... [T]
 			lua::PushString(L, "__gc");                        // ... [T] ["__gc"]
 			lua::PushFunction(L, &Adapter<C,N>::gc_obj);       // ... [T] ["__gc"] [F]
 			lua::SetTable(L, -3);                              // ... [T]
 			lua::Pop(L,1);                                     // ...
+		}
 
-
-			//--------Create a metatable for member function--------start
-
+		static void BuildMetaTableForMemberFunction(lua::Handle L)
+		{
 			lua::NewMetaTable(L, mClassName.c_str());          // ... [T]
 			lua::PushString(L, "__index");                     // ... [T] ["__index"]
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
@@ -111,13 +128,7 @@ class Adapter
 			}
 
 			lua::Pop(L,1);                                     // ...
-
-			//--------Create a metatable for member function--------end
 		}
-
-	private:
-
-		static Str         mClassName;
 
 		// As destructor.
 		static int gc_obj(lua::Handle L)

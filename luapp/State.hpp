@@ -63,18 +63,38 @@ class State
 {
 	public:
 
-		State():hLua((lua::Handle)0)
-		{}
+		State(lua::Handle h = (lua::Handle)0):hLua(h),mIsModuleMode(0)
+		{
+			if ( hLua )
+			{
+				mIsModuleMode = 1;
+			}
+		}
 
 		~State()
 		{
 			if(hLua)Drop();
 		}
 
+		void RegisterNativeFunction(lua::Str name,lua::CFunction func)
+		{
+			if ( mIsModuleMode )
+			{
+				mFuncReg.Add(name,func);
+			}
+			else
+			{
+				// I am not sure.
+				lua::PushFunction(hLua, func);
+				lua::SetGlobal(hLua, name.c_str());
+			}
+		}
+
 		/// Let lua script could use given class type.
 		template<typename C>
-		void RegisterClass(const char *class_name)
+		void RegisterClass(lua::Str class_name)
 		{
+			if ( mIsModuleMode ) return; // Not support yet.
 			adapter::Adapter<C,N>::Register(hLua,class_name);
 		}
 
@@ -82,24 +102,32 @@ class State
 		It have a faster constructor. But lua need to store more information.
 		Call it after every each RegisterMemberFunction().*/
 		template<typename C>
-		void RegisterClassEx(const char *class_name)
+		void RegisterClassEx(lua::Str class_name)
 		{
-			adapter::Adapter<C,N>::RegisterEx(hLua,class_name);
+			if ( mIsModuleMode )
+			{
+				mFuncReg.Add(class_name,adapter::Adapter<C,N>::GetConstructor(hLua,class_name));
+			}
+			else
+			{
+				adapter::Adapter<C,N>::RegisterEx(hLua,class_name);
+			}
 		}
 
 		/// Let lua script could use given member function. You can't use it without RegisterClass() or RegisterClassEx().
 		template<typename F>
-		void RegisterMemberFunction(const char *func_name,F fn)
+		void RegisterMemberFunction(lua::Str func_name,F fn)
 		{
 			typedef typename ClassTypeFilter<F>::ClassType C;
-			struct adapter::Adapter<C,N>::Pack     myF( Str(func_name),adapter::GetProxy(fn));
+			struct adapter::Adapter<C,N>::Pack     myF( func_name,adapter::GetProxy(fn));
 			adapter::Adapter<C,N>::mList.push_back(myF);
 		}
 
 		/// Let lua script could use given global function.
 		template<typename F>
-		void RegisterFunction(const char *func_name,F fn)
+		void RegisterFunction(lua::Str func_name,F fn)
 		{
+			if ( mIsModuleMode ) return; // Not support yet.
 			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn);
 		}
 
@@ -108,14 +136,19 @@ class State
 		This member function will be look like a global function in lua.
 		*/
 		template<typename F,typename C>
-		void RegisterFunction(const char *func_name,F fn,C *obj)
+		void RegisterFunction(lua::Str func_name,F fn,C *obj)
 		{
+			if ( mIsModuleMode ) return; // Not support yet.
 			// Add class type checked here some times later.
 			wrapper::Wrapper<N>::RegisterFunction(hLua,func_name,fn,obj);
 		}
 
 		int Init()
 		{
+			if ( mIsModuleMode ) return (int)0; // Why you did this? You already got a lua_State.
+
+			if (hLua)   return (int)0; // You can only call Init() once.
+
 			hLua=lua::CreateHandle();
 			lua::OpenLibs(hLua);
 
@@ -128,7 +161,14 @@ class State
 
 		void Drop()
 		{
-			lua::DestroyHandle(hLua);
+			if ( mIsModuleMode )
+			{
+				lua::NewModule(hLua,mFuncReg);
+			}
+			else
+			{
+				lua::DestroyHandle(hLua);
+			}
 			hLua=(lua::Handle)0;
 		}
 
@@ -139,6 +179,8 @@ class State
 
 		int DoScript(lua::Str str)
 		{
+			if ( mIsModuleMode ) return (int)0; // You can't do this. Because module mode didn't have its own script.
+
 			if(IsScriptPathExist())
 			{
 				str=mScriptPath+str;
@@ -147,13 +189,8 @@ class State
 			return lua::DoScript(hLua,str.c_str());
 		}
 
-		int DoScript(const char *str)
-		{
-			return DoScript(lua::Str(str));
-		}
-
 		/// Tell luapp where to read main lua scripts.
-		void AddMainPath(const char *path)
+		void AddMainPath(lua::Str path)
 		{
 			mScriptPath=path;
 			mScriptPath+="/";
@@ -164,29 +201,28 @@ class State
 		}
 
 		/// Tell luapp where to read more lua scripts.
-		void AddSearchPath(const char *path)
+		void AddSearchPath(lua::Str path)
 		{
-			lua::Str  str(path);
-			str+="/";
+			path+="/";
 			if(hLua)
 			{
-				AddScriptPathToLua(str);
+				AddScriptPathToLua(path);
 			}
 		}
 
 		/// Set global variable to lua script. Don't try to send function.
 		template<typename T>
-		void SetGlobal(const char *name,T t)
+		void SetGlobal(lua::Str name,T t)
 		{
 			PushVarToLua(hLua,t);
-			lua::SetGlobal(hLua,name);
+			lua::SetGlobal(hLua,name.c_str());
 		}
 
 		/// Get global variable from lua script.
 		template<typename T>
-		void GetGlobal(const char *name,T t)
+		void GetGlobal(lua::Str name,T t)
 		{
-			lua::GetGlobal(hLua,name);
+			lua::GetGlobal(hLua,name.c_str());
 			CheckVarFromLua(hLua,t,-1);
 			lua::Pop(hLua,1);
 		}
@@ -207,7 +243,7 @@ class State
 			func->mFuncName=name;
 		}
 
-		/// Call global function without return value.
+		/// Call global function that don't have return value.
 		void Call(lua::Str name)
 		{
 			lua::GetGlobal(hLua,name.c_str());
@@ -298,6 +334,8 @@ class State
 
 		lua::Handle      hLua;
 		lua::Str         mScriptPath;
+		bool             mIsModuleMode;
+		lua::FuncReg     mFuncReg;
 };
 
 

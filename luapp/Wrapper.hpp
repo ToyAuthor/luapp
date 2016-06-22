@@ -46,35 +46,33 @@ class Wrapper
 		// For global function.
 		template <typename F>
 		static void RegisterFunction( lua::Handle    L,
-		                              const char*    name,
+		                              lua::Str       name,
 		                              F              fn
 		                              )
 		{
-			Str                 str(name);
-			struct Pack         func(str,GetProxy(fn));
+			struct Pack         func(name,GetProxy(fn));
 			mFuncList.push_back(func);
 
 			lua::PushNumber(L, mFuncList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
-			lua::SetGlobal(L, str.c_str());
+			lua::SetGlobal(L, name.c_str());
 		}
 
 		// For member function.
 		template <typename F,typename C>
 		static void RegisterFunction( lua::Handle    L,
-		                              const char*    name,
+		                              lua::Str       name,
 		                              F              fn,
 		                              C*             obj
 		                              )
 		{
-			Str                 str(name);
 
-			struct Pack         func(str,GetProxy(fn,obj));
+			struct Pack         func(name,GetProxy(fn,obj));
 			mFuncList.push_back(func);
 
 			lua::PushNumber(L, mFuncList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
-			lua::SetGlobal(L, str.c_str());
+			lua::SetGlobal(L, name.c_str());
 		}
 
 	private:
