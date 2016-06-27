@@ -57,13 +57,21 @@ class FuncReg
 		{
 			mNameList.push_back(name);
 
-			mData[mIndex].name = mNameList[mNameList.size()-1].c_str();
+		//	mData[mIndex].name = mNameList[mNameList.size()-1].c_str();      // It's not safe. Memory address may be change.
 			mData[mIndex].func = func;
 			mIndex++;
 
 			if ( mIndex+1 == mSize )
 			{
 				get_more_memory();
+			}
+		}
+
+		void Refresh()
+		{
+			for ( int i=0 ; i<mIndex ; i++ )
+			{
+				mData[i].name = mNameList[i].c_str();
 			}
 		}
 

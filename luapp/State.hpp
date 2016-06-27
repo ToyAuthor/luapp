@@ -163,6 +163,7 @@ class State
 		{
 			if ( mIsModuleMode )
 			{
+				mFuncReg.Refresh();
 				lua::NewModule(hLua,mFuncReg);
 			}
 			else
