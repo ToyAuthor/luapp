@@ -13,7 +13,7 @@ To help you using lua in C++ style.
 - [ ] Design a C++ container to simulate lua table.
 
 ### Version
-1.1.0
+1.1.1
 
 ### Example
 
