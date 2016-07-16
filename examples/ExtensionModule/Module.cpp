@@ -41,7 +41,7 @@ static lua::Int func_count(lua::Handle L)
 //	int count(int a,int b)
 //	{
 		lua::Int c = a + b;
-//		return c
+//		return c;
 //	}
 //--------------------------------
 
