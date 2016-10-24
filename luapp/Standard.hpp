@@ -11,26 +11,21 @@
 #include <vector>
 #include <string>
 #include "lua.hpp"
+#include "luapp/DataType.hpp"
 
 
 namespace lua{
 
-/*
- * Only following date types could work in luapp.
- * You can't use the other date type to work with luapp.
- */
-typedef double          Num;
-typedef int             Int;
-typedef std::string     Str;
-typedef void*           Ptr;
 
-
-
+//----------Short name----------
 typedef lua_State* Handle;
 typedef int (*CFunction) (Handle);   // lua::CFunction as lua_CFunction.
 typedef const char* Name;
 
-// A function register for lua.
+/*
+ * It's a function register for lua.
+ * Basically, this class just a manager of luaL_Reg.
+ */
 class FuncReg
 {
 	public:
