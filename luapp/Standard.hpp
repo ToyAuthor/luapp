@@ -12,7 +12,7 @@
 #include <string>
 #include "lua.hpp"
 #include "luapp/DataType.hpp"
-
+#include "luapp/Table.hpp"
 
 namespace lua{
 
@@ -21,6 +21,7 @@ namespace lua{
 typedef lua_State* Handle;
 typedef int (*CFunction) (Handle);   // lua::CFunction as lua_CFunction.
 typedef const char* Name;
+
 
 /*
  * It's a function register for lua.
@@ -273,7 +274,7 @@ inline int GetTop(Handle h)
 }
 
 
-//----------------------tools----------------------start
+//------------------------------------Push and Check------------------------------------start
 inline void PushVarToLua(lua::Handle hLua,lua::Bool t)
 {
 	lua::PushBoolean(hLua,t);
@@ -314,7 +315,116 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
 {
 	*t=lua::CheckPointer(hLua,i);
 }
-//----------------------tools----------------------end
+
+//---------For void CheckVarFromLua(lua::Handle,lua::Table*,int)---------start
+
+inline void _VisitTable(lua::Handle hLua,lua::Table *table);
+
+template<typename T>
+inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
+{
+	// ... [value]
+
+	if ( lua_isstring(hLua, -1) )
+	{
+		lua::Str   _value;
+		CheckVarFromLua(hLua,&_value,-1);
+		lua::Var   value(_value);
+		(*table)[key] = value;
+	}
+	else if ( lua_isinteger(hLua, -1) )
+	{
+		lua::Int   value;
+		CheckVarFromLua(hLua,&value,-1);
+		(*table)[key] = value;
+	}
+	else if ( lua_isnumber(hLua, -1) )
+	{
+		lua::Num   value;
+		CheckVarFromLua(hLua,&value,-1);
+		(*table)[key] = value;
+	}
+	else if ( lua_istable(hLua, -1) )
+	{
+		lua::Table   subTable;
+		_VisitTable(hLua,&subTable);
+
+		lua::Var   value = subTable.ToVar();
+		(*table)[key] = value;
+	}
+	else
+	{
+		// drop else value.
+	}
+
+	// ... [value]
+}
+
+inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
+{
+	                                      // ... [T] [key] [value] [key]
+	if ( lua_isstring(hLua, -1) )
+	{
+		lua::Str   key;
+		lua::CheckVarFromLua(hLua,&key,-1);
+		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		_SaveTableValue(hLua,table,key);
+	}
+	else if ( lua_isnumber(hLua, -1) )
+	{
+		lua::Num   key;
+		lua::CheckVarFromLua(hLua,&key,-1);
+		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		_SaveTableValue(hLua,table,key);
+	}
+	else if ( lua_isinteger(hLua, -1) )
+	{
+		lua::Int   key;
+		lua::CheckVarFromLua(hLua,&key,-1);
+		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		_SaveTableValue(hLua,table,key);
+	}
+	else// ingore else values.
+	{
+		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+	}
+
+	lua_pop(hLua, 1);                     // ... [T] [key]
+}
+
+inline void _VisitTable(lua::Handle hLua,lua::Table *table)
+{
+	                      // ... [T]
+	lua_pushnil(hLua);    // ... [T] [nil]
+
+	while ( lua_next(hLua, -2) != 0 )
+	{
+		                                // ... [T] [key] [value]
+		/*
+		 * I have to copy the key,
+		 * because CheckVarFromLua seems modify key data.
+		 * The modified key data will make lua_next crash.
+		 */
+		lua_pushvalue(hLua,-2);         // ... [T] [key] [value] [key]
+		_SwitchTableKey(hLua,table);    // ... [T] [key]
+	}
+
+	// ... [T]
+}
+
+// Unstable.
+inline void CheckVarFromLua(lua::Handle hLua,lua::Table *table,int i)
+{
+	                                 // ...
+	lua_pushvalue(hLua,i);           // ... [T]
+	::lua::_VisitTable(hLua,table);  // ... [T]
+	lua_pop(hLua, 1);                // ...
+}
+
+//---------For void CheckVarFromLua(lua::Handle,lua::Table*,int)---------end
+
+
+//------------------------------------Push and Check------------------------------------end
 
 
 }//namespace lua
