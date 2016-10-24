@@ -208,6 +208,10 @@ inline void PushNumber(Handle h,double n)
 {
 	lua_pushnumber(h,n);
 }
+inline void PushBoolean(Handle h,bool num)
+{
+	lua_pushboolean(h,(int)num);
+}
 inline void PushInteger(Handle h,int num)
 {
 	lua_pushinteger(h,num);
@@ -215,6 +219,11 @@ inline void PushInteger(Handle h,int num)
 inline double CheckNumber(Handle h,int index)
 {
 	return luaL_checknumber(h,index);
+}
+inline bool CheckBoolean(Handle h,int index)
+{
+	return lua_toboolean(h,index);
+	//return luaL_checkboolean(h,index);
 }
 inline int CheckInteger(Handle h,int index)
 {
@@ -265,6 +274,10 @@ inline int GetTop(Handle h)
 
 
 //----------------------tools----------------------start
+inline void PushVarToLua(lua::Handle hLua,lua::Bool t)
+{
+	lua::PushBoolean(hLua,t);
+}
 inline void PushVarToLua(lua::Handle hLua,lua::Int t)
 {
 	lua::PushInteger(hLua,t);
@@ -280,6 +293,10 @@ inline void PushVarToLua(lua::Handle hLua,lua::Str t)
 inline void PushVarToLua(lua::Handle hLua,lua::Ptr t)
 {
 	lua::PushPointer(hLua,t);
+}
+inline void CheckVarFromLua(lua::Handle hLua,lua::Bool *t,int i)
+{
+	*t=(lua::Bool)lua::CheckBoolean(hLua,i);
 }
 inline void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
 {

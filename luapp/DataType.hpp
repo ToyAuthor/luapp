@@ -6,6 +6,7 @@
 namespace lua{
 
 //------Only the following date types could work in luapp------
+typedef bool            Bool;
 typedef double          Num;
 typedef int             Int;
 typedef std::string     Str;
