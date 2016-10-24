@@ -40,7 +40,7 @@ class Table
 		{
 			return _mapStr[key];
 		}
-
+		/*
 		lua::Var& operator [] (lua::Int key)
 		{
 			return _mapInt[key];
@@ -74,7 +74,7 @@ class Table
 
 			return false;
 		}
-
+		*/
 		bool IsExist(lua::Str key)
 		{
 			std::map<lua::Str,lua::Var>::iterator it = _mapStr.find(key);
@@ -97,14 +97,14 @@ class Table
 		void copy_my_kind(const Table& _bro)
 		{
 			Table   &bro = const_cast<Table&>(_bro);
-			this->_mapInt = bro._mapInt;
-			this->_mapNum = bro._mapNum;
 			this->_mapStr = bro._mapStr;
+		//	this->_mapInt = bro._mapInt;
+		//	this->_mapNum = bro._mapNum;
 		}
 
 		std::map<lua::Str,lua::Var>    _mapStr;   // Maybe we just only need it, because lua_next just only give me string key.
-		std::map<lua::Int,lua::Var>    _mapInt;
-		std::map<lua::Num,lua::Var>    _mapNum;
+	//	std::map<lua::Int,lua::Var>    _mapInt;
+	//	std::map<lua::Num,lua::Var>    _mapNum;
 };
 
 }//namespace lua

@@ -370,6 +370,7 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
+	/*
 	else if ( lua_isnumber(hLua, -1) )
 	{
 		lua::Num   key;
@@ -384,6 +385,7 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
+	*/
 	else// ingore else values.
 	{
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
