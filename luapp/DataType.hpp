@@ -18,17 +18,8 @@ class Nil
 {
 	public:
 
-		Nil()
-		{
-			body[0] = 1;
-			body[1] = 1;
-			body[2] = 1;
-		}
+		Nil(){}
 		~Nil(){}
-
-	private:
-
-		char  body[3];
 };
 
 }//namespace lua

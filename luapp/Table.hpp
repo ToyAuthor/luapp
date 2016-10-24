@@ -89,7 +89,7 @@ class Table
 
 		lua::Var ToVar()
 		{
-			return lua::Var(new ::lua::_VarType<lua::Table>(*this) ,sizeof(::lua::Table));
+			return lua::Var(new ::lua::_VarType<lua::Table>(*this) );
 		}
 
 	private:

@@ -74,54 +74,46 @@ class Var
 		Var()
 		{
 			this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
-			this->_size = sizeof(lua::Int);
 		}
 
 		Var(::lua::Int t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Int>(t);
-			this->_size = sizeof(lua::Int);
 		}
 
 		Var(::lua::Str t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Str>(t);
-			this->_size = sizeof(lua::Str);
 		}
 
 		Var(const char *t)
 		{
 			lua::Str   str = t;
 			this->_ptr = new ::lua::_VarType<lua::Str>(str);
-			this->_size = sizeof(lua::Str);
 		}
 
 		Var(::lua::Ptr t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
-			this->_size = sizeof(lua::Ptr);
 		}
 
 		Var(::lua::Num t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Num>(t);
-			this->_size = sizeof(lua::Num);
 		}
 
 		Var(::lua::Bool t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
-			this->_size = sizeof(lua::Bool);
 		}
 
 	//	Var(::lua::Table t)    It's hard to implement this.
-		Var(::lua::_VarTypeBase *t, size_t s)
+		Var(::lua::_VarTypeBase *t)
 		{
 			this->_ptr = t;
-			this->_size = s;
 		}
 
-		Var(const Var& bro)
+		Var(const Var& bro):_ptr(0)
 		{
 			copy_my_kind(bro);
 		}
@@ -134,10 +126,13 @@ class Var
 
 		~Var()
 		{
-			delete _ptr;
+			free_ptr();
 		};
 
-		const std::type_info& GetType(){return _ptr->GetType();}
+		const std::type_info& GetType()
+		{
+			return _ptr->GetType();
+		}
 
 		void* GetPtr()
 		{
@@ -151,15 +146,23 @@ class Var
 
 	private:
 
+		void free_ptr()
+		{
+			if ( this->_ptr )
+			{
+				delete _ptr;
+				this->_ptr = 0;
+			}
+		}
+
 		void copy_my_kind(const Var& _bro)
 		{
+			free_ptr();
 			Var   &bro = const_cast<Var&>(_bro);
 			this->_ptr  = bro.Clone();
-			this->_size = bro._size;
 		}
 
 		_VarTypeBase*   _ptr;
-		size_t          _size;
 };
 
 //-----------------------------------------------------
