@@ -317,7 +317,98 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
 	*t=lua::CheckPointer(hLua,i);
 }
 
-//---------For void CheckVarFromLua(lua::Handle,lua::Table*,int)---------start
+// Only work for "void PushVarToLua(lua::Handle hLua,lua::Table &table)"
+inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
+{
+	lua::NewTable(hLua);                 // ... [T]
+
+	lua::Table::Iterator   it = table.GetBegin();
+
+	lua::Var   key;
+	lua::Var   value;
+
+	for ( ; ! it.IsEnd() ; it++ )
+	{
+		// ... [T]
+
+		it.GetKeyValue( &key, &value );
+
+		if ( lua::VarType<lua::Str>(key) )
+		{
+			lua::Str   key_t = lua::VarCast<lua::Str>(key);
+			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+		}
+		else if ( lua::VarType<lua::Int>(key) )
+		{
+			lua::Int   key_t = lua::VarCast<lua::Int>(key);
+			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+		}
+		else if ( lua::VarType<lua::Num>(key) )
+		{
+			lua::Num   key_t = lua::VarCast<lua::Num>(key);
+			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+		}
+		/*
+		else if ( lua::VarType<lua::Bool>(key) )
+		{
+			lua::Bool  key_t = lua::VarCast<lua::Bool>(key);
+			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+		}
+		*/
+		else
+		{
+			continue;    // Just in case.
+		}
+
+		if ( lua::VarType<lua::Str>(value) )
+		{
+			lua::Str   t_value = lua::VarCast<lua::Str>(value);
+			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else if ( lua::VarType<lua::Int>(value) )
+		{
+			lua::Int   t_value = lua::VarCast<lua::Int>(value);
+			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else if ( lua::VarType<lua::Num>(value) )
+		{
+			lua::Num   t_value = lua::VarCast<lua::Num>(value);
+			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else if ( lua::VarType<lua::Ptr>(value) )
+		{
+			lua::Ptr   t_value = lua::VarCast<lua::Ptr>(value);
+			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else if ( lua::VarType<lua::Bool>(value) )
+		{
+			lua::Bool   t_value = lua::VarCast<lua::Bool>(value);
+			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else if ( lua::VarType<lua::Table>(value) )
+		{
+			lua::Table   t_value = lua::VarCast<lua::Table>(value);
+			_PushValueToLuaTable(hLua,t_value);    // ... [T] [key] [value]
+		}
+		else
+		{
+			lua_pop(hLua, 1);           // ... [T]
+			continue;
+		}
+
+		lua::SetTable(hLua,-3);      // ... [T]
+	}
+
+	// ... [T]
+}
+
+inline void PushVarToLua(lua::Handle hLua,lua::Table &table)
+{
+	                                     // ...
+	_PushValueToLuaTable(hLua,table);    // ... [T]
+}
+
+//------They only work for void CheckVarFromLua(lua::Handle,lua::Table*,int)------start
 
 inline void _VisitTable(lua::Handle hLua,lua::Table *table);
 
