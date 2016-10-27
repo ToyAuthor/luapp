@@ -77,45 +77,109 @@ class Var
 			this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
 		}
 
-		Var(::lua::Int t)
+		//---------------------nil---------------------
+		Var(const ::lua::Nil t)
+		{
+			this->_ptr = new ::lua::_VarType<lua::Nil>(t);
+		}
+		Var& operator = (const ::lua::Nil t)
+		{
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Nil>(t);
+			return *this;
+		}
+
+		//---------------------Integer---------------------
+		Var(const ::lua::Int t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Int>(t);
 		}
+		Var& operator = (const ::lua::Int t)
+		{
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Int>(t);
+			return *this;
+		}
 
-		Var(::lua::Str t)
+		//---------------------String---------------------
+		Var(const ::lua::Str t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Str>(t);
 		}
-
+		Var& operator = (const ::lua::Str t)
+		{
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Str>(t);
+			return *this;
+		}
 		Var(const char *t)
 		{
-			lua::Str   str = t;
-			this->_ptr = new ::lua::_VarType<lua::Str>(str);
+			this->_ptr = new ::lua::_VarType<lua::Str>(lua::Str(t));
 		}
-
-		Var(::lua::Ptr t)
+		Var& operator = (const char *t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Str>(lua::Str(t));
+			return *this;
 		}
 
-		Var(::lua::Num t)
+		//---------------------Pointer---------------------
+		Var(const ::lua::Ptr t)
+		{
+			#ifdef _LUAPP_USING_CPP11_
+			if ( t==nullptr ) {
+			#else
+			if ( t==NULL ) {
+			#endif
+				this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
+			}
+			else{
+				this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
+			}
+		}
+		Var& operator = (const ::lua::Ptr t)
+		{
+			free_ptr();
+			#ifdef _LUAPP_USING_CPP11_
+			if ( t==nullptr ) {
+			#else
+			if ( t==NULL ) {
+			#endif
+				this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
+			}
+			else {
+				this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
+			}
+			return *this;
+		}
+
+		//---------------------Double---------------------
+		Var(const ::lua::Num t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Num>(t);
 		}
+		Var& operator = (const ::lua::Num t)
+		{
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Num>(t);
+			return *this;
+		}
 
+		//---------------------Table---------------------
 		// They are implemented at luapp/Table.hpp
 		Var(const ::lua::Table &t);
 		Var& operator = (const ::lua::Table &t);
 
-		Var(::lua::Bool t)
+		//---------------------Boolean---------------------
+		Var(const ::lua::Bool t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
 		}
-
-	//	Var(::lua::Table t)    It's hard to implement this.
-		Var(::lua::_VarTypeBase *t)
+		Var& operator = (const ::lua::Bool t)
 		{
-			this->_ptr = t;
+			free_ptr();
+			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
+			return *this;
 		}
 
 		Var(const Var& bro):_ptr(0)
