@@ -11,6 +11,7 @@
 #include <vector>
 #include <string>
 #include "lua.hpp"
+#include "luapp/Define.hpp"
 #include "luapp/DataType.hpp"
 #include "luapp/Table.hpp"
 

@@ -25,6 +25,7 @@ if ( lua::VarType<lua::Str>(var) )
 
 #include <typeinfo>
 #include <cstring>
+#include "luapp/Define.hpp"
 #include "luapp/DataType.hpp"
 
 namespace lua{
