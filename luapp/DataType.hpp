@@ -1,3 +1,7 @@
+/**
+@file   DataType.hpp
+@brief  Only These date types could work in luapp and lua
+*/
 
 #ifndef _LUAPP_DATA_TYPE_HPP_
 #define _LUAPP_DATA_TYPE_HPP_
@@ -5,7 +9,6 @@
 
 namespace lua{
 
-//------Only the following date types could work in luapp------
 typedef bool            Bool;
 typedef double          Num;
 typedef int             Int;
@@ -13,14 +16,19 @@ typedef std::string     Str;
 typedef void*           Ptr;
 
 
-// As null. Not test yet.
-class Nil
-{
-	public:
+struct Nil {};
 
-		Nil(){}
-		~Nil(){}
-};
+/*
+ * It implemented at luapp/Table.hpp
+ * I try to made it looks like lua table.
+ */
+class Table;
+
+/*
+ * It implemented at luapp/Var.hpp
+ * It works like boost::any.
+ */
+class Var;
 
 }//namespace lua
 

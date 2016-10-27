@@ -102,6 +102,10 @@ class Var
 			this->_ptr = new ::lua::_VarType<lua::Num>(t);
 		}
 
+		// They are implemented at luapp/Table.hpp
+		Var(const ::lua::Table &t);
+		Var& operator = (const ::lua::Table &t);
+
 		Var(::lua::Bool t)
 		{
 			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
@@ -128,6 +132,15 @@ class Var
 		{
 			free_ptr();
 		};
+
+		/*
+		 * A shortcut for finding value when this is a Table.
+		 * Return lua::Nil if this is not a Table or the value not found.
+		 * They are implemented at luapp/Table.hpp
+		 */
+		Var& operator [] (const ::lua::Int key);
+		Var& operator [] (const ::lua::Num key);
+		Var& operator [] (const ::lua::Str key);
 
 		const std::type_info& GetType()
 		{

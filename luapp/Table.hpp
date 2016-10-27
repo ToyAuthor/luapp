@@ -36,11 +36,6 @@ class Table
 			return *this;
 		}
 
-		lua::Var& operator [] (lua::Str key)
-		{
-			return _mapStr[key];
-		}
-		/*
 		lua::Var& operator [] (lua::Int key)
 		{
 			return _mapInt[key];
@@ -49,6 +44,11 @@ class Table
 		lua::Var& operator [] (lua::Num key)
 		{
 			return _mapNum[key];
+		}
+
+		lua::Var& operator [] (lua::Str key)
+		{
+			return _mapStr[key];
 		}
 
 		bool IsExist(lua::Int key)
@@ -74,7 +74,7 @@ class Table
 
 			return false;
 		}
-		*/
+
 		bool IsExist(lua::Str key)
 		{
 			std::map<lua::Str,lua::Var>::iterator it = _mapStr.find(key);
@@ -102,10 +102,60 @@ class Table
 		//	this->_mapNum = bro._mapNum;
 		}
 
-		std::map<lua::Str,lua::Var>    _mapStr;   // Maybe we just only need it, because lua_next just only give me string key.
-	//	std::map<lua::Int,lua::Var>    _mapInt;
-	//	std::map<lua::Num,lua::Var>    _mapNum;
+		std::map<lua::Int,lua::Var>    _mapInt;
+		std::map<lua::Num,lua::Var>    _mapNum;
+		std::map<lua::Str,lua::Var>    _mapStr;
+	//	std::map<lua::Bool,lua::Var>   _mapBool;  // I don't think we need boolean index.
 };
+
+
+::lua::Var::Var(const ::lua::Table &t)
+{
+	this->_ptr = new ::lua::_VarType< ::lua::Table>(t);
+}
+
+::lua::Var& ::lua::Var::operator = (const ::lua::Table &t)
+{
+	this->free_ptr();
+	this->_ptr = new ::lua::_VarType< ::lua::Table>(t);
+	return *this;
+}
+
+::lua::Var& ::lua::Var::operator [] (const ::lua::Int key)
+{
+	static ::lua::Var  empty_var;
+
+	if ( ! VarType< ::lua::Table>(*this) )
+	{
+		return empty_var;             // Return lua::Nil
+	}
+
+	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
+}
+
+::lua::Var& ::lua::Var::operator [] (const ::lua::Num key)
+{
+	static ::lua::Var  empty_var;
+
+	if ( ! VarType< ::lua::Table>(*this) )
+	{
+		return empty_var;             // Return lua::Nil
+	}
+
+	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
+}
+
+::lua::Var& ::lua::Var::operator [] (const ::lua::Str key)
+{
+	static ::lua::Var  empty_var;
+
+	if ( ! VarType< ::lua::Table>(*this) )
+	{
+		return empty_var;             // Return lua::Nil
+	}
+
+	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
+}
 
 }//namespace lua
 

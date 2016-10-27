@@ -325,11 +325,42 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 {
 	// ... [value]
 
-	if ( lua_isstring(hLua, -1) )
+	int   type = lua_type(hLua, -1);
+
+	if ( type==LUA_TSTRING )
 	{
 		lua::Str   _value;
 		CheckVarFromLua(hLua,&_value,-1);
 		lua::Var   value(_value);
+		(*table)[key] = value;
+	}
+	else if ( type==LUA_TTABLE )
+	{
+		lua::Table   subTable;
+		_VisitTable(hLua,&subTable);
+
+		lua::Var   value = subTable;
+		(*table)[key] = value;
+	}
+	// Just in case.
+	else if ( type==LUA_TNIL )
+	{
+		// This element is not exist.
+	}
+	else if ( type==LUA_TNONE )
+	{
+		printf("luapp:No one know what type is it\n");
+	}
+	else if ( type==LUA_TLIGHTUSERDATA )
+	{
+		lua::Ptr   value;
+		CheckVarFromLua(hLua,&value,-1);
+		(*table)[key] = value;
+	}
+	else if ( type==LUA_TBOOLEAN )
+	{
+		lua::Bool   value;
+		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
 	else if ( lua_isinteger(hLua, -1) )
@@ -344,14 +375,6 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
-	else if ( lua_istable(hLua, -1) )
-	{
-		lua::Table   subTable;
-		_VisitTable(hLua,&subTable);
-
-		lua::Var   value = subTable.ToVar();
-		(*table)[key] = value;
-	}
 	else
 	{
 		// drop else value.
@@ -363,21 +386,23 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 {
 	                                      // ... [T] [key] [value] [key]
-	if ( lua_isstring(hLua, -1) )
+
+	if ( lua_type(hLua, -1)==LUA_TSTRING )
 	{
 		lua::Str   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	/*
-	else if ( lua_isnumber(hLua, -1) )
+	/* Not implement yet. Maybe I will ignore it ever.
+	else if ( lua_type(hLua, -1)==LUA_TBOOLEAN )
 	{
-		lua::Num   key;
+		lua::Bool  key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
+	*/
 	else if ( lua_isinteger(hLua, -1) )
 	{
 		lua::Int   key;
@@ -385,8 +410,14 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	*/
-	else// ingore else values.
+	else if ( lua_isnumber(hLua, -1) )
+	{
+		lua::Num   key;
+		lua::CheckVarFromLua(hLua,&key,-1);
+		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		_SaveTableValue(hLua,table,key);
+	}
+	else// Just in case.
 	{
 		lua_pop(hLua, 1);                 // ... [T] [key] [value]
 	}
