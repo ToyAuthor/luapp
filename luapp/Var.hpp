@@ -246,22 +246,10 @@ class Var
 //-----------------------------------------------------
 
 template<typename T>
-inline T VarCast(Var var)
+inline bool VarType(const ::lua::Var &_var)
 {
-	/*
-	if ( var.GetType()!=typeid(T) )
-	{
-		printf("error: see luapp/Var.hpp\n");
-		return T();
-	}
-	*/
+	::lua::Var   &var = const_cast< ::lua::Var&>(_var);
 
-	return *(reinterpret_cast<T*>(var.GetPtr()));
-}
-
-template<typename T>
-inline bool VarType(Var var)
-{
 	if ( var.GetType()!=typeid(T) )
 	{
 		return false;
@@ -270,8 +258,21 @@ inline bool VarType(Var var)
 	return true;
 }
 
-//-----------------------------------------------------
+template<typename T>
+inline T VarCast(const ::lua::Var &_var)
+{
+	::lua::Var   &var = const_cast< ::lua::Var&>(_var);
 
+	if ( ! ::lua::VarType<T>(var) )
+	{
+		printf("error: see luapp/Var.hpp\n");
+		return T();
+	}
+
+	return *(reinterpret_cast<T*>(var.GetPtr()));
+}
+
+//-----------------------------------------------------
 
 }//namespace lua
 

@@ -275,7 +275,7 @@ inline int GetTop(Handle h)
 }
 
 
-//------------------------------------Push and Check------------------------------------start
+//---------------------------PushVarToLua and CheckVarFromLua---------------------------start
 inline void PushVarToLua(lua::Handle hLua,lua::Bool t)
 {
 	lua::PushBoolean(hLua,t);
@@ -519,8 +519,8 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 
 inline void _VisitTable(lua::Handle hLua,lua::Table *table)
 {
-	                      // ... [T]
-	lua_pushnil(hLua);    // ... [T] [nil]
+	                                    // ... [T]
+	lua_pushnil(hLua);                  // ... [T] [nil]
 
 	while ( lua_next(hLua, -2) != 0 )
 	{
@@ -537,7 +537,6 @@ inline void _VisitTable(lua::Handle hLua,lua::Table *table)
 	// ... [T]
 }
 
-// Unstable.
 inline void CheckVarFromLua(lua::Handle hLua,lua::Table *table,int i)
 {
 	                                 // ...
@@ -546,10 +545,107 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Table *table,int i)
 	lua_pop(hLua, 1);                // ...
 }
 
-//---------For void CheckVarFromLua(lua::Handle,lua::Table*,int)---------end
+//------They only work for void CheckVarFromLua(lua::Handle,lua::Table*,int)------end
 
+inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
+{
+	if ( lua::VarType<lua::Str>(t) )
+	{
+		lua::Str   var = lua::VarCast<lua::Str>(t);
+		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Num>(t) )
+	{
+		lua::Num   var = lua::VarCast<lua::Num>(t);
+		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Int>(t) )
+	{
+		lua::Int   var = lua::VarCast<lua::Int>(t);
+		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Bool>(t) )
+	{
+		lua::Bool  var = lua::VarCast<lua::Bool>(t);
+		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Nil>(t) )
+	{
+		lua_pushnil(hLua);
+	}
+	else if ( lua::VarType<lua::Ptr>(t) )
+	{
+		lua::Ptr  var = lua::VarCast<lua::Ptr>(t);
+		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Table>(t) )
+	{
+		lua::Table  var = lua::VarCast<lua::Table>(t);
+		PushVarToLua(hLua,var);
+	}
+	else
+	{
+		printf("luapp:you push unknown data type\n");
+		lua_pushnil(hLua);
+	}
+}
 
-//------------------------------------Push and Check------------------------------------end
+inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
+{
+	int   type = lua_type(hLua, i);
+
+	if ( type==LUA_TSTRING )
+	{
+		lua::Str   var;
+		CheckVarFromLua(hLua,&var,i);
+		*t = var;
+	}
+	else if ( type==LUA_TBOOLEAN )
+	{
+		lua::Bool   var;
+		CheckVarFromLua(hLua,&var,i);
+		*t = var;
+	}
+	else if ( type==LUA_TNIL )
+	{
+		*t = lua::Var();
+	}
+	else if ( type==LUA_TNONE )
+	{
+		printf("luapp:No one know what type is it. That's new\n");
+	}
+	else if ( type==LUA_TLIGHTUSERDATA )
+	{
+		lua::Ptr   var;
+		CheckVarFromLua(hLua,&var,i);
+		*t = var;
+	}
+	else if ( type==LUA_TTABLE )
+	{
+		lua::Table   table;
+		CheckVarFromLua(hLua,&table,i);
+		*t = table;
+	}
+	else if ( lua_isinteger(hLua, i) )
+	{
+		lua::Int   var;
+		CheckVarFromLua(hLua,&var,i);
+		*t = var;
+	}
+	else if ( lua_isnumber(hLua, i) )
+	{
+		lua::Num   var;
+		CheckVarFromLua(hLua,&var,i);
+		*t = var;
+	}
+	else
+	{
+		printf("luapp:you get something luapp can't handle with\n");
+		*t = lua::Var();
+	}
+}
+
+//---------------------------PushVarToLua and CheckVarFromLua---------------------------end
 
 
 }//namespace lua

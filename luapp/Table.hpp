@@ -252,9 +252,9 @@ class Table
 		void copy_my_kind(const Table& _bro)
 		{
 			Table   &bro = const_cast<Table&>(_bro);
+			this->_mapInt = bro._mapInt;
+			this->_mapNum = bro._mapNum;
 			this->_mapStr = bro._mapStr;
-		//	this->_mapInt = bro._mapInt;
-		//	this->_mapNum = bro._mapNum;
 		}
 
 		std::map<lua::Int,lua::Var>    _mapInt;
