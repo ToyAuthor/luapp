@@ -204,6 +204,14 @@ class Var
 		template<typename T>
 		Var& operator [] (const T key);
 
+		/*
+		 * It's implemented at luapp/Table.hpp
+		 * A shortcut for finding value when this is a Table.
+		 * Return lua::Nil if this is not a Table or the value not found.
+		 */
+		template<typename T>
+		const Var& operator >> (const T key) const;
+
 		const std::type_info& GetType() const
 		{
 			return _ptr->GetType();

@@ -1,6 +1,6 @@
 /**
 @file   Table.hpp
-@brief  It's a container for copy lua table.
+@brief  It's a container looks like lua table.
 */
 
 
@@ -204,6 +204,21 @@ class Table
 			return _mapStr[key];
 		}
 
+		lua::Var& operator >> (lua::Int key)
+		{
+			return _mapInt[key];
+		}
+
+		lua::Var& operator >> (lua::Num key)
+		{
+			return _mapNum[key];
+		}
+
+		lua::Var& operator >> (lua::Str key)
+		{
+			return _mapStr[key];
+		}
+
 		bool IsExist(lua::Int key)
 		{
 			std::map<lua::Int,lua::Var>::iterator it = _mapInt.find(key);
@@ -283,6 +298,19 @@ template<typename T>
 	}
 
 	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
+}
+
+template<typename T>
+const ::lua::Var& ::lua::Var::operator >> (const T key) const
+{
+	static lua::Var   empty_var;
+
+	if ( ! VarType< ::lua::Table>(*this) )
+	{
+		return empty_var;
+	}
+
+	return (*const_cast< ::lua::Var*>(this))[key];
 }
 
 }//namespace lua
