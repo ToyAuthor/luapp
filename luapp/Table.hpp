@@ -3,6 +3,63 @@
 @brief  It's a container looks like lua table.
 */
 
+//----------------------Usage----------------------start
+#if 0
+
+#include <iostream>
+#include "luapp/Standard.hpp"
+
+int main()
+{
+	lua::Table  table;
+//	lua::Var    table;     // It works too! lua::Var can support following usage.
+
+	table["A"] = "A string";
+	table["B"] = 3.14;
+	table["C"]["D"] = true;
+	table["C"]["E"] = 100;
+
+	/*
+	 * Now table structure looks like this
+	 * -----------------------------------------
+	 *
+	 *            ___A :"A string"
+	 *           |
+	 *   table___|___B :3.14
+	 *           |
+	 *           |___C ___D :true
+	 *                |
+	 *                |___E :100
+	 *
+	 * -----------------------------------------
+	 */
+
+	lua::Var   var = table["A"];
+
+	if ( lua::VarType<lua::Str>(var) )
+	{
+		std::cout << lua::VarCast<lua::Str>(var); // Print "A string"
+	}
+
+//	var = table["C"]["E"];      // Don't do this. It may change value.
+	var = table>>"C">>"E";      // I recommand you search value by this way.
+
+	if ( lua::VarType<lua::Nil>(var) )
+	{
+		std::cout << "You search for nothing";
+	}
+
+	if ( lua::VarType<lua::Int>(var) )
+	{
+		std::cout << lua::VarCast<lua::Int>(var); // Print 100
+	}
+
+	return 0;
+}
+#endif
+//----------------------Usage----------------------end
+
+
 
 #ifndef _LUAPP_TABLE_HPP_
 #define _LUAPP_TABLE_HPP_

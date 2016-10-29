@@ -7,12 +7,71 @@
 //-----------------Usage-----------------start
 #if 0
 
-lua::Var  var("str");
-lua::Str  str;
+#include <iostream>
+#include "luapp/Standard.hpp"
 
-if ( lua::VarType<lua::Str>(var) )
+template<typename T>
+void PrintVar(lua::Var &var)
 {
-	str = lua::VarCast<lua::Str>(var);
+	if ( lua::VarType<lua::Nil>(var) )
+	{
+		std::cout << "Empty variable" << std::endl;
+	}
+	else
+	{
+		if ( lua::VarType<T>(var) ) // Always check the type. Always!
+		{
+			std::cout << lua::VarCast<T>(var) << std::endl;
+		}
+		else
+		{
+			std::cout << "Not correct type!" << std::endl;
+		}
+	}
+}
+
+int main()
+{
+	lua::Var  var;
+
+	PrintVar<lua::Num>(var);    // Print "Empty variable"
+	PrintVar<lua::Str>(var);    // Print "Empty variable"
+
+	//-----------------------------------------------------------
+
+	var = 3.14;
+
+	PrintVar<lua::Num>(var);    // Print 3.14
+	PrintVar<lua::Str>(var);    // Print "Not correct type!"
+
+	//-----------------------------------------------------------
+
+	var = "str";
+
+	PrintVar<lua::Num>(var);    // Print "Not correct type!"
+	PrintVar<lua::Str>(var);    // Print "str"
+
+	//-----------------------------------------------------------
+
+	var = lua::Nil();
+
+	PrintVar<lua::Num>(var);    // Print "Empty variable"
+	PrintVar<lua::Str>(var);    // Print "Empty variable"
+
+	//-----------------------------------------------------------
+
+	// Now this var is a number, not a table.
+	var = 100;
+
+	// This var is a table now.
+	var[10] = "str";
+
+	PrintVar<lua::Num>(var);    // Print "Not correct type!"
+	PrintVar<lua::Str>(var);    // Print "Not correct type!"
+
+	PrintVar<lua::Str>(var[10]);// Print "str"
+
+	return 0;
 }
 
 #endif
