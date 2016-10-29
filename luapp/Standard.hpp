@@ -32,13 +32,22 @@ class FuncReg
 {
 	public:
 
-		// lua::FunctionRegister::Item as luaL_Reg.
+		// lua::FuncReg::Item as luaL_Reg.
+		#ifdef _LUAPP_USING_CPP11_
+		struct Item
+		{
+			Item(){}
+			Name       name = nullptr;
+			CFunction  func = nullptr;
+		};
+		#else
 		struct Item
 		{
 			Item():name(NULL),func(NULL){}
 			Name       name;
 			CFunction  func;
 		};
+		#endif
 
 		FuncReg():mIndex(0),mSize(4),mData(0)
 		{
@@ -54,7 +63,7 @@ class FuncReg
 		{
 			mNameList.push_back(name);
 
-		//	mData[mIndex].name = mNameList[mNameList.size()-1].c_str();      // It's not safe. Memory address may be change.
+		//	mData[mIndex].name = mNameList[mNameList.size()-1].c_str();      // It's not safe. Memory address may be changed.
 			mData[mIndex].func = func;
 			mIndex++;
 
@@ -527,7 +536,7 @@ inline void _VisitTable(lua::Handle hLua,lua::Table *table)
 		                                // ... [T] [key] [value]
 		/*
 		 * I have to copy the key,
-		 * because CheckVarFromLua seems modify key data.
+		 * because lua_isinteger may be modify key data.
 		 * The modified key data will make lua_next crash.
 		 */
 		lua_pushvalue(hLua,-2);         // ... [T] [key] [value] [key]

@@ -30,7 +30,6 @@ class Table
 					END_STAGE = 3
 				};
 
-				//Iterator():_stage(INT_STAGE){}   // Try to remove it
 				~Iterator(){}
 
 				Iterator(const Iterator &other)
