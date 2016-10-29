@@ -35,9 +35,9 @@ namespace lua{
 struct _VarTypeBase
 {
 	virtual ~_VarTypeBase(){}
-	virtual const std::type_info& GetType()=0;
-	virtual void* GetPtr()=0;
-	virtual _VarTypeBase* NewMyself()=0;
+	virtual const std::type_info& GetType() const = 0;
+	virtual void* GetPtr() = 0;
+	virtual _VarTypeBase* NewMyself() const = 0;
 };
 
 template<typename T>
@@ -46,7 +46,7 @@ struct _VarType : public _VarTypeBase
 	_VarType(T t):var(t){}
 	~_VarType(){}
 
-	const std::type_info& GetType()
+	const std::type_info& GetType() const
 	{
 		return typeid(T);
 	}
@@ -56,11 +56,9 @@ struct _VarType : public _VarTypeBase
 		return reinterpret_cast<void*>(&var);
 	}
 
-	_VarTypeBase* NewMyself()
+	_VarTypeBase* NewMyself() const
 	{
-		_VarType  *ptr = new _VarType(T());
-		ptr->var = this->var;
-		return ptr;
+		return new _VarType(this->var);
 	}
 
 	T   var;
@@ -207,7 +205,7 @@ class Var
 		Var& operator [] (const ::lua::Num key);
 		Var& operator [] (const ::lua::Str key);
 
-		const std::type_info& GetType()
+		const std::type_info& GetType() const
 		{
 			return _ptr->GetType();
 		}
@@ -217,7 +215,7 @@ class Var
 			return _ptr->GetPtr();
 		}
 
-		_VarTypeBase* Clone()
+		_VarTypeBase* Clone() const
 		{
 			return _ptr->NewMyself();
 		}
@@ -246,10 +244,8 @@ class Var
 //-----------------------------------------------------
 
 template<typename T>
-inline bool VarType(const ::lua::Var &_var)
+inline bool VarType(const ::lua::Var &var)
 {
-	::lua::Var   &var = const_cast< ::lua::Var&>(_var);
-
 	if ( var.GetType()!=typeid(T) )
 	{
 		return false;
@@ -259,17 +255,15 @@ inline bool VarType(const ::lua::Var &_var)
 }
 
 template<typename T>
-inline T VarCast(const ::lua::Var &_var)
+inline T VarCast(const ::lua::Var &var)
 {
-	::lua::Var   &var = const_cast< ::lua::Var&>(_var);
-
 	if ( ! ::lua::VarType<T>(var) )
 	{
 		printf("error: see luapp/Var.hpp\n");
 		return T();
 	}
 
-	return *(reinterpret_cast<T*>(var.GetPtr()));
+	return *(reinterpret_cast<T*>(const_cast< ::lua::Var&>(var).GetPtr()));
 }
 
 //-----------------------------------------------------

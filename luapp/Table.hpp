@@ -263,7 +263,6 @@ class Table
 	//	std::map<lua::Bool,lua::Var>   _mapBool;  // I don't think we need boolean index.
 };
 
-
 ::lua::Var::Var(const ::lua::Table &t)
 {
 	this->_ptr = new ::lua::_VarType< ::lua::Table>(t);
