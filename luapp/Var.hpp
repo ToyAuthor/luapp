@@ -197,13 +197,12 @@ class Var
 		};
 
 		/*
-		 * A shortcut for finding value when this is a Table.
-		 * Return lua::Nil if this is not a Table or the value not found.
-		 * They are implemented at luapp/Table.hpp
+		 * It's implemented at luapp/Table.hpp
+		 * A shortcut for enter value to this object.
+		 * Don't use it to checkout element exist or not.
 		 */
-		Var& operator [] (const ::lua::Int key);
-		Var& operator [] (const ::lua::Num key);
-		Var& operator [] (const ::lua::Str key);
+		template<typename T>
+		Var& operator [] (const T key);
 
 		const std::type_info& GetType() const
 		{

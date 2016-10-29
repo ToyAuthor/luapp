@@ -274,37 +274,12 @@ class Table
 	return *this;
 }
 
-::lua::Var& ::lua::Var::operator [] (const ::lua::Int key)
+template<typename T>
+::lua::Var& ::lua::Var::operator [] (const T key)
 {
-	static ::lua::Var  empty_var;
-
 	if ( ! VarType< ::lua::Table>(*this) )
 	{
-		return empty_var;             // Return lua::Nil
-	}
-
-	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
-}
-
-::lua::Var& ::lua::Var::operator [] (const ::lua::Num key)
-{
-	static ::lua::Var  empty_var;
-
-	if ( ! VarType< ::lua::Table>(*this) )
-	{
-		return empty_var;             // Return lua::Nil
-	}
-
-	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
-}
-
-::lua::Var& ::lua::Var::operator [] (const ::lua::Str key)
-{
-	static ::lua::Var  empty_var;
-
-	if ( ! VarType< ::lua::Table>(*this) )
-	{
-		return empty_var;             // Return lua::Nil
+		*this = ::lua::Table();
 	}
 
 	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
