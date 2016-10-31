@@ -23,11 +23,11 @@ class Wrapper
 
 		struct Pack
 		{
-			Pack():mProxy(0){}
-			Pack(Str name,Proxy *param):mName(name),mProxy(param){}
+			Pack():_proxy(0){}
+			Pack(Str name,Proxy *param):_name(name),_proxy(param){}
 
-			Str         mName;
-			Proxy*      mProxy;
+			Str         _name;
+			Proxy*      _proxy;
 		};
 
 		class PackList : public std::vector<struct Pack>
@@ -38,7 +38,7 @@ class Wrapper
 				{
 					for(int i =this->size()-1;i>=0;i--)
 					{
-						delete (*this)[i].mProxy;
+						delete (*this)[i]._proxy;
 					}
 				}
 		};
@@ -51,9 +51,9 @@ class Wrapper
 		                              )
 		{
 			struct Pack         func(name,GetProxy(fn));
-			mFuncList.push_back(func);
+			_funcList.push_back(func);
 
-			lua::PushNumber(L, mFuncList.size()-1);
+			lua::PushNumber(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
 			lua::SetGlobal(L, name.c_str());
 		}
@@ -68,27 +68,27 @@ class Wrapper
 		{
 
 			struct Pack         func(name,GetProxy(fn,obj));
-			mFuncList.push_back(func);
+			_funcList.push_back(func);
 
-			lua::PushNumber(L, mFuncList.size()-1);
+			lua::PushNumber(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
 			lua::SetGlobal(L, name.c_str());
 		}
 
 	private:
 
-		static PackList        mFuncList;
+		static PackList        _funcList;
 
 		static int thunk(lua::Handle L)
 		{
 			int i = (int)lua::ToNumber(L, lua::UpValueIndex(1));
 
-			return mFuncList[i].mProxy->Do(L);
+			return _funcList[i]._proxy->Do(L);
 		}
 
 };
 
-template<int N>typename Wrapper<N>::PackList        Wrapper<N>::mFuncList;
+template<int N>typename Wrapper<N>::PackList        Wrapper<N>::_funcList;
 
 
 }//namespace wrapper

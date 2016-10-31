@@ -49,25 +49,25 @@ class FuncReg
 		};
 		#endif
 
-		FuncReg():mIndex(0),mSize(4),mData(0)
+		FuncReg():_index(0),_size(4),_data(0)
 		{
-			mData = new Item [mSize];
+			_data = new Item [_size];
 		}
 
 		~FuncReg()
 		{
-			delete [] mData;
+			delete [] _data;
 		}
 
 		void Add(std::string name, CFunction func)
 		{
-			mNameList.push_back(name);
+			_nameList.push_back(name);
 
-		//	mData[mIndex].name = mNameList[mNameList.size()-1].c_str();      // It's not safe. Memory address may be changed.
-			mData[mIndex].func = func;
-			mIndex++;
+		//	_data[_index].name = _nameList[_nameList.size()-1].c_str();      // It's not safe. Memory address may be changed.
+			_data[_index].func = func;
+			_index++;
 
-			if ( mIndex+1 == mSize )
+			if ( _index+1 == _size )
 			{
 				get_more_memory();
 			}
@@ -75,38 +75,38 @@ class FuncReg
 
 		void Refresh()
 		{
-			for ( int i=0 ; i<mIndex ; i++ )
+			for ( int i=0 ; i<_index ; i++ )
 			{
-				mData[i].name = mNameList[i].c_str();
+				_data[i].name = _nameList[i].c_str();
 			}
 		}
 
 		Item* _get()
 		{
-			return mData;
+			return _data;
 		}
 
 	private:
 
 		void get_more_memory()
 		{
-			mSize = mSize*2;
+			_size = _size*2;
 
-			Item    *new_block = new Item [mSize];
+			Item    *new_block = new Item [_size];
 
-			for ( int i=0 ; mData[i].name!=NULL ; i++ )
+			for ( int i=0 ; _data[i].name!=NULL ; i++ )
 			{
-				new_block[i] = mData[i];
+				new_block[i] = _data[i];
 			}
 
-			delete [] mData;
-			mData = new_block;
+			delete [] _data;
+			_data = new_block;
 		}
 
-		int     mIndex;
-		int     mSize;
-		Item    *mData;
-		std::vector<std::string>   mNameList;
+		int     _index;
+		int     _size;
+		Item*   _data;
+		std::vector<std::string>   _nameList;
 };
 
 inline void NewModule(Handle h,FuncReg &reg)
@@ -372,32 +372,32 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 		if ( lua::VarType<lua::Str>(value) )
 		{
 			lua::Str   t_value = lua::VarCast<lua::Str>(value);
-			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
 		else if ( lua::VarType<lua::Int>(value) )
 		{
 			lua::Int   t_value = lua::VarCast<lua::Int>(value);
-			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
 		else if ( lua::VarType<lua::Num>(value) )
 		{
 			lua::Num   t_value = lua::VarCast<lua::Num>(value);
-			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
 		else if ( lua::VarType<lua::Ptr>(value) )
 		{
 			lua::Ptr   t_value = lua::VarCast<lua::Ptr>(value);
-			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
 		else if ( lua::VarType<lua::Bool>(value) )
 		{
 			lua::Bool   t_value = lua::VarCast<lua::Bool>(value);
-			PushVarToLua(hLua,t_value);    // ... [T] [key] [value]
+			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
 		else if ( lua::VarType<lua::Table>(value) )
 		{
 			lua::Table   t_value = lua::VarCast<lua::Table>(value);
-			_PushValueToLuaTable(hLua,t_value);    // ... [T] [key] [value]
+			_PushValueToLuaTable(hLua,t_value);                       // ... [T] [key] [value]
 		}
 		else
 		{
