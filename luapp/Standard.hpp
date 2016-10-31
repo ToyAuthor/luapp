@@ -229,42 +229,89 @@ inline void PushInteger(Handle h,int num)
 }
 inline double CheckNumber(Handle h,int index)
 {
-	return luaL_checknumber(h,index);
+//	return luaL_checknumber(h,index);
+
+	#ifdef _LUAPP_CHECK_DATA_TYPE_
+	if ( lua_type(h,index)!=LUA_TNUMBER )
+	{
+		printf("error:lua::CheckNumber\n");
+		return 0.0;
+	}
+	#endif
+
+	return lua_tonumber(h,index);
 }
 inline bool CheckBoolean(Handle h,int index)
 {
+//	return luaL_checkboolean(h,index);
+
+	#ifdef _LUAPP_CHECK_DATA_TYPE_
+	if ( lua_type(h,index)!=LUA_TBOOLEAN )
+	{
+		printf("error:lua::CheckBoolean\n");
+		return false;
+	}
+	#endif
+
 	return lua_toboolean(h,index);
-	//return luaL_checkboolean(h,index);
 }
 inline int CheckInteger(Handle h,int index)
 {
-	return luaL_checkinteger(h,index);
+//	return luaL_checkinteger(h,index);
+
+	#ifdef _LUAPP_CHECK_DATA_TYPE_
+	if ( lua_type(h, index)!=LUA_TNUMBER )
+	{
+		printf("error:lua::CheckInteger\n");
+		return 0;
+	}
+	else if ( ! lua_isinteger(h,index) )
+	{
+		printf("error:lua::CheckInteger: not a integer\n");
+		return 0;
+	}
+	#endif
+
+	return lua_tointeger(h,index);
 }
 inline Str CheckString(Handle h,int index)
 {
-	return Str(luaL_checkstring(h,index));
+//	return Str(luaL_checkstring(h,index));
+
+	#ifdef _LUAPP_CHECK_DATA_TYPE_
+	if ( lua_type(h, index)!=LUA_TSTRING )
+	{
+		printf("error:lua::CheckString\n");
+		return Str();
+	}
+	#endif
+
+	return lua_tolstring(h,index,NULL);
 }
 inline void* CheckUserData(Handle h,int ud, Name tname)
 {
 	return luaL_checkudata(h, ud, tname);
 }
-inline void PushPointer(Handle h,Ptr num)
+inline void PushPointer(Handle h,Ptr ptr)
 {
-	lua_pushlightuserdata(h,num);
+	lua_pushlightuserdata(h,ptr);
 }
 inline Ptr CheckPointer(Handle h,int index)
 {
-//	if (lua_islightuserdata(h, index))
-//        luaL_typerror(h, index, "lightuserdata");
+//	return (Ptr)luaL_checklightudata(h,index);
+
+	#ifdef _LUAPP_CHECK_DATA_TYPE_
+	if ( lua_type(h, index)!=LUA_TLIGHTUSERDATA )
+	{
+		#ifdef _LUAPP_USING_CPP11_
+		return nullptr;
+		#else
+		return NULL;
+		#endif
+	}
+	#endif
 
     return (Ptr)lua_topointer(h, index);
-
-//	return (Ptr)luaL_checkudata(h,index)
-//	return (Ptr)luaL_checklightudata(h,index);
-}
-inline double ToNumber(Handle h,int index)
-{
-	return lua_tonumber(h,index);
 }
 inline int UpValueIndex(int index)
 {
@@ -344,24 +391,24 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 
 		if ( lua::VarType<lua::Str>(key) )
 		{
-			lua::Str   key_t = lua::VarCast<lua::Str>(key);
-			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+			lua::Str   t_key = lua::VarCast<lua::Str>(key);
+			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
 		else if ( lua::VarType<lua::Int>(key) )
 		{
-			lua::Int   key_t = lua::VarCast<lua::Int>(key);
-			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+			lua::Int   t_key = lua::VarCast<lua::Int>(key);
+			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
 		else if ( lua::VarType<lua::Num>(key) )
 		{
-			lua::Num   key_t = lua::VarCast<lua::Num>(key);
-			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+			lua::Num   t_key = lua::VarCast<lua::Num>(key);
+			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
 		/*
 		else if ( lua::VarType<lua::Bool>(key) )
 		{
-			lua::Bool  key_t = lua::VarCast<lua::Bool>(key);
-			PushVarToLua(hLua,key_t);                        // ... [T] [key]
+			lua::Bool  t_key = lua::VarCast<lua::Bool>(key);
+			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
 		*/
 		else

@@ -81,7 +81,7 @@ class Wrapper
 
 		static int thunk(lua::Handle L)
 		{
-			int i = (int)lua::ToNumber(L, lua::UpValueIndex(1));
+			int i = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
 
 			return _funcList[i]._proxy->Do(L);
 		}

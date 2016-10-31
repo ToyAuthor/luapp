@@ -192,7 +192,7 @@ class Adapter
 
 		static int thunk(lua::Handle L)
 		{
-			int i = (int)lua::ToNumber(L, lua::UpValueIndex(1));
+			int i = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
 			lua::PushNumber(L, 0);
 			lua::GetTable(L, 1);
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, (_className+"_ud").c_str()));
