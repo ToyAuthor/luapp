@@ -28,15 +28,11 @@ int main()
 
 	lua::State<>    lua;
 
-	lua.Init();
-
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
-
-	lua.DoScript("CallMultipleReturnValueFunctionFromLua.lua");
+	lua.run(LUAPP_SCRIPT_PATH,"CallMultipleReturnValueFunctionFromLua.lua");
 
 	lua::FunctionExt<void(Int,Int,Int),void(void)>   func;
 
-	lua.GetFunction("func",&func);
+	lua.getFunc("func",&func);
 
 	int   x,y,z;
 

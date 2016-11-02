@@ -50,15 +50,11 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
-
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
-
-	lua.DoScript("GetGlobalVariable.lua");
+	lua.run(LUAPP_SCRIPT_PATH,"GetGlobalVariable.lua");
 
 	lua::Var   var;
 
-	lua.GetGlobal("lua_power",&var);
+	lua.getGlobal("lua_power",&var);
 
 	if ( lua::VarType<lua::Str>(var) )   // Make sure it's a string.
 	{
@@ -68,7 +64,7 @@ int main()
 
 	Print("-------------------------------------------------------");
 
-	lua.GetGlobal("test_table",&var);
+	lua.getGlobal("test_table",&var);
 
 	if ( lua::VarType<lua::Table>(var) )   // Make sure it's a table.
 	{

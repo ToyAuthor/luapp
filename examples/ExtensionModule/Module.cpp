@@ -28,6 +28,14 @@ print(a .. "+" .. b .. "=" .. t.count(a,b))
 -----------------------------------------------------
 */
 
+/*
+ * If you want to do this simple way.
+ * Every module must has a different n for lua::State<n>.
+static lua::Int func_count(lua::Int a,lua::Int b)
+{
+	return a + b;
+}
+*/
 
 static lua::Int func_count(lua::Handle L)
 {
@@ -59,7 +67,7 @@ extern "C" MY_DLL_API int luaopen_module(lua::Handle L)
 {
 	lua::State<>    lua(L);
 
-	lua.RegisterNativeFunction("count",func_count);
+	lua.bind("count",func_count);
 
 	return 1;
 }

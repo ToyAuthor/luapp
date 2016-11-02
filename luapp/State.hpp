@@ -138,7 +138,7 @@ class State
 		{
 			typedef typename ClassTypeFilter<F>::ClassType C;
 			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
-			adapter::Adapter<C,N>::_list.push_back(myF);
+			adapter::Adapter<C,N>::pushPack(myF);
 		}
 		template<typename F>
 		void RegisterMemberFunction(lua::Str name,F fn)

@@ -27,14 +27,10 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
-
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
-
 	{
 		lua::Int     number = 100;
 
-		lua.SetGlobal("cpp_number",number);
+		lua.setGlobal("cpp_number",number);
 	}
 
 	{
@@ -45,10 +41,10 @@ int main()
 		table[123]["A"] = true;
 		table[123]["B"] = false;
 
-		lua.SetGlobal("cpp_table",table);
+		lua.setGlobal("cpp_table",table);
 	}
 
-	lua.DoScript("SetGlobalVariable.lua");
+	lua.run(LUAPP_SCRIPT_PATH,"SetGlobalVariable.lua");
 
 	return EXIT_SUCCESS;
 }

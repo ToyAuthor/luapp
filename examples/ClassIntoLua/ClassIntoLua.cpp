@@ -17,7 +17,7 @@ object = MyClass()
 
 param = 6
 
-num = object:Count(param,0.1,0.2,"Good"," job")
+num = object:count(param,0.1,0.2,"Good"," job")
 
 print("Answer is " .. param .. "+1 = " .. num)
 
@@ -39,7 +39,7 @@ class MyClass
 			printf("do MyClass::~MyClass()\n");
 		}
 
-		lua::Int Count( lua::Int num01,
+		lua::Int count( lua::Int num01,
 		                lua::Num num02,
 		                lua::Num num03,
 		                lua::Str num04,
@@ -59,17 +59,13 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
+	lua.bindMethod("count",&MyClass::count);   // Lua script has member function now.
 
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
+	lua.bindClassEx<MyClass>("MyClass");       // Lua script has class now.
 
-	lua.RegisterMemberFunction("Count",&MyClass::Count);   // Lua script has member function now.
-
-	lua.RegisterClass<MyClass>("MyClass");                 // Lua script has class now.
-
-	if( ! lua.DoScript("ClassIntoLua.lua") )
+	if( ! lua.run(LUAPP_SCRIPT_PATH,"ClassIntoLua.lua") )
 	{
-		std::cout<<lua.GetError()<<std::endl;
+		std::cout<<lua.error()<<std::endl;
 	}
 
 	return EXIT_SUCCESS;

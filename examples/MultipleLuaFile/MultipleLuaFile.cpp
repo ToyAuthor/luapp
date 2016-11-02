@@ -30,15 +30,11 @@ int main()
 
 	lua::State<>    lua;
 
-	lua.Init();
-
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
-
-	lua.DoScript("MultipleLuaFile.lua");
+	lua.run(LUAPP_SCRIPT_PATH,"MultipleLuaFile.lua");
 
 	lua::Function<Int(Int,Int,Int)>   func;
 
-	lua.GetFunction("func",&func);
+	lua.getFunc("func",&func);
 
 	printf("Return value is %d\n",func(1,2,3));
 

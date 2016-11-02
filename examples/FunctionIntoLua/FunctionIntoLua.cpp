@@ -33,13 +33,9 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
+	lua.bind("NumberPlus",&MyFunction);   // Lua script has MyFunction() now.
 
-	lua.AddMainPath(LUAPP_SCRIPT_PATH);
-
-	lua.RegisterFunction("NumberPlus",&MyFunction);   // Lua script has MyFunction() now.
-
-	lua.DoScript("FunctionIntoLua.lua");
+	lua.run(LUAPP_SCRIPT_PATH,"FunctionIntoLua.lua");
 
 	return EXIT_SUCCESS;
 }

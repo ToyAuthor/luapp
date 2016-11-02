@@ -31,23 +31,6 @@ class Adapter
 			Proxy<C>*      _proxy;
 		};
 
-		class PackList : public std::vector<struct Pack>
-		{
-			typedef std::vector<struct Pack> base;
-
-			public:
-
-				~PackList()
-				{
-					for(int i =this->size()-1;i>=0;i--)
-					{
-						delete (*this)[i]._proxy;
-					}
-				}
-		};
-
-		static PackList     _list;
-
 		// It's a general way to register class.
 		static void registerClass( lua::Handle    L,    ///< Handle of lua
 		                           lua::Str       str   ///< Name of class
@@ -90,9 +73,28 @@ class Adapter
 			return &Adapter<C,N>::constructor2;
 		}
 
+		static void pushPack(struct Pack pak)
+		{
+			Adapter<C,N>::_list.push_back(pak);
+		}
+
 	private:
 
+		class PackList : public std::vector<struct Pack>
+		{
+			public:
+
+				~PackList()
+				{
+					for(int i =this->size()-1;i>=0;i--)
+					{
+						delete (*this)[i]._proxy;
+					}
+				}
+		};
+
 		static Str         _className;
+		static PackList    _list;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
