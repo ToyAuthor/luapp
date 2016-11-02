@@ -59,7 +59,7 @@ class FuncReg
 			delete [] _data;
 		}
 
-		void Add(std::string name, CFunction func)
+		void add(std::string name, CFunction func)
 		{
 			_nameList.push_back(name);
 
@@ -73,7 +73,7 @@ class FuncReg
 			}
 		}
 
-		void Refresh()
+		void refresh()
 		{
 			for ( int i=0 ; i<_index ; i++ )
 			{
@@ -378,16 +378,16 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 {
 	lua::NewTable(hLua);                 // ... [T]
 
-	lua::Table::Iterator   it = table.GetBegin();
+	lua::Table::Iterator   it = table.getBegin();
 
 	lua::Var   key;
 	lua::Var   value;
 
-	for ( ; ! it.IsEnd() ; it++ )
+	for ( ; ! it.isEnd() ; it++ )
 	{
 		// ... [T]
 
-		it.GetKeyValue( &key, &value );
+		it.getKeyValue( &key, &value );
 
 		if ( lua::VarType<lua::Str>(key) )
 		{

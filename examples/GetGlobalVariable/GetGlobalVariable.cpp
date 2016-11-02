@@ -197,14 +197,14 @@ static void PrintTableKeyValue(lua::Var key,lua::Var value,int *indentation)
 
 void PrintTableItem(lua::Table &table,int *indentation)
 {
-	lua::Table::Iterator   it = table.GetBegin();
+	lua::Table::Iterator   it = table.getBegin();
 
 	lua::Var   key;
 	lua::Var   value;
 
-	for ( ; ! it.IsEnd() ; it++ )
+	for ( ; ! it.isEnd() ; it++ )
 	{
-		it.GetKeyValue(&key,&value);
+		it.getKeyValue(&key,&value);
 
 		if ( lua::VarType<lua::Table>(value) )
 		{

@@ -94,9 +94,9 @@ namespace lua{
 struct _VarTypeBase
 {
 	virtual ~_VarTypeBase(){}
-	virtual const std::type_info& GetType() const = 0;
-	virtual void* GetPtr() = 0;
-	virtual _VarTypeBase* NewMyself() const = 0;
+	virtual const std::type_info& getType() const = 0;
+	virtual void* getPtr() = 0;
+	virtual _VarTypeBase* newMyself() const = 0;
 };
 
 template<typename T>
@@ -105,17 +105,17 @@ struct _VarType : public _VarTypeBase
 	_VarType(T t):var(t){}
 	~_VarType(){}
 
-	const std::type_info& GetType() const
+	const std::type_info& getType() const
 	{
 		return typeid(T);
 	}
 
-	void* GetPtr()
+	void* getPtr()
 	{
 		return reinterpret_cast<void*>(&var);
 	}
 
-	_VarTypeBase* NewMyself() const
+	_VarTypeBase* newMyself() const
 	{
 		return new _VarType(this->var);
 	}
@@ -131,70 +131,70 @@ class Var
 
 		Var()
 		{
-			this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
+			this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
 		}
 
 		//---------------------nil---------------------
-		Var(const ::lua::Nil t)
+		Var(const lua::Nil t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Nil>(t);
+			this->_ptr = new lua::_VarType<lua::Nil>(t);
 		}
-		Var& operator = (const ::lua::Nil t)
+		Var& operator = (const lua::Nil t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Nil>(t);
+			this->_ptr = new lua::_VarType<lua::Nil>(t);
 			return *this;
 		}
 
 		//---------------------Integer---------------------
-		Var(const ::lua::Int t)
+		Var(const lua::Int t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Int>(t);
+			this->_ptr = new lua::_VarType<lua::Int>(t);
 		}
 		Var& operator = (const ::lua::Int t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Int>(t);
+			this->_ptr = new lua::_VarType<lua::Int>(t);
 			return *this;
 		}
 
 		//---------------------String---------------------
-		Var(const ::lua::Str t)
+		Var(const lua::Str t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Str>(t);
+			this->_ptr = new lua::_VarType<lua::Str>(t);
 		}
-		Var& operator = (const ::lua::Str t)
+		Var& operator = (const lua::Str t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Str>(t);
+			this->_ptr = new lua::_VarType<lua::Str>(t);
 			return *this;
 		}
 		Var(const char *t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Str>(lua::Str(t));
+			this->_ptr = new lua::_VarType<lua::Str>(lua::Str(t));
 		}
 		Var& operator = (const char *t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Str>(lua::Str(t));
+			this->_ptr = new lua::_VarType<lua::Str>(lua::Str(t));
 			return *this;
 		}
 
 		//---------------------Pointer---------------------
-		Var(const ::lua::Ptr t)
+		Var(const lua::Ptr t)
 		{
 			#ifdef _LUAPP_USING_CPP11_
 			if ( t==nullptr ) {
 			#else
 			if ( t==NULL ) {
 			#endif
-				this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
+				this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
 			}
 			else{
-				this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
+				this->_ptr = new lua::_VarType<lua::Ptr>(t);
 			}
 		}
-		Var& operator = (const ::lua::Ptr t)
+		Var& operator = (const lua::Ptr t)
 		{
 			free_ptr();
 			#ifdef _LUAPP_USING_CPP11_
@@ -202,40 +202,40 @@ class Var
 			#else
 			if ( t==NULL ) {
 			#endif
-				this->_ptr = new ::lua::_VarType<lua::Nil>(lua::Nil());
+				this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
 			}
 			else {
-				this->_ptr = new ::lua::_VarType<lua::Ptr>(t);
+				this->_ptr = new lua::_VarType<lua::Ptr>(t);
 			}
 			return *this;
 		}
 
 		//---------------------Double---------------------
-		Var(const ::lua::Num t)
+		Var(const lua::Num t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Num>(t);
+			this->_ptr = new lua::_VarType<lua::Num>(t);
 		}
-		Var& operator = (const ::lua::Num t)
+		Var& operator = (const lua::Num t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Num>(t);
+			this->_ptr = new lua::_VarType<lua::Num>(t);
 			return *this;
 		}
 
 		//---------------------Table---------------------
 		// They are implemented at luapp/Table.hpp
-		Var(const ::lua::Table &t);
-		Var& operator = (const ::lua::Table &t);
+		Var(const lua::Table &t);
+		Var& operator = (const lua::Table &t);
 
 		//---------------------Boolean---------------------
-		Var(const ::lua::Bool t)
+		Var(const lua::Bool t)
 		{
-			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
+			this->_ptr = new lua::_VarType<lua::Bool>(t);
 		}
 		Var& operator = (const ::lua::Bool t)
 		{
 			free_ptr();
-			this->_ptr = new ::lua::_VarType<lua::Bool>(t);
+			this->_ptr = new lua::_VarType<lua::Bool>(t);
 			return *this;
 		}
 
@@ -271,19 +271,19 @@ class Var
 		template<typename T>
 		const Var& operator >> (const T key) const;
 
-		const std::type_info& GetType() const
+		const std::type_info& getType() const
 		{
-			return _ptr->GetType();
+			return _ptr->getType();
 		}
 
-		void* GetPtr()
+		void* getPtr()
 		{
-			return _ptr->GetPtr();
+			return _ptr->getPtr();
 		}
 
-		_VarTypeBase* Clone() const
+		_VarTypeBase* clone() const
 		{
-			return _ptr->NewMyself();
+			return _ptr->newMyself();
 		}
 
 	private:
@@ -301,7 +301,7 @@ class Var
 		{
 			free_ptr();
 			Var   &bro = const_cast<Var&>(_bro);
-			this->_ptr  = bro.Clone();
+			this->_ptr  = bro.clone();
 		}
 
 		_VarTypeBase*   _ptr;
@@ -310,9 +310,9 @@ class Var
 //-----------------------------------------------------
 
 template<typename T>
-inline bool VarType(const ::lua::Var &var)
+inline bool VarType(const lua::Var &var)
 {
-	if ( var.GetType()!=typeid(T) )
+	if ( var.getType()!=typeid(T) )
 	{
 		return false;
 	}
@@ -321,15 +321,15 @@ inline bool VarType(const ::lua::Var &var)
 }
 
 template<typename T>
-inline T VarCast(const ::lua::Var &var)
+inline T VarCast(const lua::Var &var)
 {
-	if ( ! ::lua::VarType<T>(var) )
+	if ( ! lua::VarType<T>(var) )
 	{
 		printf("error: see luapp/Var.hpp\n");
 		return T();
 	}
 
-	return *(reinterpret_cast<T*>(const_cast< ::lua::Var&>(var).GetPtr()));
+	return *(reinterpret_cast<T*>(const_cast<lua::Var&>(var).getPtr()));
 }
 
 //-----------------------------------------------------

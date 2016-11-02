@@ -45,7 +45,7 @@ class Wrapper
 
 		// For global function.
 		template <typename F>
-		static void RegisterFunction( lua::Handle    L,
+		static void registerFunction( lua::Handle    L,
 		                              lua::Str       name,
 		                              F              fn
 		                              )
@@ -60,7 +60,7 @@ class Wrapper
 
 		// For member function.
 		template <typename F,typename C>
-		static void RegisterFunction( lua::Handle    L,
+		static void registerFunction( lua::Handle    L,
 		                              lua::Str       name,
 		                              F              fn,
 		                              C*             obj

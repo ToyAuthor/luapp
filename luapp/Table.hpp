@@ -136,7 +136,7 @@ class Table
 				Iterator& operator --(int){it_offset_backward();return *this;}  // i--
 				*/
 
-				void GetKeyValue(lua::Var *key, lua::Var *value)
+				void getKeyValue(lua::Var *key, lua::Var *value)
 				{
 					switch ( this->_stage )
 					{
@@ -158,7 +158,7 @@ class Table
 					}
 				}
 
-				bool IsEnd()
+				bool isEnd()
 				{
 					while ( ! _eableList[_stage] )
 					{
@@ -276,7 +276,7 @@ class Table
 			return _mapStr[key];
 		}
 
-		bool IsExist(lua::Int key)
+		bool isExist(lua::Int key)
 		{
 			std::map<lua::Int,lua::Var>::iterator it = _mapInt.find(key);
 
@@ -288,7 +288,7 @@ class Table
 			return false;
 		}
 
-		bool IsExist(lua::Num key)
+		bool isExist(lua::Num key)
 		{
 			std::map<lua::Num,lua::Var>::iterator it = _mapNum.find(key);
 
@@ -300,7 +300,7 @@ class Table
 			return false;
 		}
 
-		bool IsExist(lua::Str key)
+		bool isExist(lua::Str key)
 		{
 			std::map<lua::Str,lua::Var>::iterator it = _mapStr.find(key);
 
@@ -312,7 +312,7 @@ class Table
 			return false;
 		}
 
-		Iterator GetBegin()
+		Iterator getBegin()
 		{
 			return Iterator( _mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
 			                 _mapInt.end(),   _mapNum.end(),   _mapStr.end() );
@@ -334,40 +334,40 @@ class Table
 	//	std::map<lua::Bool,lua::Var>   _mapBool;  // I don't think we need boolean index.
 };
 
-::lua::Var::Var(const ::lua::Table &t)
+lua::Var::Var(const ::lua::Table &t)
 {
-	this->_ptr = new ::lua::_VarType< ::lua::Table>(t);
+	this->_ptr = new ::lua::_VarType<lua::Table>(t);
 }
 
-::lua::Var& ::lua::Var::operator = (const ::lua::Table &t)
+lua::Var& lua::Var::operator = (const lua::Table &t)
 {
 	this->free_ptr();
-	this->_ptr = new ::lua::_VarType< ::lua::Table>(t);
+	this->_ptr = new ::lua::_VarType<lua::Table>(t);
 	return *this;
 }
 
 template<typename T>
-::lua::Var& ::lua::Var::operator [] (const T key)
+lua::Var& ::lua::Var::operator [] (const T key)
 {
-	if ( ! VarType< ::lua::Table>(*this) )
+	if ( ! VarType<lua::Table>(*this) )
 	{
-		*this = ::lua::Table();
+		*this = lua::Table();
 	}
 
-	return (*(reinterpret_cast< ::lua::Table*>(this->GetPtr())))[key];
+	return (*(reinterpret_cast<lua::Table*>(this->getPtr())))[key];
 }
 
 template<typename T>
-const ::lua::Var& ::lua::Var::operator >> (const T key) const
+const lua::Var& lua::Var::operator >> (const T key) const
 {
 	static lua::Var   empty_var;
 
-	if ( ! VarType< ::lua::Table>(*this) )
+	if ( ! VarType<lua::Table>(*this) )
 	{
 		return empty_var;
 	}
 
-	return (*const_cast< ::lua::Var*>(this))[key];
+	return (*const_cast<lua::Var*>(this))[key];
 }
 
 }//namespace lua

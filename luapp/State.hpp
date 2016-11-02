@@ -69,18 +69,22 @@ class State
 			{
 				_moduleMode = 1;
 			}
+			else
+			{
+				this->init();   // If you are very lazy just like me.
+			}
 		}
 
 		~State()
 		{
-			if(_lua)Drop();
+			if(_lua)drop();
 		}
 
-		void RegisterNativeFunction(lua::Str name,lua::CFunction func)
+		void bind(lua::Str name,lua::CFunction func)
 		{
 			if ( _moduleMode )
 			{
-				_funcReg.Add(name,func);
+				_funcReg.add(name,func);
 			}
 			else
 			{
@@ -89,46 +93,70 @@ class State
 				lua::SetGlobal(_lua, name.c_str());
 			}
 		}
+		void RegisterNativeFunction(lua::Str name,lua::CFunction func)
+		{
+			bind(name,func);
+		}
 
 		/// Let lua script could use given class type.
 		template<typename C>
-		void RegisterClass(lua::Str class_name)
+		void bindClass(lua::Str class_name)
 		{
 			if ( _moduleMode ) return; // Not support yet.
-			adapter::Adapter<C,N>::Register(_lua,class_name);
+			adapter::Adapter<C,N>::registerClass(_lua,class_name);
+		}
+		template<typename C>
+		void RegisterClass(lua::Str class_name)
+		{
+			bindClass<C>(class_name);
 		}
 
 		/** Let lua script could use given class type.
 		It have a faster constructor. But lua need to store more information.
 		Call it after every each RegisterMemberFunction().*/
 		template<typename C>
-		void RegisterClassEx(lua::Str class_name)
+		void bindClassEx(lua::Str class_name)
 		{
 			if ( _moduleMode )
 			{
-				_funcReg.Add(class_name,adapter::Adapter<C,N>::GetConstructor(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
 			}
 			else
 			{
-				adapter::Adapter<C,N>::RegisterEx(_lua,class_name);
+				adapter::Adapter<C,N>::registerClassEx(_lua,class_name);
 			}
+		}
+		template<typename C>
+		void RegisterClassEx(lua::Str class_name)
+		{
+			bindClassEx<C>(class_name);
 		}
 
 		/// Let lua script could use given member function. You can't use it without RegisterClass() or RegisterClassEx().
 		template<typename F>
-		void RegisterMemberFunction(lua::Str func_name,F fn)
+		void bindMethod(lua::Str name,F fn)
 		{
 			typedef typename ClassTypeFilter<F>::ClassType C;
-			struct adapter::Adapter<C,N>::Pack     myF( func_name,adapter::GetProxy(fn));
+			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
 			adapter::Adapter<C,N>::_list.push_back(myF);
+		}
+		template<typename F>
+		void RegisterMemberFunction(lua::Str name,F fn)
+		{
+			bindMethod(name,fn);
 		}
 
 		/// Let lua script could use given global function.
 		template<typename F>
-		void RegisterFunction(lua::Str func_name,F fn)
+		void bind(lua::Str name,F fn)
 		{
 			if ( _moduleMode ) return; // Not support yet.
-			wrapper::Wrapper<N>::RegisterFunction(_lua,func_name,fn);
+			wrapper::Wrapper<N>::registerFunction(_lua,name,fn);
+		}
+		template<typename F>
+		void RegisterFunction(lua::Str name,F fn)
+		{
+			bind(name,fn);
 		}
 
 		/**
@@ -136,34 +164,59 @@ class State
 		This member function will be look like a global function in lua.
 		*/
 		template<typename F,typename C>
-		void RegisterFunction(lua::Str func_name,F fn,C *obj)
+		void bind(lua::Str name,F fn,C *obj)
 		{
 			if ( _moduleMode ) return; // Not support yet.
 			// Add class type checked here some times later.
-			wrapper::Wrapper<N>::RegisterFunction(_lua,func_name,fn,obj);
+			wrapper::Wrapper<N>::registerFunction(_lua,name,fn,obj);
 		}
-
-		int Init()
+		template<typename F,typename C>
+		void RegisterFunction(lua::Str name,F fn,C *obj)
 		{
-			if ( _moduleMode ) return (int)0; // Why you did this? You already got a lua_State.
-
-			if (_lua)   return (int)0; // You can only call Init() once.
-
-			_lua=lua::CreateHandle();
-			lua::OpenLibs(_lua);
-
-			if(IsScriptPathExist())
-			{
-				AddScriptPathToLua(_path);
-			}
-			return (int)1;
+			bind(name,fn,obj);
 		}
 
-		void Drop()
+		int init()
 		{
 			if ( _moduleMode )
 			{
-				_funcReg.Refresh();
+				printf("warning:you was choose another mode.\n");
+				return (int)1;
+			}
+
+			if ( _lua )
+			{
+				printf("warning:you don't have to do this now.\n");
+				return (int)1;
+			}
+
+			_lua=lua::CreateHandle();
+
+			if ( ! _lua )
+			{
+				printf("error:can't get lua_State.\n");
+				return (int)0;
+			}
+
+			lua::OpenLibs(_lua);
+
+			if(is_script_path_exist())
+			{
+				add_script_path_to_lua(_path);
+			}
+
+			return (int)1;
+		}
+		int Init()
+		{
+			return this->init();
+		}
+
+		void drop()
+		{
+			if ( _moduleMode )
+			{
+				_funcReg.refresh();
 				lua::NewModule(_lua,_funcReg);
 			}
 			else
@@ -172,104 +225,164 @@ class State
 			}
 			_lua=(lua::Handle)0;
 		}
+		void Drop()
+		{
+			this->drop();
+		}
 
-		lua::Str GetError()
+		lua::Str error()
 		{
 			return lua::GetError(_lua);
 		}
+		lua::Str GetError()
+		{
+			return this->error();
+		}
 
-		int DoScript(lua::Str str)
+		int run(lua::Str str)
 		{
 			if ( _moduleMode ) return (int)0; // You can't do this. Because module mode didn't have its own script.
 
-			if(IsScriptPathExist())
+			if(is_script_path_exist())
 			{
 				str=_path+str;
 			}
 
 			return lua::DoScript(_lua,str.c_str());
 		}
+		int DoScript(lua::Str str)
+		{
+			return this->run(str);
+		}
+
+		int run(lua::Str path,lua::Str script)
+		{
+			this->path(path);
+			return this->run(path+"/"+script);
+		}
 
 		/// Tell luapp where to read main lua scripts.
-		void AddMainPath(lua::Str path)
+		void project(lua::Str path)
 		{
 			_path=path;
 			_path+="/";
 			if(_lua)
 			{
-				AddScriptPathToLua(_path);
+				add_script_path_to_lua(_path);
 			}
+		}
+		void AddMainPath(lua::Str path)
+		{
+			this->project(path);
 		}
 
 		/// Tell luapp where to read more lua scripts.
-		void AddSearchPath(lua::Str path)
+		void path(lua::Str path)
 		{
-			path+="/";
 			if(_lua)
 			{
-				AddScriptPathToLua(path);
+				path+="/";
+				add_script_path_to_lua(path);
 			}
+		}
+		void AddSearchPath(lua::Str path)
+		{
+			this->path(path);
 		}
 
 		/// Set global variable to lua script. Don't try to send function.
 		template<typename T>
-		void SetGlobal(lua::Str name,T t)
+		void setGlobal(lua::Str name,T t)
 		{
 			PushVarToLua(_lua,t);
 			lua::SetGlobal(_lua,name.c_str());
 		}
+		template<typename T>
+		void SetGlobal(lua::Str name,T t)
+		{
+			this->setGlobal(name,t);
+		}
 
 		/// Get global variable from lua script.
 		template<typename T>
-		void GetGlobal(lua::Str name,T t)
+		void getGlobal(lua::Str name,T t)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			CheckVarFromLua(_lua,t,-1);
 			lua::Pop(_lua,1);
 		}
+		template<typename T>
+		void GetGlobal(lua::Str name,T t)
+		{
+			this->getGlobal(name,t);
+		}
 
 		/// Get global function(only one return value).
 		template<typename F>
-		void GetFunction(const char *name,lua::Function<F> *func)
+		void getFunc(const char *name,lua::Function<F> *func)
 		{
 			func->_lua=_lua;
 			func->_funcName=name;
+		}
+		template<typename F>
+		void GetFunction(const char *name,lua::Function<F> *func)
+		{
+			this->getFunc(name,func);
 		}
 
 		/// Get global function(more than one return value).
 		template<typename R,typename P>
-		void GetFunction(const char *name,lua::FunctionExt<R,P> *func)
+		void getFunc(const char *name,lua::FunctionExt<R,P> *func)
 		{
 			func->_lua=_lua;
 			func->_funcName=name;
 		}
+		template<typename R,typename P>
+		void GetFunction(const char *name,lua::FunctionExt<R,P> *func)
+		{
+			this->getFunc(name,func);
+		}
 
 		/// Call global function that don't have return value.
-		void Call(lua::Str name)
+		void call(lua::Str name)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PCall(_lua,0,0,0);
 		}
+		void Call(lua::Str name)
+		{
+			this->call(name);
+		}
 
 		template<typename A1>
-		void Call(lua::Str name,A1 a1)
+		void call(lua::Str name,A1 a1)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
 			lua::PCall(_lua,1,0,0);
 		}
+		template<typename A1>
+		void Call(lua::Str name,A1 a1)
+		{
+			this->call(name,a1);
+		}
 
 		template<typename A1,typename A2>
-		void Call(lua::Str name,A1 a1,A2 a2)
+		void call(lua::Str name,A1 a1,A2 a2)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PCall(_lua,2,0,0);
 		}
+		template<typename A1,typename A2>
+		void Call(lua::Str name,A1 a1,A2 a2)
+		{
+			this->call(name,a1,a2);
+		}
 
 		template<typename A1,typename A2,typename A3>
-		void Call(lua::Str name,A1 a1,A2 a2,A3 a3)
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
@@ -277,9 +390,14 @@ class State
 			lua::PushVarToLua(_lua,a3);
 			lua::PCall(_lua,3,0,0);
 		}
+		template<typename A1,typename A2,typename A3>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3)
+		{
+			this->call(name,a1,a2,a3);
+		}
 
 		template<typename A1,typename A2,typename A3,typename A4>
-		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4)
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
@@ -288,9 +406,14 @@ class State
 			lua::PushVarToLua(_lua,a4);
 			lua::PCall(_lua,4,0,0);
 		}
+		template<typename A1,typename A2,typename A3,typename A4>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4)
+		{
+			this->call(name,a1,a2,a3,a4);
+		}
 
 		template<typename A1,typename A2,typename A3,typename A4,typename A5>
-		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5)
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
@@ -300,9 +423,14 @@ class State
 			lua::PushVarToLua(_lua,a5);
 			lua::PCall(_lua,5,0,0);
 		}
+		template<typename A1,typename A2,typename A3,typename A4,typename A5>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5)
+		{
+			this->call(name,a1,a2,a3,a4,a5);
+		}
 
 		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
 		{
 			lua::GetGlobal(_lua,name.c_str());
 			lua::PushVarToLua(_lua,a1);
@@ -313,22 +441,26 @@ class State
 			lua::PushVarToLua(_lua,a6);
 			lua::PCall(_lua,6,0,0);
 		}
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
+		{
+			this->call(name,a1,a2,a3,a4,a5,a6);
+		}
 
 	private:
 
-		void AddScriptPathToLua(lua::Str str)
+		void add_script_path_to_lua(lua::Str str)
 		{
-			lua::GetGlobal(_lua,"package");
-			lua::GetField(_lua,-1, "path");
-			lua::Str  path=lua::CheckString(_lua,-1);
-			path=str+"?.lua;"+path;
-			lua::Pop(_lua,1);
-			lua::PushString(_lua,path);
-			lua::SetField(_lua,-2, "path");
-			lua::Pop(_lua,1);
+			                                 // ...
+			lua::GetGlobal(_lua,"package");  // ... package
+			lua::GetField(_lua,-1, "path");  // ... package path
+			lua::PushString(_lua,str+"?.lua;"+lua::CheckString(_lua,-1));
+			                                 // ... package path new_path
+			lua::SetField(_lua,-3, "path");  // ... package path
+			lua::Pop(_lua,2);                // ...
 		}
 
-		int IsScriptPathExist()
+		int is_script_path_exist()
 		{
 			return !_path.empty();
 		}
