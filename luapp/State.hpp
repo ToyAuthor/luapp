@@ -1,6 +1,6 @@
 /**
 @file   State.hpp
-@brief  Help lua and C++.
+@brief  The main interface of luapp.
 */
 
 
@@ -58,6 +58,7 @@ struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6)>
 //-----------------ClassTypeFilter-----------------end
 
 
+/// The main interface of luapp.
 template<int N=0>
 class State
 {
@@ -71,7 +72,7 @@ class State
 			}
 			else
 			{
-				this->init();   // If you are very lazy just like me.
+				this->init();
 			}
 		}
 
@@ -88,7 +89,6 @@ class State
 			}
 			else
 			{
-				// I am not sure.
 				lua::PushFunction(_lua, func);
 				lua::SetGlobal(_lua, name.c_str());
 			}
@@ -102,7 +102,12 @@ class State
 		template<typename C>
 		void bindClass(lua::Str class_name)
 		{
-			if ( _moduleMode ) return; // Not support yet.
+			if ( _moduleMode )
+			{
+				printf("error:bindClass not support module mode.\n");
+				return;
+			}
+
 			adapter::Adapter<C,N>::registerClass(_lua,class_name);
 		}
 		template<typename C>
@@ -111,9 +116,11 @@ class State
 			bindClass<C>(class_name);
 		}
 
-		/** Let lua script could use given class type.
-		It have a faster constructor. But lua need to store more information.
-		Call it after every each RegisterMemberFunction().*/
+		/**
+		 * Let lua script could use given class type.
+		 * It have a faster constructor. But lua need to store more information.
+		 * Always call it after all bindMethod().
+		 */
 		template<typename C>
 		void bindClassEx(lua::Str class_name)
 		{
@@ -132,7 +139,10 @@ class State
 			bindClassEx<C>(class_name);
 		}
 
-		/// Let lua script could use given member function. You can't use it without RegisterClass() or RegisterClassEx().
+		/**
+		 * Let lua script could use given member function.
+		 * Don't use it without bindClass() or bindClassEx().
+		 */
 		template<typename F>
 		void bindMethod(lua::Str name,F fn)
 		{
@@ -150,7 +160,12 @@ class State
 		template<typename F>
 		void bind(lua::Str name,F fn)
 		{
-			if ( _moduleMode ) return; // Not support yet.
+			if ( _moduleMode )
+			{
+				printf("error:bind(lua::Str name,F fn) not support module mode.\n");
+				return;
+			}
+
 			wrapper::Wrapper<N>::registerFunction(_lua,name,fn);
 		}
 		template<typename F>
@@ -160,13 +175,18 @@ class State
 		}
 
 		/**
-		Let lua script could use given member function.
-		This member function will be look like a global function in lua.
-		*/
+		 * Let lua script could use given member function.
+		 * This member function will be looks like a global function in lua.
+		 */
 		template<typename F,typename C>
 		void bind(lua::Str name,F fn,C *obj)
 		{
-			if ( _moduleMode ) return; // Not support yet.
+			if ( _moduleMode )
+			{
+				printf("error:bind(lua::Str name,F fn,C *obj) not support module mode.\n");
+				return;
+			}
+
 			// Add class type checked here some times later.
 			wrapper::Wrapper<N>::registerFunction(_lua,name,fn,obj);
 		}
@@ -180,13 +200,13 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("warning:you was choose another mode.\n");
+				printf("warning:you was chose another mode.\n");
 				return (int)1;
 			}
 
 			if ( _lua )
 			{
-				printf("warning:you don't have to do this now.\n");
+				printf("warning:you don't have to call init() by yourself.\n");
 				return (int)1;
 			}
 
@@ -216,8 +236,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				_funcReg.refresh();
-				lua::NewModule(_lua,_funcReg);
+				this->build_module();
 			}
 			else
 			{
@@ -241,7 +260,11 @@ class State
 
 		int run(lua::Str str)
 		{
-			if ( _moduleMode ) return (int)0; // You can't do this. Because module mode didn't have its own script.
+			if ( _moduleMode )
+			{
+				printf("error:You can't do this. Because module mode didn't have its own script.\n");
+				return (int)0;
+			}
 
 			if(is_script_path_exist())
 			{
@@ -276,7 +299,7 @@ class State
 			this->project(path);
 		}
 
-		/// Tell luapp where to read more lua scripts.
+		/// Let luapp know where to read more lua scripts.
 		void path(lua::Str path)
 		{
 			if(_lua)
@@ -317,7 +340,7 @@ class State
 			this->getGlobal(name,t);
 		}
 
-		/// Get global function(only one return value).
+		/// Get global function(one or no return value).
 		template<typename F>
 		void getFunc(const char *name,lua::Function<F> *func)
 		{
@@ -458,6 +481,12 @@ class State
 			                                 // ... package path new_path
 			lua::SetField(_lua,-3, "path");  // ... package path
 			lua::Pop(_lua,2);                // ...
+		}
+
+		void build_module()
+		{
+			_funcReg.refresh();
+			lua::NewModule(_lua,_funcReg);
 		}
 
 		int is_script_path_exist()
