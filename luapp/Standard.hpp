@@ -36,7 +36,6 @@ class FuncReg
 		#ifdef _LUAPP_USING_CPP11_
 		struct Item
 		{
-			Item(){}
 			Name       name = nullptr;
 			CFunction  func = nullptr;
 		};
@@ -63,10 +62,10 @@ class FuncReg
 		{
 			_nameList.push_back(name);
 
-		//	_data[_index].name = _nameList[_nameList.size()-1].c_str();      // It's not safe. Memory address may be changed.
 			_data[_index].func = func;
 			_index++;
 
+			// If it get n elements in list, then list size alway bigger than n+1.
 			if ( _index+1 == _size )
 			{
 				get_more_memory();
@@ -94,7 +93,7 @@ class FuncReg
 
 			Item    *new_block = new Item [_size];
 
-			for ( int i=0 ; _data[i].name!=NULL ; i++ )
+			for ( int i=0 ; _data[i].func!=NULL ; i++ )
 			{
 				new_block[i] = _data[i];
 			}
