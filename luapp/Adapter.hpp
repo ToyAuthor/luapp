@@ -33,10 +33,10 @@ class Adapter
 
 		// It's a general way to register class.
 		static void registerClass( lua::Handle    L,    ///< Handle of lua
-		                           lua::Str       str   ///< Name of class
+		                           lua::Str&      str   ///< Name of class
 		                           )
 		{
-			Adapter<C,N>::_className=str;                      // ...
+			set_class_name(str);                               // ...
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
@@ -47,10 +47,10 @@ class Adapter
 
 		// Call it after every member function was registed at _list[].
 		static void registerClassEx( lua::Handle    L,    ///< Handle of lua
-		                             lua::Str       str   ///< Name of class
+		                             lua::Str&      str   ///< Name of class
 		                             )
 		{
-			Adapter<C,N>::_className=str;                      // ...
+			set_class_name(str);                               // ...
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor2); // ... [F]
@@ -62,10 +62,10 @@ class Adapter
 
 		// Return a lua function.
 		static lua::CFunction getConstructor( lua::Handle    L,    ///< Handle of lua
-		                                      lua::Str       str   ///< Name of class
+		                                      lua::Str&      str   ///< Name of class
 		                                      )
 		{
-			Adapter<C,N>::_className=str;
+			set_class_name(str);
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -94,11 +94,12 @@ class Adapter
 		};
 
 		static Str         _className;
+		static Str         _classNameUD;   // For user data.
 		static PackList    _list;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
-			lua::NewMetaTable(L, (_className+"_ud").c_str());  // ... [T]
+			lua::NewMetaTable(L, _classNameUD.c_str());        // ... [T]
 			lua::PushString(L, "__gc");                        // ... [T] ["__gc"]
 			lua::PushFunction(L, &Adapter<C,N>::gc_obj);       // ... [T] ["__gc"] [F]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -135,20 +136,21 @@ class Adapter
 		// As destructor.
 		static int gc_obj(lua::Handle L)
 		{
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, (_className+"_ud").c_str()));
+			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD.c_str()));
 			delete (*obj);
 
 			return 0;
 		}
 
-		// It's a general way to build table. Lua just only need to store constructor and userdata metatable.
+		// It's a general way to build object(table).
+		// Lua just only need to store constructor and a small metatable of userdata.
 		static int constructor(lua::Handle L)
 		{
 			lua::NewTable(L);                                  // ... [T]
 			lua::PushNumber(L, 0);                             // ... [T] [0]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, (_className+"_ud").c_str());  // ... [T] [0] [UD] [MT]
+			lua::GetMetaTable(L, _classNameUD.c_str());        // ... [T] [0] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
@@ -172,7 +174,8 @@ class Adapter
 			return 1;
 		}
 
-		// It's a faster way to build table. Lua have to store metatable that include every each member function.
+		// It's a faster way to build object(table).
+		// Lua have to store a big metatable that include every each member function.
 		static int constructor2(lua::Handle L)
 		{
 			lua::NewTable(L);                                  // ... [T]
@@ -185,7 +188,7 @@ class Adapter
 			lua::PushNumber(L, 0);                             // ... [T] [0]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, (_className+"_ud").c_str());  // ... [T] [0] [UD] [MT]
+			lua::GetMetaTable(L, _classNameUD.c_str());        // ... [T] [0] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
@@ -197,14 +200,21 @@ class Adapter
 			int i = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
 			lua::PushNumber(L, 0);
 			lua::GetTable(L, 1);
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, (_className+"_ud").c_str()));
+			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD.c_str()));
 			lua::Pop(L, 1);
 
 			return	Adapter<C,N>::_list[i]._proxy->Do(L,*obj);
 		}
+
+		static void set_class_name(lua::Str &name)
+		{
+			_className   = name;
+			_classNameUD = _className + "_luapp_ud";
+		}
 };
 
 template <typename C,int N>Str                                  Adapter<C,N>::_className;
+template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
 template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
 
 
