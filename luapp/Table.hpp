@@ -312,6 +312,13 @@ class Table
 			return false;
 		}
 
+		void swap(lua::Table &bro)
+		{
+			this->_mapInt.swap( bro._mapInt );
+			this->_mapNum.swap( bro._mapNum );
+			this->_mapStr.swap( bro._mapStr );
+		}
+
 		Iterator getBegin()
 		{
 			return Iterator( _mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
