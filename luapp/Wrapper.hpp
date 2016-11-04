@@ -66,7 +66,6 @@ class Wrapper
 		                              C*             obj
 		                              )
 		{
-
 			struct Pack         func(name,GetProxy(fn,obj));
 			_funcList.push_back(func);
 
@@ -85,7 +84,6 @@ class Wrapper
 
 			return _funcList[i]._proxy->Do(L);
 		}
-
 };
 
 template<int N>typename Wrapper<N>::PackList        Wrapper<N>::_funcList;

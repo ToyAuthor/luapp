@@ -10,4 +10,7 @@
  */
 #define _LUAPP_CHECK_DATA_TYPE_
 
+// Spend more time to make sure everything was fine.
+#define _LUAPP_CHECK_CAREFUL_
+
 #endif

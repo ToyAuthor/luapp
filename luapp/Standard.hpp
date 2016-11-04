@@ -60,6 +60,14 @@ class FuncReg
 
 		void add(std::string name, CFunction func)
 		{
+			#ifdef _LUAPP_CHECK_CAREFUL_
+			if ( func ==NULL )
+			{
+				printf("error:never enter null pointer to lua::FuncReg\n");
+				return;
+			}
+			#endif
+
 			_nameList.push_back(name);
 
 			_data[_index].func = func;
