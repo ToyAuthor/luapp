@@ -5,6 +5,7 @@
 
 
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
@@ -21,7 +22,10 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.run(LUAPP_SCRIPT_PATH,"simple.lua");
+	if( ! lua.run(LUAPP_SCRIPT_PATH,"simple.lua") )
+	{
+		std::cout<<lua.error()<<std::endl;
+	}
 
 	return EXIT_SUCCESS;
 }

@@ -28,14 +28,6 @@ print(a .. "+" .. b .. "=" .. t.count(a,b))
 -----------------------------------------------------
 */
 
-/*
- * If you want to do this simple way.
- * Every module must has a different n for lua::State<n>.
-static lua::Int func_count(lua::Int a,lua::Int b)
-{
-	return a + b;
-}
-*/
 
 static lua::Int func_count(lua::Handle L)
 {
@@ -56,6 +48,7 @@ static lua::Int func_count(lua::Handle L)
     lua::PushVarToLua(L,c);
     return 1;
 }
+
 
 #if defined(_WIN32)
 	#define MY_DLL_API __declspec(dllexport)

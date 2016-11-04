@@ -80,6 +80,8 @@ int main()
 	return EXIT_SUCCESS;
 }
 
+//------------------------------------------------------------------------------
+
 const int IndentationSize = 4;
 
 inline void Print(lua::Int t)
