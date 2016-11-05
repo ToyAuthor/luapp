@@ -4,17 +4,17 @@
 */
 
 
-#include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
 /* CallMultipleReturnValueFunctionFromLua.lua
 -----------------------------------------------------
 
-function func()
-	local   x,y,z=1,2,3
---	local   x=1,y=2,z=3    It's not allow in lua.
+function func(a,b,c)
+	local   x,y,z=c,b,a
+--	local   x=c,y=b,z=a    It's not allow in lua.
 	return x,y,z
 end
 
@@ -25,23 +25,31 @@ end
 int main()
 {
 	using lua::Int;
+	using lua::Str;
+	using lua::Num;
 
 	lua::State<>    lua;
 
 	lua.run(LUAPP_SCRIPT_PATH,"CallMultipleReturnValueFunctionFromLua.lua");
 
-	lua::FunctionExt<void(Int,Int,Int),void(void)>   func;
+	lua::FunctionExt<void(Str,Num,Int),void(Int,Num,Str)>   func;
 
 	lua.getFunc("func",&func);
 
-	int   x,y,z;
+	Str   x;
+	Num   y;
+	Int   z;
 
-	func(&x,&y,&z);
+	Int   a = 3;
+	Num   b = 0.5;
+	Str   c = "hello";
 
-	printf("Return values:\n");
-	printf("x=%d\n",x);
-	printf("y=%d\n",y);
-	printf("z=%d\n",z);
+	func( &x, &y, &z, a, b, c );
+
+	std::cout << "Return values:" << std::endl;
+	std::cout << "x=" << x << std::endl;
+	std::cout << "y=" << y << std::endl;
+	std::cout << "z=" << z << std::endl;
 
 	return EXIT_SUCCESS;
 }

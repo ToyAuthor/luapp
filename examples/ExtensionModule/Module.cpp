@@ -25,9 +25,24 @@ local a = 1
 local b = 2
 
 print(a .. "+" .. b .. "=" .. t.count(a,b))
+
+local obj = t.newClass()
+print("Message frome C++: " .. obj:name())
 -----------------------------------------------------
 */
 
+class MyClass
+{
+	public:
+
+		MyClass(){}
+		~MyClass(){}
+
+		lua::Str name()
+		{
+			return lua::Str("It is MyClass");
+		}
+};
 
 static lua::Int func_count(lua::Handle L)
 {
@@ -61,6 +76,9 @@ extern "C" MY_DLL_API int luaopen_module(lua::Handle L)
 	lua::State<>    lua(L);
 
 	lua.bind("count",func_count);
+
+	lua.bindMethod("name",&MyClass::name);
+	lua.bindClassEx<MyClass>("newClass");
 
 	return 1;
 }

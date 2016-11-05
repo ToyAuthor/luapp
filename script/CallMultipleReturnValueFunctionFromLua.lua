@@ -1,5 +1,6 @@
-function func()
-	local   x,y,z=1,2,3
---	local   x=1,y=2,z=3    It's not allow in lua.
+function func(a,b,c)
+	local   x,y,z=c,b,a
+--	local   x=c,y=b,z=a    It's not allow in lua.
+
 	return x,y,z
 end

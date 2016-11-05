@@ -1,28 +1,34 @@
 # luapp
-It's a simple tool for lua.  
-To help you using lua in C++ style.
+It's a useful tool for lua. To help you using lua in C++ style and work better with object-oriented programming.
 
 ### Features
 - [x] Header file only.
-- [x] To register the class from C++ into lua.
-- [x] To register the global function or member function from C++ into lua.
-- [x] Read/Add global variable of lua script from C++.
-- [x] Call global function of lua script from C++.
-- [x] Create lua module support.
+- [x] To register C++ class into lua.
+- [x] To register C++ global function or member function into lua.
+- [x] Read/Write/Add/Remove lua global variable in C++ side.
+- [x] Call lua global function in C++ side.
+- [x] Be able to create extension module for lua with C++ style.
+- [x] Design a C++ container to simulate lua table.
+- [x] Design a class whose instances can hold instances of any type supported by luapp.
 - [ ] Let lua script embedded in C++.
-- [ ] Design a C++ container to simulate lua table.
+- [ ] Require lua script by another rule.
+- [ ] Support C++11.(optional)
 
-### Version
-1.1.1
+### Information
+Item                      | Description
+--------------------------|----------
+**License**               | MIT
+**Version**               | 1.2.0 (using Semantic Versioning 2.0.0)
+**Supported lua version** | 5.3.0
 
 ### Example
 
 ```lua
 -- ClassIntoLua.lua
 
-object = MyClass()
+object = NewClass()
 
-num = object:Count(3,4)
+num = object:count(3,4)
 
 print("3 + 4 = " .. num)
 ```
@@ -46,10 +52,10 @@ public:
 		printf("do MyClass::~MyClass()\n");
 	}
 
-	lua::Int Count( lua::Int num01,
+	lua::Int count( lua::Int num01,
 	                lua::Int num02)
 	{
-		return num01+num02;
+		return num01 + num02;
 	}
 };
 
@@ -57,13 +63,11 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.Init();
+	lua.bindMethod("count",&MyClass::count);
 
-	lua.RegisterMemberFunction("Count",&MyClass::Count);
+	lua.bindClassEx<MyClass>("NewClass");
 
-	lua.RegisterClassEx<MyClass>("MyClass");
-
-	lua.DoScript("ClassIntoLua.lua");
+	lua.run("ClassIntoLua.lua");
 
 	return 0;
 }
