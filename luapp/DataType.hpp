@@ -6,6 +6,7 @@
 #ifndef _LUAPP_DATA_TYPE_HPP_
 #define _LUAPP_DATA_TYPE_HPP_
 
+#include <string>
 
 namespace lua{
 
