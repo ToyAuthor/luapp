@@ -56,12 +56,16 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 		}
 
-		// Return a lua function.
-		static lua::CFunction getConstructor( lua::Handle    L,    ///< Handle of lua
-		                                      lua::Str&      str   ///< Name of class
-		                                      )
+		static lua::CFunction getConstructor(lua::Handle L,lua::Str& className)
 		{
-			set_class_name(str);
+			set_class_name(className);
+			buildMetaTableForUserdata(L);
+			return &Adapter<C,N>::constructor;
+		}
+
+		static lua::CFunction getConstructor2(lua::Handle L,lua::Str& className)
+		{
+			set_class_name(className);
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);

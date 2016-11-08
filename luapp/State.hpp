@@ -104,11 +104,12 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:bindClass not support module mode.\n");
-				return;
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
 			}
-
-			adapter::Adapter<C,N>::registerClass(_lua,class_name);
+			else
+			{
+				adapter::Adapter<C,N>::registerClass(_lua,class_name);
+			}
 		}
 		template<typename C>
 		void RegisterClass(lua::Str class_name)
@@ -126,7 +127,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2(_lua,class_name));
 			}
 			else
 			{
