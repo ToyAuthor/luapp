@@ -84,7 +84,7 @@ int main()
 
 #include <typeinfo>
 #include <cstring>
-#include "luapp/Define.hpp"
+#include "luapp/Config.hpp"
 #include "luapp/DataType.hpp"
 
 namespace lua{

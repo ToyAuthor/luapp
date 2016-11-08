@@ -1,8 +1,9 @@
 
-#ifndef _LUAPP_DEFINE_HPP_
-#define _LUAPP_DEFINE_HPP_
+#ifndef _LUAPP_CONFIG_HPP_
+#define _LUAPP_CONFIG_HPP_
 
 //#define _LUAPP_USING_CPP11_
+//#define _LUAPP_USING_BOOST_
 
 /*
  * Check data type before copy variable from lua.
@@ -13,4 +14,5 @@
 // Spend more time to make sure everything was fine.
 #define _LUAPP_CHECK_CAREFUL_
 
-#endif
+
+#endif//_LUAPP_CONFIG_HPP_

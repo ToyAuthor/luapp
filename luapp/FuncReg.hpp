@@ -5,7 +5,7 @@
 
 #include <vector>
 #include <string>
-#include "luapp/Define.hpp"
+#include "luapp/Config.hpp"
 #include "luapp/ShortName.hpp"
 
 namespace lua{
