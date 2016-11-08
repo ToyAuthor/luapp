@@ -42,6 +42,7 @@ inline void OpenLibs(Handle h)
 	luaL_openlibs(h);
 }
 //------------------------------------------------------------------------------
+// Remove it in next version.
 inline Str GetError(Handle h)
 {
 	Str  str(lua_tostring(h, -1));
@@ -50,9 +51,9 @@ inline Str GetError(Handle h)
 	return str;
 }
 //------------------------------------------------------------------------------
-inline int DoScript(Handle h,Name filename)
+inline int DoScript(Handle h,lua::Str filename)
 {
-	if( luaL_loadfile(h,filename) )
+	if( luaL_loadfile(h,filename.c_str()) )
 	{
 		return 0;
 	}
@@ -70,9 +71,18 @@ inline void NewTable(Handle h)
 	lua_newtable(h);
 }
 //------------------------------------------------------------------------------
-inline int NewMetaTable(Handle h,Name tname)
+inline int NewMetaTable(Handle h,lua::Str tname)
 {
-	return luaL_newmetatable(h,tname);
+	#ifdef _LUAPP_CHECK_CAREFUL_
+	luaL_getmetatable(h,tname.c_str());
+	if ( lua_type(h, -1)!=LUA_TNIL )
+	{
+		printf("error:this meta table already exist.\n");
+	}
+	lua_pop(h,1);
+	#endif
+
+	return luaL_newmetatable(h,tname.c_str());
 }
 //------------------------------------------------------------------------------
 inline void* NewUserData(Handle h,size_t size)
@@ -80,14 +90,23 @@ inline void* NewUserData(Handle h,size_t size)
 	return lua_newuserdata(h,size);
 }
 //------------------------------------------------------------------------------
-inline void SetGlobal(Handle h,Name var)
+inline void SetGlobal(Handle h,lua::Str var)
 {
-	lua_setglobal(h,var);
+	#ifdef _LUAPP_CHECK_CAREFUL_
+	lua_getglobal(h,var.c_str());
+	if ( lua_type(h, -1)!=LUA_TNIL )
+	{
+		printf("warning:this global variable already exist.\n");
+	}
+	lua_pop(h,1);
+	#endif
+
+	lua_setglobal(h,var.c_str());
 }
 //------------------------------------------------------------------------------
-inline void GetGlobal(Handle h,Name var)
+inline void GetGlobal(Handle h,lua::Str var)
 {
-	lua_getglobal(h,var);
+	lua_getglobal(h,var.c_str());
 }
 //------------------------------------------------------------------------------
 inline void SetTable(Handle h,int index)
@@ -100,14 +119,14 @@ inline void GetTable(Handle h,int index)
 	lua_gettable(h,index);
 }
 //------------------------------------------------------------------------------
-inline void SetField(Handle h,int index, Name name)
+inline void SetField(Handle h,int index, lua::Str name)
 {
-	lua_setfield(h,index,name);
+	lua_setfield(h,index,name.c_str());
 }
 //------------------------------------------------------------------------------
-inline void GetField(Handle h,int index, Name k)
+inline void GetField(Handle h,int index, lua::Str k)
 {
-	lua_getfield(h,index,k);
+	lua_getfield(h,index,k.c_str());
 }
 //------------------------------------------------------------------------------
 inline int SetMetaTable(Handle h,int index)
@@ -115,9 +134,9 @@ inline int SetMetaTable(Handle h,int index)
 	return lua_setmetatable(h,index);
 }
 //------------------------------------------------------------------------------
-inline void GetMetaTable(Handle h,Name name)
+inline void GetMetaTable(Handle h,lua::Str name)
 {
-	luaL_getmetatable(h,name);
+	luaL_getmetatable(h,name.c_str());
 }
 //------------------------------------------------------------------------------
 inline void PushClosure(Handle h,CFunction fn,int n)
@@ -130,14 +149,9 @@ inline void PushFunction(Handle h,CFunction fn)
 	lua_pushcfunction(h,fn);
 }
 //------------------------------------------------------------------------------
-inline Name PushString(Handle h,Name str)
+inline void PushString(Handle h,lua::Str str)
 {
-	return lua_pushstring(h, str);
-}
-//------------------------------------------------------------------------------
-inline Name PushString(Handle h,Str str)
-{
-	return lua_pushstring(h, str.c_str());
+	lua_pushstring(h, str.c_str());
 }
 //------------------------------------------------------------------------------
 inline void PushValue(Handle h,int index)
@@ -218,16 +232,22 @@ inline Str CheckString(Handle h,int index)
 	if ( lua_type(h, index)!=LUA_TSTRING )
 	{
 		printf("error:lua::CheckString\n");
-		return Str();
+		return Str("none");
 	}
 	#endif
 
+//	return lua_tostring(h,index);
 	return lua_tolstring(h,index,NULL);
 }
 //------------------------------------------------------------------------------
-inline void* CheckUserData(Handle h,int ud, Name tname)
+inline void* CheckUserData(Handle h,int index)
 {
-	return luaL_checkudata(h, ud, tname);
+	return lua_touserdata(h,index);
+}
+//------------------------------------------------------------------------------
+inline void* CheckUserData(Handle h,int index, lua::Str tname)
+{
+	return luaL_checkudata(h, index, tname.c_str());
 }
 //------------------------------------------------------------------------------
 inline void PushPointer(Handle h,Ptr ptr)

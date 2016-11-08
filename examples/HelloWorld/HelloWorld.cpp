@@ -24,7 +24,7 @@ int main()
 
 	if( ! lua.run(LUAPP_SCRIPT_PATH,"simple.lua") )
 	{
-		std::cout<<lua.error()<<std::endl;
+		std::cout << "error:lua script failed" << std::endl;
 	}
 
 	return EXIT_SUCCESS;

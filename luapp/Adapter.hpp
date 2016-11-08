@@ -40,7 +40,7 @@ class Adapter
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
-			lua::SetGlobal(L, _className.c_str());             // ...
+			lua::SetGlobal(L, _className);                     // ...
 
 			buildMetaTableForUserdata(L);
 		}
@@ -54,7 +54,7 @@ class Adapter
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor2); // ... [F]
-			lua::SetGlobal(L, _className.c_str());             // ...
+			lua::SetGlobal(L, _className);                     // ...
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -99,7 +99,7 @@ class Adapter
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
-			lua::NewMetaTable(L, _classNameUD.c_str());        // ... [T]
+			lua::NewMetaTable(L, _classNameUD);                // ... [T]
 			lua::PushString(L, "__gc");                        // ... [T] ["__gc"]
 			lua::PushFunction(L, &Adapter<C,N>::gc_obj);       // ... [T] ["__gc"] [F]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -108,7 +108,7 @@ class Adapter
 
 		static void buildMetaTableForMemberFunction(lua::Handle L)
 		{
-			lua::NewMetaTable(L, _className.c_str());          // ... [T]
+			lua::NewMetaTable(L, _className);                  // ... [T]
 			lua::PushString(L, "__index");                     // ... [T] ["__index"]
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
 			lua::SetTable(L,-3);                               // ... [T]
@@ -124,7 +124,7 @@ class Adapter
 			*/
 			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
 			{
-				lua::PushString(L, Adapter<C,N>::_list[i]._name.c_str());
+				lua::PushString(L, Adapter<C,N>::_list[i]._name);
 				lua::PushNumber(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
@@ -136,7 +136,7 @@ class Adapter
 		// As destructor.
 		static int gc_obj(lua::Handle L)
 		{
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD.c_str()));
+			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
 			delete (*obj);
 
 			return 0;
@@ -150,7 +150,7 @@ class Adapter
 			lua::PushNumber(L, 0);                             // ... [T] [0]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, _classNameUD.c_str());        // ... [T] [0] [UD] [MT]
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
@@ -165,7 +165,7 @@ class Adapter
 			*/
 			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
 			{
-				lua::PushString(L, Adapter<C,N>::_list[i]._name.c_str());
+				lua::PushString(L, Adapter<C,N>::_list[i]._name);
 				lua::PushNumber(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
@@ -181,14 +181,14 @@ class Adapter
 			lua::NewTable(L);                                  // ... [T]
 
 			//-----------Setup member function-----------
-			lua::GetMetaTable(L, _className.c_str());          // ... [T] [MT]
+			lua::GetMetaTable(L, _className);          // ... [T] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------
 			lua::PushNumber(L, 0);                             // ... [T] [0]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, _classNameUD.c_str());        // ... [T] [0] [UD] [MT]
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 

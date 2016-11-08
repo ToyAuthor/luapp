@@ -55,7 +55,7 @@ class Wrapper
 
 			lua::PushNumber(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
-			lua::SetGlobal(L, name.c_str());
+			lua::SetGlobal(L, name);
 		}
 
 		// For member function.
@@ -71,7 +71,7 @@ class Wrapper
 
 			lua::PushNumber(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
-			lua::SetGlobal(L, name.c_str());
+			lua::SetGlobal(L, name);
 		}
 
 	private:
@@ -80,9 +80,9 @@ class Wrapper
 
 		static int thunk(lua::Handle L)
 		{
-			int i = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
+			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
 
-			return _funcList[i]._proxy->Do(L);
+			return _funcList[id]._proxy->Do(L);
 		}
 };
 

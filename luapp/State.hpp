@@ -90,7 +90,7 @@ class State
 			else
 			{
 				lua::PushFunction(_lua, func);
-				lua::SetGlobal(_lua, name.c_str());
+				lua::SetGlobal(_lua, name);
 			}
 		}
 		void RegisterNativeFunction(lua::Str name,lua::CFunction func)
@@ -251,7 +251,18 @@ class State
 
 		lua::Str error()
 		{
-			return lua::GetError(_lua);
+			lua::Var  var;
+			lua::CheckVarFromLua(_lua,&var,-1);
+
+			lua::Str  str("error message not found");
+
+			if ( lua::VarType<lua::Str>(var) )
+			{
+				str = lua::VarCast<lua::Str>(var);
+			//	lua::Pop(_lua,-1);    I can't make sure it is error message.
+			}
+
+			return str;
 		}
 		lua::Str GetError()
 		{
@@ -271,7 +282,15 @@ class State
 				str=_path+str;
 			}
 
-			return lua::DoScript(_lua,str.c_str());
+			int result = lua::DoScript(_lua,str);
+
+			if ( ! result )
+			{
+				// Output what's wrong at which line in which script file.
+				printf("%s\n",this->error().c_str());
+			}
+
+			return result;
 		}
 		int DoScript(lua::Str str)
 		{
@@ -285,6 +304,7 @@ class State
 		}
 
 		/// Tell luapp where to read main lua scripts.
+		// Remove it in next version.
 		void project(lua::Str path)
 		{
 			_path=path;
@@ -318,7 +338,7 @@ class State
 		void setGlobal(lua::Str name,T t)
 		{
 			PushVarToLua(_lua,t);
-			lua::SetGlobal(_lua,name.c_str());
+			lua::SetGlobal(_lua,name);
 		}
 		template<typename T>
 		void SetGlobal(lua::Str name,T t)
@@ -330,7 +350,7 @@ class State
 		template<typename T>
 		void getGlobal(lua::Str name,T t)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			CheckVarFromLua(_lua,t,-1);
 			lua::Pop(_lua,1);
 		}
@@ -369,7 +389,7 @@ class State
 		/// Call global function that don't have return value.
 		void call(lua::Str name)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PCall(_lua,0,0,0);
 		}
 		void Call(lua::Str name)
@@ -380,7 +400,7 @@ class State
 		template<typename A1>
 		void call(lua::Str name,A1 a1)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PCall(_lua,1,0,0);
 		}
@@ -393,7 +413,7 @@ class State
 		template<typename A1,typename A2>
 		void call(lua::Str name,A1 a1,A2 a2)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PCall(_lua,2,0,0);
@@ -407,7 +427,7 @@ class State
 		template<typename A1,typename A2,typename A3>
 		void call(lua::Str name,A1 a1,A2 a2,A3 a3)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PushVarToLua(_lua,a3);
@@ -422,7 +442,7 @@ class State
 		template<typename A1,typename A2,typename A3,typename A4>
 		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PushVarToLua(_lua,a3);
@@ -438,7 +458,7 @@ class State
 		template<typename A1,typename A2,typename A3,typename A4,typename A5>
 		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PushVarToLua(_lua,a3);
@@ -455,7 +475,7 @@ class State
 		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
 		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
 		{
-			lua::GetGlobal(_lua,name.c_str());
+			lua::GetGlobal(_lua,name);
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
 			lua::PushVarToLua(_lua,a3);
@@ -495,7 +515,7 @@ class State
 		}
 
 		lua::Handle      _lua;
-		lua::Str         _path;         // A path for search scripts.
+		lua::Str         _path;         // Remove it in next version.
 		bool             _moduleMode;
 		lua::FuncReg     _funcReg;      // Only work for module mode.
 };
