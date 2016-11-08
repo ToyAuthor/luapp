@@ -26,7 +26,7 @@ local b = 2
 
 print(a .. "+" .. b .. "=" .. t.count(a,b))
 
-local obj = t.newClass()
+local obj = t.NewObject()
 print("Message frome C++: " .. obj:name())
 -----------------------------------------------------
 */
@@ -78,7 +78,7 @@ extern "C" MY_DLL_API int luaopen_module(lua::Handle L)
 	lua.bind("count",func_count);
 
 	lua.bindMethod("name",&MyClass::name);
-	lua.bindClassEx<MyClass>("newClass");
+	lua.bindClassEx<MyClass>("NewObject");
 
 	return 1;
 }

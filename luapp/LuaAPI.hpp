@@ -174,6 +174,24 @@ inline void PushInteger(Handle h,int num)
 	lua_pushinteger(h,num);
 }
 //------------------------------------------------------------------------------
+template<typename S>
+inline void PushUserData(Handle h,S ud)
+{
+	                                               // ...
+	void*  ptr = lua::NewUserData(h, sizeof(S));   // ... [UD]
+	*((S*)ptr) = ud;
+}
+//------------------------------------------------------------------------------
+template<typename S>
+inline void PushUserData(Handle h,S ud, lua::Str tname)
+{
+	                                               // ...
+	void*  ptr = lua::NewUserData(h, sizeof(S));   // ... [UD]
+	*((S*)ptr) = ud;
+	lua::GetMetaTable(h, tname.c_str());           // ... [UD] [MT]
+	lua::SetMetaTable(h, -2);                      // ... [UD]
+}
+//------------------------------------------------------------------------------
 inline double CheckNumber(Handle h,int index)
 {
 //	return luaL_checknumber(h,index);

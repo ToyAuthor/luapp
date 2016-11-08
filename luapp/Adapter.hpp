@@ -32,11 +32,9 @@ class Adapter
 		};
 
 		// It's a general way to register class.
-		static void registerClass( lua::Handle    L,    ///< Handle of lua
-		                           lua::Str&      str   ///< Name of class
-		                           )
+		static void registerClass(lua::Handle L,lua::Str& className)
 		{
-			set_class_name(str);                               // ...
+			set_class_name(className);                         // ...
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
@@ -46,11 +44,9 @@ class Adapter
 		}
 
 		// Call it after every member function was registed at _list[].
-		static void registerClassEx( lua::Handle    L,    ///< Handle of lua
-		                             lua::Str&      str   ///< Name of class
-		                             )
+		static void registerClassEx(lua::Handle L,lua::Str& className)
 		{
-			set_class_name(str);                               // ...
+			set_class_name(className);                         // ...
 
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor2); // ... [F]
@@ -95,6 +91,7 @@ class Adapter
 
 		static Str         _className;
 		static Str         _classNameUD;   // For user data.
+	//	static Str         _classNameMT;   // For meta table.    Maybe I need this!
 		static PackList    _list;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
@@ -197,13 +194,14 @@ class Adapter
 
 		static int thunk(lua::Handle L)
 		{
-			int i = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
-			lua::PushNumber(L, 0);
-			lua::GetTable(L, 1);
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD.c_str()));
-			lua::Pop(L, 1);
+			                                                        // [this] [arg1] [arg2] ... [argN]
+			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
+			lua::PushNumber(L, 0);                                  // [this] [arg1] [arg2] ... [argN] [0]
+			lua::GetTable(L, 1);                                    // [this] [arg1] [arg2] ... [argN] [UD]
+			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
+			lua::Pop(L, 1);                                         // [this] [arg1] [arg2] ... [argN]
 
-			return	Adapter<C,N>::_list[i]._proxy->Do(L,*obj);
+			return	Adapter<C,N>::_list[id]._proxy->Do(L,*obj);
 		}
 
 		static void set_class_name(lua::Str &name)

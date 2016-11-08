@@ -13,7 +13,7 @@
 /* ClassIntoLua.lua
 -----------------------------------------------------
 
-object = MyClass()
+object = NewObject()
 
 param = 6
 
@@ -61,12 +61,9 @@ int main()
 
 	lua.bindMethod("count",&MyClass::count);   // Lua script has member function now.
 
-	lua.bindClassEx<MyClass>("MyClass");       // Lua script has class now.
+	lua.bindClassEx<MyClass>("NewObject");     // Lua script has object now.
 
-	if( ! lua.run(LUAPP_SCRIPT_PATH,"ClassIntoLua.lua") )
-	{
-		std::cout<<lua.error()<<std::endl;
-	}
+	lua.run(LUAPP_SCRIPT_PATH,"ClassIntoLua.lua");
 
 	return EXIT_SUCCESS;
 }

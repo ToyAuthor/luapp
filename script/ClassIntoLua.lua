@@ -1,5 +1,5 @@
 
-object = MyClass()
+object = NewObject()
 
 param = 6
 
