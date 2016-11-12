@@ -51,11 +51,116 @@ inline Str GetError(Handle h)
 	return str;
 }
 //------------------------------------------------------------------------------
-inline int DoScript(Handle h,lua::Str filename)
+inline void DoString(Handle h,lua::Str code)
 {
-	if( luaL_loadfile(h,filename.c_str()) )
+	luaL_dostring(h, code.c_str());
+}
+//------------------------------------------------------------------------------
+inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
+{
+	switch ( error_code )
+	{
+		case 0:
+			printf("warning:big mistake! It's not a error.\n");
+			break;
+		case LUA_ERRFILE:
+			printf("error:cannot open the file:%s\n",filename.c_str());
+			break;
+		case LUA_ERRSYNTAX:
+			printf("error:syntax error during pre-compilation\n");
+			break;
+		case LUA_ERRMEM:
+			printf("error:memory allocation error\n");
+			break;
+		default:
+			printf("error:load script failed for some reason\n");
+	}
+}
+//------------------------------------------------------------------------------
+inline int LoadScript(Handle h,lua::Str name,lua::Str& code)
+{
+	if ( name.empty() )
+	{
+		printf("error:script name is empty string\n");
+		return 0;
+	}
+	else
+	{
+		int result = luaL_loadbuffer(h,code.c_str(), code.size(), name.c_str());
+
+		if ( result )
+		{
+			_PrintScriptLoadingError(result,name);
+			return 0;
+		}
+	}
+
+	return 1;
+}
+//------------------------------------------------------------------------------
+inline int LoadScript(Handle h,lua::Str filename)
+{
+	if ( filename.empty() )
+	{
+		printf("error:file name is empty string\n");
+		return 0;
+	}
+	else
+	{
+		int result = luaL_loadfile(h,filename.c_str());
+
+		if ( result )
+		{
+			_PrintScriptLoadingError(result,filename);
+			return 0;
+		}
+	}
+
+	return 1;
+}
+//------------------------------------------------------------------------------
+inline int DoScript(Handle h,lua::Str name,lua::Str& code)
+{
+	if ( name.empty() )
+	{
+		printf("error:script name is empty string\n");
+		return 0;
+	}
+	else
+	{
+		int result = luaL_loadbuffer(h,code.c_str(), code.size(), name.c_str());
+
+		if ( result )
+		{
+			_PrintScriptLoadingError(result,name);
+			return 0;
+		}
+	}
+
+	if( lua_pcall(h,0,0,0) )
 	{
 		return 0;
+	}
+
+	return 1;
+}
+//------------------------------------------------------------------------------
+inline int DoScript(Handle h,lua::Str filename)
+{
+	if ( filename.empty() )
+	{
+		printf("error:file name is empty string\n");
+		return 0;
+	}
+	else
+	{
+		int result = luaL_loadfile(h,filename.c_str());
+
+		if ( result )
+		{
+			_PrintScriptLoadingError(result,filename);
+			return 0;
+		}
 	}
 
 	if( lua_pcall(h,0,0,0) )
@@ -254,8 +359,7 @@ inline Str CheckString(Handle h,int index)
 	}
 	#endif
 
-//	return lua_tostring(h,index);
-	return lua_tolstring(h,index,NULL);
+	return lua_tostring(h,index);
 }
 //------------------------------------------------------------------------------
 inline void* CheckUserData(Handle h,int index)

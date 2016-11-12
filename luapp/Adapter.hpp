@@ -182,7 +182,7 @@ class Adapter
 			lua::NewTable(L);                                  // ... [T]
 
 			//-----------Setup member function-----------
-			lua::GetMetaTable(L, _className);          // ... [T] [MT]
+			lua::GetMetaTable(L, _className);                  // ... [T] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------

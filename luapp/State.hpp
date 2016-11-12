@@ -250,31 +250,79 @@ class State
 			this->drop();
 		}
 
-		lua::Str error()
-		{
-			lua::Var  var;
-			lua::CheckVarFromLua(_lua,&var,-1);
-
-			lua::Str  str("error message not found");
-
-			if ( lua::VarType<lua::Str>(var) )
-			{
-				str = lua::VarCast<lua::Str>(var);
-			//	lua::Pop(_lua,-1);    I can't make sure it is error message.
-			}
-
-			return str;
-		}
 		lua::Str GetError()
 		{
 			return this->error();
+		}
+
+		int load(lua::Str name,lua::Str& code)
+		{
+			int result = lua::LoadScript(_lua,name,code);
+
+			if ( ! result )
+			{
+				printf("%s\n",this->error().c_str());
+			}
+
+			return result;
+		}
+
+		int load(lua::Str filename)
+		{
+			int result = lua::LoadScript(_lua,filename);
+
+			if ( ! result )
+			{
+				printf("%s\n",this->error().c_str());
+			}
+
+			return result;
+		}
+
+		int run()
+		{
+			if ( _moduleMode )
+			{
+				printf("error:You can't do this. Because module mode didn't run its own script.\n");
+				return (int)0;
+			}
+
+			if ( lua::PCall(_lua,0,0,0) )
+			{
+				return 0;
+			}
+
+			return 1;
+		}
+
+		int run(lua::Str name,lua::Str& code,lua::Str& (*loader)(lua::Str))
+		{
+			if ( _moduleMode )
+			{
+				printf("error:You can't do this. Because module mode didn't run its own script.\n");
+				return (int)0;
+			}
+
+			if ( loader )
+			{
+				this->searcher(loader);
+			}
+
+			int result = lua::DoScript(_lua,name,code);
+
+			if ( ! result )
+			{
+				printf("%s\n",this->error().c_str());
+			}
+
+			return result;
 		}
 
 		int run(lua::Str str)
 		{
 			if ( _moduleMode )
 			{
-				printf("error:You can't do this. Because module mode didn't have its own script.\n");
+				printf("error:You can't do this. Because module mode didn't run its own script.\n");
 				return (int)0;
 			}
 
@@ -287,7 +335,6 @@ class State
 
 			if ( ! result )
 			{
-				// Output what's wrong at which line in which script file.
 				printf("%s\n",this->error().c_str());
 			}
 
@@ -508,6 +555,22 @@ class State
 		{
 			_funcReg.refresh();
 			lua::NewModule(_lua,_funcReg);
+		}
+
+		lua::Str error()
+		{
+			lua::Var  var;
+			lua::CheckVarFromLua(_lua,&var,-1);
+
+			lua::Str  str("error message not found");
+
+			if ( lua::VarType<lua::Str>(var) )
+			{
+				str = lua::VarCast<lua::Str>(var);
+			//	lua::Pop(_lua,-1);    I can't make sure it is error message.
+			}
+
+			return str;
 		}
 
 		int is_script_path_exist()
