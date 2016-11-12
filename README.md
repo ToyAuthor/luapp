@@ -10,8 +10,8 @@ It's a useful tool for lua. To help you using lua in C++ style and work better w
 - [x] Be able to create extension module for lua with C++ style.
 - [x] Design a C++ container to simulate lua table.
 - [x] Design a class whose instances can hold instances of any type supported by luapp.
-- [ ] Let lua script embedded in C++.
-- [ ] Require lua script by another rule.
+- [x] Let lua script embedded in C++.
+- [x] Be able to require lua script by custom rule.
 - [ ] Support C++11.(optional)
 
 ### Information
@@ -26,7 +26,7 @@ Item                      | Description
 ```lua
 -- ClassIntoLua.lua
 
-object = NewClass()
+object = NewObject()
 
 num = object:count(3,4)
 
@@ -65,7 +65,7 @@ int main()
 
 	lua.bindMethod("count",&MyClass::count);
 
-	lua.bindClassEx<MyClass>("NewClass");
+	lua.bindClassEx<MyClass>("NewObject");
 
 	lua.run("ClassIntoLua.lua");
 

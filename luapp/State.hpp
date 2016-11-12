@@ -11,6 +11,7 @@
 #include "luapp/Wrapper.hpp"
 #include "luapp/Function.hpp"
 #include "luapp/FunctionExt.hpp"
+#include "luapp/Searcher.hpp"
 
 
 namespace lua{
@@ -536,6 +537,12 @@ class State
 		void Call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6)
 		{
 			this->call(name,a1,a2,a3,a4,a5,a6);
+		}
+
+	//	void searcher(std::function<lua::Str&(lua::Str)> loader)
+		void searcher(lua::Str& (*loader)(lua::Str))
+		{
+			Searcher<N>::setup(_lua,loader);
 		}
 
 	private:
