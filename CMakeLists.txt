@@ -4,6 +4,8 @@ cmake_minimum_required(VERSION 2.8)
 
 set(CMAKE_BUILD_TYPE Release)
 
+set(LUAPP_BINARY_DIR  ${PROJECT_BINARY_DIR}/bin)
+
 # Build lua.
 add_subdirectory(lua)
 
