@@ -31,6 +31,8 @@ class Table;
  */
 class Var;
 
+//class Func;   Not support yet.
+
 }//namespace lua
 
 #endif//_LUAPP_STATE_HPP_

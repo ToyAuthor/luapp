@@ -164,7 +164,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:bind(lua::Str name,F fn) not support module mode.\n");
+				lua::log::Cout<<"error:bind(lua::Str name,F fn) not support module mode."<<lua::log::End;
 				return;
 			}
 

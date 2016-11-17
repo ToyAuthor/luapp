@@ -324,7 +324,7 @@ inline bool CheckBoolean(Handle h,int index)
 	}
 	#endif
 
-	return lua_toboolean(h,index);
+	return lua_toboolean(h,index)==0 ? false:true;
 }
 //------------------------------------------------------------------------------
 inline int CheckInteger(Handle h,int index)

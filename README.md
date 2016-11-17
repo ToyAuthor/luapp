@@ -1,13 +1,13 @@
 # luapp
-It's a useful tool for lua. To help you using lua in C++ style and work better with object-oriented programming.
+It's a useful tool for lua. To help you use lua in C++ style and work better with object-oriented programming.
 
 ### Features
 - [x] Header file only.
 - [x] To register C++ class into lua.
 - [x] To register C++ global function or member function into lua.
-- [x] Read/Write/Add/Remove lua global variable in C++ side.
-- [x] Call lua global function in C++ side.
-- [x] Be able to create extension module for lua with C++ style.
+- [x] Read/Write/Add/Remove lua global variable at C++ side.
+- [x] Call lua global function at C++ side.
+- [x] Be able to create extension module for lua in C++ style.
 - [x] Design a C++ container to simulate lua table.
 - [x] Design a class whose instances can hold instances of any type supported by luapp.
 - [x] Let lua script embedded in C++.
