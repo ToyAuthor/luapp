@@ -18,7 +18,7 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 Item                      | Description
 --------------------------|----------
 **License**               | MIT
-**Version**               | 1.2.0 (using Semantic Versioning 2.0.0)
+**Version**               | 1.3.0 (using Semantic Versioning 2.0.0)
 **Supported lua version** | 5.3.0
 
 ### Example
