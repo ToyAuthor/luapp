@@ -6,6 +6,7 @@
 #pragma once
 
 #include "luapp/LuaAPI.hpp"
+#include "luapp/stl/functional.hpp"
 
 namespace lua{
 
@@ -14,8 +15,7 @@ class Searcher
 {
 	public:
 
-	//	static void setup(lua::Handle L,std::function<lua::Str&(lua::Str)> searcher)
-		static void setup(lua::Handle L,lua::Str& (*searcher)(lua::Str))
+		static void setup(lua::Handle L,std::function<lua::Str&(lua::Str)> searcher)
 		{
 			Searcher<N>::_findScriptFromBuffer = searcher;
 			lua::PushFunction(L,&Searcher<N>::thunk);
@@ -28,6 +28,12 @@ class Searcher
 		static int thunk(lua::Handle L)
 		{
 			lua::Str   name = lua::CheckString(L,1);
+
+			if ( ! Searcher<N>::_findScriptFromBuffer )
+			{
+				printf("error:no one call Searcher::setup()\n");
+				return 1;
+			}
 
 			lua::Str&  code = Searcher<N>::_findScriptFromBuffer(name);
 
@@ -61,12 +67,9 @@ class Searcher
 			return str;
 		}
 
-		static lua::Str& (*_findScriptFromBuffer)(lua::Str);
-
-	//	static std::function<lua::Str&(lua::Str)>   _findScriptFromBuffer;
+		static std::function<lua::Str&(lua::Str)>   _findScriptFromBuffer;
 };
 
-template <int N> lua::Str&    (*Searcher<N>::_findScriptFromBuffer)(lua::Str);
-//template <int N> std::function<lua::Str&(lua::Str)> Searcher<N>::_findScriptFromBuffer;
+template <int N> std::function<lua::Str&(lua::Str)> Searcher<N>::_findScriptFromBuffer;
 
 }//namespace lua

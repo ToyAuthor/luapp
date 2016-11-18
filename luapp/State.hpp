@@ -538,8 +538,7 @@ class State
 			this->call(name,a1,a2,a3,a4,a5,a6);
 		}
 
-	//	void searcher(std::function<lua::Str&(lua::Str)> loader)
-		void searcher(lua::Str& (*loader)(lua::Str))
+		void searcher(std::function<lua::Str&(lua::Str)> loader)
 		{
 			Searcher<N>::setup(_lua,loader);
 		}
