@@ -1,35 +1,36 @@
-CallFunctionFromLua
+
+HelloWorld
+	例行性要寫的範例，使用者通常都會從這個範例開始閱讀
+
+SetGlobalVariable
+	將一些資料輸入成 lua 裡的全域變數
+
+GetGlobalVariable
+	讀取 lua 的全域變數，因此也有人把 lua 當成 config 檔使用
+
+FunctionInjectLua
+	在 lua 這端呼叫 C++ 函式
+
+MemberFunctionInjectLua
+	在 lua 這端呼叫 C++ 成員函式，做法是把成員函式綁上物件指標再傳給 lua
+
+CallLuaFunction
 	在 C++ 呼叫 lua 這邊的全域函式
 
 CallMultipleReturnValueFunctionFromLua
 	在 C++ 呼叫 lua 這邊的全域函式，這些全域函式擁有多個回傳值
 
-ClassIntoLua
-	將類別轉入 lua 裡面，如此便可以在 lua 宣告使用 C++ 物件了
+ClassInjectLua
+	將類別導入 lua 裡面，如此便可以在 lua 宣告使用 C++ 物件了
+
+MultipleLuaFile
+	示範一下 lua 腳本裡又引入其他腳本的情況
 
 ExtensionModule
 	協助建立擴充模組(外掛)
-
-FunctionIntoLua
-	在 lua 這端呼叫 C++ 函式
-
-GetGlobalVariable
-	讀取 lua 的全域變數，因此也有人把 lua 當成 config 檔使用
-
-HelloWorld
-	例行性要寫的範例
 
 LuaCompiler
 	這個是 lua 官方提供的工具，可以將 lua 腳本轉成能更快讀取的格式，同時也有加密作用
 
 LuaInterpreter
 	這個是 lua 官方提供的工具，用來讀取執行腳本的互動直譯器
-
-MemberFunctionIntoLua
-	把 C++ 成員函式綁上物件指標轉成 lua 的全域函式
-
-MultipleLuaFile
-	示範一下 lua 腳本裡又引入其他腳本的情況
-
-SetGlobalVariable
-	將一些資料輸入成 lua 裡的全域變數

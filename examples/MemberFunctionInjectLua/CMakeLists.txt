@@ -1,4 +1,4 @@
-project(ClassIntoLua)
+project(MemberFunctionInjectLua)
 
 
 if(MINGW)
@@ -8,14 +8,14 @@ elseif(UNIX)
 endif()
 
 
-set(NAME "ClassIntoLua")
+set(NAME "MemberFunctionInjectLua")
 
 include_directories(${LUAPP_INCLUDE_DIR})
 link_directories(   ${LUAPP_LIBRARY_DIR})
 
 set(CMAKE_RUNTIME_OUTPUT_DIRECTORY ${LUAPP_BINARY_DIR})
 
-add_executable(${NAME} ClassIntoLua.cpp)
+add_executable(${NAME} MemberFunctionInjectLua.cpp)
 
 target_link_libraries(${NAME} ${LUAPP_LIBRARY_NAME})
 
