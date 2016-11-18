@@ -33,6 +33,13 @@ inline void PushVarToLua(lua::Handle hLua,lua::Ptr t)
 	lua::PushPointer(hLua,t);
 }
 //------------------------------------------------------------------------------
+#ifdef _LUAPP_CPP11_
+inline void PushVarToLua(lua::Handle hLua,std::nullptr_t)
+{
+	lua::PushPointer(hLua,nullptr);
+}
+#endif
+//------------------------------------------------------------------------------
 inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 {
 	lua::NewTable(hLua);                 // ... [T]

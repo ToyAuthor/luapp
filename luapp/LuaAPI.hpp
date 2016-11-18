@@ -376,6 +376,13 @@ inline void PushPointer(Handle h,Ptr ptr)
 	lua_pushlightuserdata(h,ptr);
 }
 //------------------------------------------------------------------------------
+#ifdef _LUAPP_CPP11_
+inline void PushPointer(Handle h,std::nullptr_t)
+{
+	lua_pushlightuserdata(h,(void*)0);
+}
+#endif
+//------------------------------------------------------------------------------
 inline Ptr CheckPointer(Handle h,int index)
 {
 //	return (Ptr)luaL_checklightudata(h,index);
