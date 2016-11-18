@@ -1,7 +1,7 @@
 /**
-@file   SetGlobalVariable.cpp
-@brief  Show you how to set global variable to lua.
-*/
+ * @file   SetGlobalVariable.cpp
+ * @brief  Show you how to set global variable to lua.
+ */
 
 
 #include <cstdlib>

@@ -1,5 +1,4 @@
-#ifndef _LUAPP_COPY_FROM_STACK_HPP_
-#define _LUAPP_COPY_FROM_STACK_HPP_
+#pragma once
 
 #include "luapp/LuaAPI.hpp"
 #include "luapp/Table.hpp"
@@ -226,5 +225,3 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 
 
 }
-
-#endif//_LUAPP_COPY_FROM_STACK_HPP_

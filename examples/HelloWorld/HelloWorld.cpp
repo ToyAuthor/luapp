@@ -1,7 +1,7 @@
 /**
-@file   HelloWorld.cpp
-@brief  Print a message from lua script.
-*/
+ * @file   HelloWorld.cpp
+ * @brief  Print a message from lua script.
+ */
 
 
 #include <cstdlib>

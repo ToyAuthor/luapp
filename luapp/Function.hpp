@@ -3,12 +3,9 @@
 @brief  Let you call the function come from lua.
 */
 
-#ifndef _LUAPP_FUNCTION_HPP_
-#define _LUAPP_FUNCTION_HPP_
-
+#pragma once
 
 #include "luapp/Standard.hpp"
-
 
 
 namespace lua{
@@ -282,5 +279,3 @@ struct Function<R(A1,A2,A3,A4,A5,A6)>
 
 
 }//namespace lua
-
-#endif//_LUAPP_FUNCTION_HPP_

@@ -4,8 +4,7 @@
 */
 
 
-#ifndef _LUAPP_WRAPPER_HPP_
-#define _LUAPP_WRAPPER_HPP_
+#pragma once
 
 
 #include "luapp/WrapperProxy.hpp"
@@ -91,5 +90,3 @@ template<int N>typename Wrapper<N>::PackList        Wrapper<N>::_funcList;
 
 }//namespace wrapper
 }//namespace lua
-
-#endif//_LUAPP_WRAPPER_HPP_

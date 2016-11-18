@@ -1,12 +1,9 @@
 /**
-@file   AdapterProxy.hpp
-@brief  To get all of parameters.
-*/
+ * @file   AdapterProxy.hpp
+ * @brief  To get all of parameters.
+ */
 
-
-#ifndef _LUAPP_ADAPTER_PROXY_HPP_
-#define _LUAPP_ADAPTER_PROXY_HPP_
-
+#pragma once
 
 #include "luapp/Standard.hpp"
 
@@ -418,5 +415,3 @@ static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6))
 
 }//namespace adapter
 }//namespace lua
-
-#endif//_LUAPP_ADAPTER_PROXY_HPP_

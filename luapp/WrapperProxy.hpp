@@ -4,8 +4,7 @@
 */
 
 
-#ifndef _LUAPP_WRAPPER_PROXY_HPP_
-#define _LUAPP_WRAPPER_PROXY_HPP_
+#pragma once
 
 
 #include "luapp/Standard.hpp"
@@ -658,5 +657,3 @@ static Proxy* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6),C *obj)
 
 }//namespace wrapper
 }//namespace lua
-
-#endif//_LUAPP_WRAPPER_PROXY_HPP_

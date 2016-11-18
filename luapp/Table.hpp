@@ -1,7 +1,9 @@
 /**
-@file   Table.hpp
-@brief  It's a container looks like lua table.
-*/
+ * @file   Table.hpp
+ * @brief  It's a container looks like lua table.
+ */
+
+#pragma once
 
 //----------------------Usage----------------------start
 #if 0
@@ -60,9 +62,6 @@ int main()
 //----------------------Usage----------------------end
 
 
-
-#ifndef _LUAPP_TABLE_HPP_
-#define _LUAPP_TABLE_HPP_
 
 #include <map>
 #include "luapp/Var.hpp"
@@ -378,5 +377,3 @@ const lua::Var& lua::Var::operator >> (const T key) const
 }
 
 }//namespace lua
-
-#endif//_LUAPP_TABLE_HPP_

@@ -1,11 +1,9 @@
 /**
-@file   Searcher.hpp
-@brief  To find script by custom way.
-*/
+ * @file   Searcher.hpp
+ * @brief  To find script by custom way.
+ */
 
-
-#ifndef _LUAPP_SEARCHER_HPP_
-#define _LUAPP_SEARCHER_HPP_
+#pragma once
 
 #include "luapp/LuaAPI.hpp"
 
@@ -72,5 +70,3 @@ template <int N> lua::Str&    (*Searcher<N>::_findScriptFromBuffer)(lua::Str);
 //template <int N> std::function<lua::Str&(lua::Str)> Searcher<N>::_findScriptFromBuffer;
 
 }//namespace lua
-
-#endif//_LUAPP_SEARCHER_HPP_

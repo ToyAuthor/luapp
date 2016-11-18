@@ -1,10 +1,9 @@
 /**
-@file   DataType.hpp
-@brief  Only These date types could work in luapp and lua
-*/
+ * @file   DataType.hpp
+ * @brief  Only These date types could work in luapp and lua
+ */
 
-#ifndef _LUAPP_DATA_TYPE_HPP_
-#define _LUAPP_DATA_TYPE_HPP_
+#pragma once
 
 #include <string>
 
@@ -34,5 +33,3 @@ class Var;
 //class Func;   Not support yet.
 
 }//namespace lua
-
-#endif//_LUAPP_STATE_HPP_

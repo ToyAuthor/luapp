@@ -1,7 +1,7 @@
 /**
-@file   FunctionIntoLua.cpp
-@brief  Show you how to call a C function in lua script.
-*/
+ * @file   FunctionIntoLua.cpp
+ * @brief  Show you how to call a C function in lua script.
+ */
 
 
 #include <cstdlib>

@@ -1,18 +1,15 @@
 /**
-@file   FunctionExt.hpp
-@brief  A multiple return value version of "LuaFunction.hpp".
-<pre>
-It's not finish yet(maybe never do).
-Too many template have to be done.
-</pre>
-*/
+ * @file   FunctionExt.hpp
+ * @brief  A multiple return value version of "LuaFunction.hpp".
+ * <pre>
+ * It's not finish yet(maybe never do).
+ * Too many template have to be done.
+ * </pre>
+ */
 
-#ifndef _LUAPP_FUNCTION_EXT_HPP_
-#define _LUAPP_FUNCTION_EXT_HPP_
-
+#pragma once
 
 #include "luapp/Standard.hpp"
-
 
 
 namespace lua{
@@ -803,5 +800,3 @@ struct FunctionExt<void(R1,R2,R3,R4,R5,R6),void(A1,A2,A3,A4,A5,A6)>
 //------------------------------------------------------------
 
 }//namespace lua
-
-#endif//_LUAPP_FUNCTION_EXT_HPP_

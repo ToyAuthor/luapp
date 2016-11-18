@@ -1,7 +1,7 @@
 /**
-@file   MemberFunctionIntoLua.cpp
-@brief  Put a member function into lua.
-*/
+ * @file   MemberFunctionIntoLua.cpp
+ * @brief  Put a member function into lua.
+ */
 
 
 #include <cstdio>

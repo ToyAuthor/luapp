@@ -1,10 +1,9 @@
 /**
-@file   LuaAPI.hpp
-@brief  It's just a wrapper of lua.
-*/
+ * @file   LuaAPI.hpp
+ * @brief  It's just a wrapper of lua.
+ */
 
-#ifndef _LUAPP_LUA_API_HPP_
-#define _LUAPP_LUA_API_HPP_
+#pragma once
 
 
 #include "lua.hpp"
@@ -344,7 +343,7 @@ inline int CheckInteger(Handle h,int index)
 	}
 	#endif
 
-	return lua_tointeger(h,index);
+	return (int)lua_tointeger(h,index);
 }
 //------------------------------------------------------------------------------
 inline Str CheckString(Handle h,int index)
@@ -385,7 +384,7 @@ inline Ptr CheckPointer(Handle h,int index)
 	if ( lua_type(h, index)!=LUA_TLIGHTUSERDATA )
 	{
 		printf("error:lua::CheckPointer\n");
-		#ifdef _LUAPP_USING_CPP11_
+		#ifdef _LUAPP_CPP11_
 		return nullptr;
 		#else
 		return NULL;
@@ -418,5 +417,3 @@ inline int GetTop(Handle h)
 //------------------------------------------------------------------------------
 
 }
-
-#endif//_LUAPP_LUA_API_HPP_

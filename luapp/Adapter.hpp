@@ -1,15 +1,11 @@
 /**
-@file   Adapter.hpp
-@brief  Help lua and C++.
-*/
+ * @file   Adapter.hpp
+ * @brief  Help lua and C++.
+ */
 
-
-#ifndef _LUAPP_ADAPTER_HPP_
-#define _LUAPP_ADAPTER_HPP_
-
+#pragma once
 
 #include "luapp/AdapterProxy.hpp"
-
 
 
 namespace lua{
@@ -223,5 +219,3 @@ template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_l
 
 }//namespace adapter
 }//namespace lua
-
-#endif//_LUAPP_ADAPTER_HPP_

@@ -1,7 +1,7 @@
 /**
-@file   CallMultipleReturnValueFunctionFromLua.cpp
-@brief  Show you how to call a global function of lua script.
-*/
+ * @file   CallMultipleReturnValueFunctionFromLua.cpp
+ * @brief  Show you how to call a global function of lua script.
+ */
 
 
 #include <cstdlib>

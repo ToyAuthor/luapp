@@ -1,7 +1,7 @@
 /**
-@file   MultipleLuaFile.cpp
-@brief  Show you how to use multiple lua files.
-*/
+ * @file   MultipleLuaFile.cpp
+ * @brief  Show you how to use multiple lua files.
+ */
 
 
 #include <cstdio>

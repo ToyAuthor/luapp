@@ -1,9 +1,9 @@
 /**
-@file   Log.hpp
-*/
+ * @file   Log.hpp
+ * @brief  A wrapper for printing message.
+ */
 
-#ifndef _LUAPP_LOG_HPP_
-#define _LUAPP_LOG_HPP_
+#pragma once
 
 #include <cstdio>
 #include <string>
@@ -78,5 +78,3 @@ static ::lua::log::Printer      Cout;
 
 }//namespace log
 }//namespace lua
-
-#endif//_LUAPP_LOG_HPP_

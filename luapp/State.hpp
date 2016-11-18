@@ -1,11 +1,10 @@
 /**
-@file   State.hpp
-@brief  The main interface of luapp.
-*/
+ * @file   State.hpp
+ * @brief  The main interface of luapp.
+ */
 
 
-#ifndef _LUAPP_STATE_HPP_
-#define _LUAPP_STATE_HPP_
+#pragma once
 
 #include "luapp/Adapter.hpp"
 #include "luapp/Wrapper.hpp"
@@ -594,5 +593,3 @@ class State
 
 
 }//namespace lua
-
-#endif//_LUAPP_STATE_HPP_

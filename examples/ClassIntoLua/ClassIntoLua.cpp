@@ -1,7 +1,7 @@
 /**
-@file   ClassIntoLua.cpp
-@brief  Show you how to new a C++ object in lua script.
-*/
+ * @file   ClassIntoLua.cpp
+ * @brief  Show you how to new a C++ object in lua script.
+ */
 
 
 #include <cstdio>

@@ -4,6 +4,8 @@
 */
 
 
+#pragma once
+
 //-----------------Usage-----------------start
 #if 0
 
@@ -78,9 +80,6 @@ int main()
 //-----------------Usage-----------------end
 
 
-
-#ifndef _LUAPP_VAR_HPP_
-#define _LUAPP_VAR_HPP_
 
 #include <typeinfo>
 #include <cstring>
@@ -183,7 +182,7 @@ class Var
 		//---------------------Pointer---------------------
 		Var(const lua::Ptr t)
 		{
-			#ifdef _LUAPP_USING_CPP11_
+			#ifdef _LUAPP_CPP11_
 			if ( t==nullptr ) {
 			#else
 			if ( t==NULL ) {
@@ -197,7 +196,7 @@ class Var
 		Var& operator = (const lua::Ptr t)
 		{
 			free_ptr();
-			#ifdef _LUAPP_USING_CPP11_
+			#ifdef _LUAPP_CPP11_
 			if ( t==nullptr ) {
 			#else
 			if ( t==NULL ) {
@@ -335,5 +334,3 @@ inline T VarCast(const lua::Var &var)
 //-----------------------------------------------------
 
 }//namespace lua
-
-#endif//_LUAPP_VAR_HPP_

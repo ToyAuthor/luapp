@@ -1,9 +1,6 @@
 
-#ifndef _LUAPP_STANDARD_HPP_
-#define _LUAPP_STANDARD_HPP_
+#pragma once
 
 #include "luapp/LuaAPI.hpp"
 #include "luapp/PushToStack.hpp"
 #include "luapp/CopyFromStack.hpp"
-
-#endif

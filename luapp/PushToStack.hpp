@@ -1,6 +1,5 @@
 
-#ifndef _LUAPP_PUSH_TO_STACK_HPP_
-#define _LUAPP_PUSH_TO_STACK_HPP_
+#pragma once
 
 #include "luapp/LuaAPI.hpp"
 #include "luapp/Table.hpp"
@@ -169,5 +168,3 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 //------------------------------------------------------------------------------
 
 }
-
-#endif

@@ -1,7 +1,7 @@
 /**
-@file   GetGlobalVariable.cpp
-@brief  Show you how to get global variable from lua script.
-*/
+ * @file   GetGlobalVariable.cpp
+ * @brief  Show you how to get global variable from lua script.
+ */
 
 
 #include <cstdlib>

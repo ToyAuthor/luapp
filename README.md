@@ -14,12 +14,15 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - [x] Be able to require lua script by custom rule.
 - [ ] Support C++11.(optional)
 
+### Requirements
+- CMake 2.8+
+- Lua 5.3+
+
 ### Information
-Item                      | Description
---------------------------|----------
-**License**               | MIT
-**Version**               | 1.3.0 (using Semantic Versioning 2.0.0)
-**Supported lua version** | 5.3.0
+Item        | Description
+------------|----------
+**License** | MIT
+**Version** | 1.3.0.x (using Semantic Versioning 2.0.0)
 
 ### Example
 

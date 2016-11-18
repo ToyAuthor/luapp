@@ -1,6 +1,5 @@
 
-#ifndef _LUAPP_FUNC_REG_HPP_
-#define _LUAPP_FUNC_REG_HPP_
+#pragma once
 
 
 #include <vector>
@@ -19,7 +18,7 @@ class FuncReg
 	public:
 
 		// lua::FuncReg::Item as luaL_Reg.
-		#ifdef _LUAPP_USING_CPP11_
+		#ifdef _LUAPP_CPP11_
 		struct Item
 		{
 			Name       name = nullptr;
@@ -103,5 +102,3 @@ class FuncReg
 };
 
 }
-
-#endif//_LUAPP_FUNC_REG_HPP_
