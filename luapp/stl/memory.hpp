@@ -1,7 +1,7 @@
 
 #include "luapp/Config.hpp"
 
-#ifdef _LUAPP_CPP11_
+#if defined(_LUAPP_CPP11_) || defined( TOY_VC_2010)
 	#include <memory>
 #else
 	#include "luapp/stl/sharedptr.hpp"

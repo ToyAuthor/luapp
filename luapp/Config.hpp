@@ -3,8 +3,9 @@
 
 //#define _LUAPP_USING_BOOST_
 
+#include "luapp/Environment.hpp"
 
-// if ( it's C++11 )
+// if ( version >= C++11 )
 #if __cplusplus > 201100L
 
 	#define _LUAPP_CPP11_
