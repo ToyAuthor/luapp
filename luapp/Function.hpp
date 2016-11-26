@@ -1,7 +1,7 @@
 /**
-@file   Function.hpp
-@brief  Let you call the function come from lua.
-*/
+ * @file   Function.hpp
+ * @brief  Let you call the function come from lua.
+ */
 
 #pragma once
 

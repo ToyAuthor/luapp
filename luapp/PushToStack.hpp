@@ -168,7 +168,7 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	}
 	else
 	{
-		printf("luapp:you push unknown data type\n");
+		lua::log::Cout<<"luapp:you push unknown data type"<<lua::log::End;
 		lua_pushnil(hLua);
 	}
 }

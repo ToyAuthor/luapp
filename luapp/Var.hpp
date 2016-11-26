@@ -324,7 +324,7 @@ inline T VarCast(const lua::Var &var)
 {
 	if ( ! lua::VarType<T>(var) )
 	{
-		printf("error: see luapp/Var.hpp\n");
+		lua::log::Cout<<"error: see luapp/Var.hpp"<<lua::log::End;
 		return T();
 	}
 

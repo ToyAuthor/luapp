@@ -160,7 +160,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:bind(lua::Str name,F fn,C *obj) not support module mode.\n");
+				lua::log::Cout<<"error:bind(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
 				return;
 			}
 
@@ -172,13 +172,11 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("warning:you was chose another mode.\n");
 				return (int)1;
 			}
 
 			if ( _lua )
 			{
-				printf("warning:you don't have to call init() by yourself.\n");
 				return (int)1;
 			}
 
@@ -186,7 +184,6 @@ class State
 
 			if ( ! _lua )
 			{
-				printf("error:can't get lua_State.\n");
 				return (int)0;
 			}
 
@@ -214,7 +211,7 @@ class State
 
 			if ( ! result )
 			{
-				printf("%s\n",this->error().c_str());
+				lua::log::Cout<<"lua::State::load(name,code):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -226,7 +223,7 @@ class State
 
 			if ( ! result )
 			{
-				printf("%s\n",this->error().c_str());
+				lua::log::Cout<<"lua::State::load(filename):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -236,7 +233,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:You can't do this. Because module mode didn't run its own script.\n");
+				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -252,7 +249,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:You can't do this. Because module mode didn't run its own script.\n");
+				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -265,7 +262,7 @@ class State
 
 			if ( ! result )
 			{
-				printf("%s\n",this->error().c_str());
+				lua::log::Cout<<"lua::State::run(name,code,loader):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -275,7 +272,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				printf("error:You can't do this. Because module mode didn't run its own script.\n");
+				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -283,7 +280,7 @@ class State
 
 			if ( ! result )
 			{
-				printf("%s\n",this->error().c_str());
+				lua::log::Cout<<"lua::State::run(str):"<<this->error()<<lua::log::End;
 			}
 
 			return result;

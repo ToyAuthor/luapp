@@ -58,19 +58,19 @@ inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
 	switch ( error_code )
 	{
 		case 0:
-			printf("warning:big mistake! It's not a error.\n");
+			lua::log::Cout<<"warning:big mistake! It's not a error."<<lua::log::End;
 			break;
 		case LUA_ERRFILE:
-			printf("error:cannot open the file:%s\n",filename.c_str());
+			lua::log::Cout<<"error:cannot open the file:"<<filename<<lua::log::End;
 			break;
 		case LUA_ERRSYNTAX:
-			printf("error:syntax error during pre-compilation\n");
+			lua::log::Cout<<"error:syntax error during pre-compilation"<<lua::log::End;
 			break;
 		case LUA_ERRMEM:
-			printf("error:memory allocation error\n");
+			lua::log::Cout<<"error:memory allocation error"<<lua::log::End;
 			break;
 		default:
-			printf("error:load script failed for some reason\n");
+			lua::log::Cout<<"error:load script failed for some reason"<<lua::log::End;
 	}
 }
 //------------------------------------------------------------------------------
@@ -78,7 +78,7 @@ inline int LoadScript(Handle h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
-		printf("error:script name is empty string\n");
+		lua::log::Cout<<"error:script name is empty string"<<lua::log::End;
 		return 0;
 	}
 	else
@@ -99,7 +99,7 @@ inline int LoadScript(Handle h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
-		printf("error:file name is empty string\n");
+		lua::log::Cout<<"error:file name is empty string"<<lua::log::End;
 		return 0;
 	}
 	else
@@ -120,7 +120,7 @@ inline int DoScript(Handle h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
-		printf("error:script name is empty string\n");
+		lua::log::Cout<<"error:script name is empty string"<<lua::log::End;
 		return 0;
 	}
 	else
@@ -146,7 +146,7 @@ inline int DoScript(Handle h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
-		printf("error:file name is empty string\n");
+		lua::log::Cout<<"error:file name is empty string"<<lua::log::End;
 		return 0;
 	}
 	else
@@ -179,7 +179,7 @@ inline int NewMetaTable(Handle h,lua::Str tname)
 	luaL_getmetatable(h,tname.c_str());
 	if ( lua_type(h, -1)!=LUA_TNIL )
 	{
-		printf("error:this meta table already exist.\n");
+		lua::log::Cout<<"error:this meta table already exist."<<lua::log::End;
 	}
 	lua_pop(h,1);
 	#endif
@@ -198,7 +198,7 @@ inline void SetGlobal(Handle h,lua::Str var)
 	lua_getglobal(h,var.c_str());
 	if ( lua_type(h, -1)!=LUA_TNIL )
 	{
-		printf("warning:this global variable already exist.\n");
+		lua::log::Cout<<"warning:this global variable already exist."<<lua::log::End;
 	}
 	lua_pop(h,1);
 	#endif
@@ -301,7 +301,7 @@ inline double CheckNumber(Handle h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h,index)!=LUA_TNUMBER )
 	{
-		printf("error:lua::CheckNumber\n");
+		lua::log::Cout<<"error:lua::CheckNumber"<<lua::log::End;
 		return 0.0;
 	}
 	#endif
@@ -316,7 +316,7 @@ inline bool CheckBoolean(Handle h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h,index)!=LUA_TBOOLEAN )
 	{
-		printf("error:lua::CheckBoolean\n");
+		lua::log::Cout<<"error:lua::CheckBoolean"<<lua::log::End;
 		return false;
 	}
 	#endif
@@ -331,12 +331,12 @@ inline int CheckInteger(Handle h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TNUMBER )
 	{
-		printf("error:lua::CheckInteger\n");
+		lua::log::Cout<<"error:lua::CheckInteger"<<lua::log::End;
 		return 0;
 	}
 	else if ( ! lua_isinteger(h,index) )
 	{
-		printf("error:lua::CheckInteger: not a integer\n");
+		lua::log::Cout<<"error:lua::CheckInteger: not a integer"<<lua::log::End;
 		return 0;
 	}
 	#endif
@@ -351,7 +351,7 @@ inline Str CheckString(Handle h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TSTRING )
 	{
-		printf("error:lua::CheckString\n");
+		lua::log::Cout<<"error:lua::CheckString"<<lua::log::End;
 		return Str("none");
 	}
 	#endif
@@ -388,7 +388,7 @@ inline Ptr CheckPointer(Handle h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TLIGHTUSERDATA )
 	{
-		printf("error:lua::CheckPointer\n");
+		lua::log::Cout<<"error:lua::CheckPointer"<<lua::log::End;
 		#ifdef _LUAPP_CPP11_
 		return nullptr;
 		#else
