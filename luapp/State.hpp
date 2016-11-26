@@ -12,6 +12,10 @@
 #include "luapp/FunctionExt.hpp"
 #include "luapp/Searcher.hpp"
 
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+#include "luapp/Func.hpp"
+#include "luapp/Register.hpp"
+#endif
 
 namespace lua{
 
@@ -64,25 +68,56 @@ class State
 {
 	public:
 
-		State(lua::Handle h = (lua::Handle)0):_lua(h),_moduleMode(0)
+		State(lua::NativeState h = (lua::NativeState)0):_moduleMode(false)
 		{
-			if ( _lua )
-			{
-				_moduleMode = 1;
-			}
-			else
-			{
-				this->init();
-			}
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+				if ( h )
+				{
+					_moduleMode = true;
+					_lua = std::make_shared<HandleClass>(h);
+				}
+				else
+				{
+					_lua = std::make_shared<HandleClass>();
+					//this->init();
+				}
+
+				wrapper::Wrapper<N>::_lua = this->_lua;
+			#else
+				if ( h )
+				{
+					_moduleMode = true;
+					_lua = h;
+				}
+				else
+				{
+					_lua = lua::CreateHandle();
+
+					if ( ! _lua )
+					{
+						lua::log::Cout<<"error:can't get lua_State."<<lua::log::End;
+					}
+
+					lua::OpenLibs(_lua);
+				}
+			#endif
 		}
 
 		~State()
 		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			wrapper::Wrapper<N>::_lua = NULL;
+			#endif
+
 			if(_lua)drop();
 		}
 
 		void bind(lua::Str name,lua::CFunction func)
 		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			wrapper::Wrapper<N>::_lua = this->_lua;
+			#endif
+
 			if ( _moduleMode )
 			{
 				_funcReg.add(name,func);
@@ -98,6 +133,13 @@ class State
 		template<typename C>
 		void bindClass(lua::Str class_name)
 		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
 			if ( _moduleMode )
 			{
 				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
@@ -116,6 +158,13 @@ class State
 		template<typename C>
 		void bindClassEx(lua::Str class_name)
 		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
 			if ( _moduleMode )
 			{
 				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2(_lua,class_name));
@@ -134,6 +183,14 @@ class State
 		void bindMethod(lua::Str name,F fn)
 		{
 			typedef typename ClassTypeFilter<F>::ClassType C;
+
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
 			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
 			adapter::Adapter<C,N>::pushPack(myF);
 		}
@@ -148,6 +205,10 @@ class State
 				return;
 			}
 
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			wrapper::Wrapper<N>::_lua = this->_lua;
+			#endif
+
 			wrapper::Wrapper<N>::registerFunction(_lua,name,fn);
 		}
 
@@ -158,6 +219,13 @@ class State
 		template<typename F,typename C>
 		void bind(lua::Str name,F fn,C *obj)
 		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
 			if ( _moduleMode )
 			{
 				lua::log::Cout<<"error:bind(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
@@ -168,41 +236,35 @@ class State
 			wrapper::Wrapper<N>::registerFunction(_lua,name,fn,obj);
 		}
 
-		int init()
-		{
-			if ( _moduleMode )
-			{
-				return (int)1;
-			}
-
-			if ( _lua )
-			{
-				return (int)1;
-			}
-
-			_lua=lua::CreateHandle();
-
-			if ( ! _lua )
-			{
-				return (int)0;
-			}
-
-			lua::OpenLibs(_lua);
-
-			return (int)1;
-		}
-
 		void drop()
 		{
-			if ( _moduleMode )
-			{
-				this->build_module();
-			}
-			else
-			{
-				lua::DestroyHandle(_lua);
-			}
-			_lua=(lua::Handle)0;
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+				if ( _moduleMode )
+				{
+					this->build_module();
+				}
+				else
+				{
+					#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+					this->cleanHandle();
+					#endif
+				}
+
+				_lua = NULL;
+			#else
+				if ( _lua )
+				{
+					if ( _moduleMode )
+					{
+						this->build_module();
+					}
+					else
+					{
+						lua::DestroyHandle(_lua);
+						_lua = NULL;
+					}
+				}
+			#endif
 		}
 
 		int load(lua::Str name,lua::Str& code)
@@ -410,6 +472,26 @@ class State
 			Searcher<N>::setup(_lua,loader);
 		}
 
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		lua::Func bind(lua::CFunction func)
+		{
+			lua::Func   fu;
+			lua::PushFunction(_lua, func);
+
+			lua::Register::Item   item = _lua->_register->newItem();
+
+			item->setVar();
+			fu._set(_lua,item);
+
+			return fu;
+		}
+		#endif
+
+		void operator ()(lua::Str cmd)
+		{
+			lua::DoString(_lua,cmd);
+		}
+
 	private:
 
 		void add_script_path_to_lua(lua::Str str)
@@ -445,11 +527,72 @@ class State
 			return str;
 		}
 
+		#if defined(_LUAPP_KEEP_LOCAL_LUA_VARIABLE_) && defined(_LUAPP_CLEAN_LUA_HANDLE_)
+		void pushClean(void(*func)())
+		{
+			int     count = _cleanHandle.size();
+			int     not_exist = 1;
+
+			for ( int i = 0 ; i < count ; i++)
+			{
+				if ( _cleanHandle[i]==func )
+				{
+					not_exist = 0;
+					break;
+				}
+			}
+
+			if ( not_exist )
+			{
+				_cleanHandle.push_back(func);
+			}
+		}
+
+		void cleanHandle()
+		{
+			int     count = _cleanHandle.size();
+
+			for ( int i = 0 ; i < count ; i++)
+			{
+				_cleanHandle[i]();
+			}
+
+			_cleanHandle.clear();
+		}
+		#endif
+
 		lua::Handle      _lua;
 		bool             _moduleMode;
 		lua::FuncReg     _funcReg;      // Only work for module mode.
+
+		#if defined(_LUAPP_KEEP_LOCAL_LUA_VARIABLE_) && defined(_LUAPP_CLEAN_LUA_HANDLE_)
+		std::vector<void(*)()>    _cleanHandle;    // To write down all the shared pointer must free.
+		#endif
 };
 
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 
+HandleClass::HandleClass(lua::NativeState h)
+{
+	_lua = h;
+	_register = std::make_shared<lua::Register>(_lua);
+	_moduleMode = true;
+}
+
+HandleClass::HandleClass()
+{
+	_moduleMode = false;
+	_lua = lua::CreateHandle();
+
+	if ( ! _lua )
+	{
+		lua::log::Cout<<"error:can't get lua_State."<<lua::log::End;
+	}
+
+	lua::OpenLibs(_lua);
+	_register = std::make_shared<lua::Register>(_lua);
+}
+
+#endif
 
 }//namespace lua

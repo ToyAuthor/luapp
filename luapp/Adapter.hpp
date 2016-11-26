@@ -74,6 +74,16 @@ class Adapter
 			Adapter<C,N>::_list.push_back(pak);
 		}
 
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+		static void cleanPtr()
+		{
+			Adapter<C,N>::_lua = NULL;
+		}
+		#endif
+		static lua::Handle _lua;
+		#endif
+
 	private:
 
 		class PackList : public std::vector<struct Pack>
@@ -131,7 +141,7 @@ class Adapter
 		}
 
 		// As destructor.
-		static int gc_obj(lua::Handle L)
+		static int gc_obj(lua::NativeState L)
 		{
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
 			delete (*obj);
@@ -141,7 +151,7 @@ class Adapter
 
 		// It's a general way to build object(table).
 		// Lua just only need to store constructor and a small metatable of userdata.
-		static int constructor(lua::Handle L)
+		static int constructor(lua::NativeState L)
 		{
 			lua::NewTable(L);                                  // ... [T]
 			lua::PushNumber(L, 0);                             // ... [T] [0]
@@ -173,7 +183,7 @@ class Adapter
 
 		// It's a faster way to build object(table).
 		// Lua have to store a big metatable that include every each member function.
-		static int constructor2(lua::Handle L)
+		static int constructor2(lua::NativeState L)
 		{
 			lua::NewTable(L);                                  // ... [T]
 
@@ -192,7 +202,7 @@ class Adapter
 			return 1;
 		}
 
-		static int thunk(lua::Handle L)
+		static int thunk(lua::NativeState L)
 		{
 			                                                        // [this] [arg1] [arg2] ... [argN]
 			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
@@ -201,7 +211,11 @@ class Adapter
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
 			lua::Pop(L, 1);                                         // [this] [arg1] [arg2] ... [argN]
 
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			return	Adapter<C,N>::_list[id]._proxy->Do(Adapter<C,N>::_lua,*obj);
+			#else
 			return	Adapter<C,N>::_list[id]._proxy->Do(L,*obj);
+			#endif
 		}
 
 		static void set_class_name(lua::Str &name)
@@ -215,6 +229,9 @@ template <typename C,int N>Str                                  Adapter<C,N>::_c
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
 template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
 
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+template <typename C,int N>Handle                               Adapter<C,N>::_lua;
+#endif
 
 
 }//namespace adapter

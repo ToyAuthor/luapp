@@ -12,7 +12,7 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - [x] Design a class whose instances can hold instances of any type supported by luapp.
 - [x] Let lua script embedded in C++.
 - [x] Be able to search lua script by custom rule.
-- [ ] Be able to keep lua function at C++ side.
+- [x] Be able to keep lua function at C++ side.
 - [ ] Be able to keep lua table at C++ side.
 - [ ] Support C++11.(optional)
 

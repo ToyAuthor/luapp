@@ -2,6 +2,9 @@
 #pragma once
 
 #include "luapp/stl/memory.hpp"
-#include "luapp/LuaAPI.hpp"
-#include "luapp/PushToStack.hpp"
-#include "luapp/CopyFromStack.hpp"
+#include "luapp/Handle.hpp"
+
+
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+#include "luapp/MorePushAndPull.hpp"
+#endif

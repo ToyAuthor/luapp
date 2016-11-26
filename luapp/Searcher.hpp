@@ -25,7 +25,7 @@ class Searcher
 
 	private:
 
-		static int thunk(lua::Handle L)
+		static int thunk(lua::NativeState L)
 		{
 			lua::Str   name = lua::CheckString(L,1);
 
@@ -51,7 +51,7 @@ class Searcher
 			return 1;
 		}
 
-		static lua::Str error(lua::Handle L)
+		static lua::Str error(lua::NativeState L)
 		{
 			lua::Var  var;
 			lua::CheckVarFromLua(L,&var,-1);

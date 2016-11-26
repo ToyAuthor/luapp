@@ -8,39 +8,39 @@ namespace lua{
 
 
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Bool t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Bool t)
 {
 	lua::PushBoolean(hLua,t);
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Int t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Int t)
 {
 	lua::PushInteger(hLua,t);
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Num t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Num t)
 {
 	lua::PushNumber(hLua,t);
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Str t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Str t)
 {
 	lua::PushString(hLua,t);
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Ptr t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Ptr t)
 {
 	lua::PushPointer(hLua,t);
 }
 //------------------------------------------------------------------------------
 #ifdef _LUAPP_CPP11_
-inline void PushVarToLua(lua::Handle hLua,std::nullptr_t)
+inline void PushVarToLua(lua::NativeState hLua,std::nullptr_t)
 {
 	lua::PushPointer(hLua,nullptr);
 }
 #endif
 //------------------------------------------------------------------------------
-inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
+inline void _PushValueToLuaTable(lua::NativeState hLua,lua::Table &table)
 {
 	lua::NewTable(hLua);                 // ... [T]
 
@@ -124,13 +124,13 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 	// ... [T]
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Table &table)
+inline void PushVarToLua(lua::NativeState hLua,lua::Table &table)
 {
 	                                     // ...
 	_PushValueToLuaTable(hLua,table);    // ... [T]
 }
 //------------------------------------------------------------------------------
-inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
+inline void PushVarToLua(lua::NativeState hLua,lua::Var &t)
 {
 	if ( lua::VarType<lua::Str>(t) )
 	{

@@ -73,20 +73,31 @@ class Wrapper
 			lua::SetGlobal(L, name);
 		}
 
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		static lua::Handle     _lua;
+		#endif
+
 	private:
 
 		static PackList        _funcList;
 
-		static int thunk(lua::Handle L)
+		static int thunk(lua::NativeState L)
 		{
 			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
 
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			return _funcList[id]._proxy->Do(Wrapper<N>::_lua);
+			#else
 			return _funcList[id]._proxy->Do(L);
+			#endif
 		}
 };
 
 template<int N>typename Wrapper<N>::PackList        Wrapper<N>::_funcList;
 
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+template<int N>Handle                               Wrapper<N>::_lua;
+#endif
 
 }//namespace wrapper
 }//namespace lua

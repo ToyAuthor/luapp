@@ -7,34 +7,34 @@ namespace lua{
 
 
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Bool *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Bool *t,int i)
 {
 	*t=(lua::Bool)lua::CheckBoolean(hLua,i);
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Int *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Int *t,int i)
 {
 	*t=(lua::Int)lua::CheckInteger(hLua,i);
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Num *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Num *t,int i)
 {
 	*t=(lua::Num)lua::CheckNumber(hLua,i);
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Str *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Str *t,int i)
 {
 	*t=lua::CheckString(hLua,i);
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Ptr *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Ptr *t,int i)
 {
 	*t=lua::CheckPointer(hLua,i);
 }
 //------------------------------------------------------------------------------
-inline void _VisitTable(lua::Handle hLua,lua::Table *table);
+inline void _VisitTable(lua::NativeState hLua,lua::Table *table);
 template<typename T>
-inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
+inline void _SaveTableValue(lua::NativeState hLua,lua::Table *table,T key)
 {
 	// ... [value]
 
@@ -76,6 +76,11 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
+	else if ( type==LUA_TFUNCTION || type==LUA_TUSERDATA || type==LUA_TTHREAD )
+	{
+		lua::RestType   value;
+		(*table)[key] = value;
+	}
 	else if ( lua_isinteger(hLua, -1) )
 	{
 		lua::Int   value;
@@ -96,7 +101,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	// ... [value]
 }
 //------------------------------------------------------------------------------
-inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
+inline void _SwitchTableKey(lua::NativeState hLua,lua::Table *table)
 {
 	                                      // ... [T] [key] [value] [key]
 
@@ -138,7 +143,7 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 	lua_pop(hLua, 1);                     // ... [T] [key]
 }
 //------------------------------------------------------------------------------
-inline void _VisitTable(lua::Handle hLua,lua::Table *table)
+inline void _VisitTable(lua::NativeState hLua,lua::Table *table)
 {
 	                                    // ... [T]
 	lua_pushnil(hLua);                  // ... [T] [nil]
@@ -158,7 +163,7 @@ inline void _VisitTable(lua::Handle hLua,lua::Table *table)
 	// ... [T]
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Table *table,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Table *table,int i)
 {
 	                                 // ...
 	lua_pushvalue(hLua,i);           // ... [T]
@@ -166,7 +171,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Table *table,int i)
 	lua_pop(hLua, 1);                // ...
 }
 //------------------------------------------------------------------------------
-inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Var *t,int i)
 {
 	int   type = lua_type(hLua, i);
 
@@ -201,6 +206,12 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 		lua::Table   table;
 		CheckVarFromLua(hLua,&table,i);
 		*t = table;
+	}
+	else if ( type==LUA_TFUNCTION || type==LUA_TUSERDATA || type==LUA_TTHREAD )
+	{
+		lua::RestType   var;
+		// Just for detect type.
+		*t = var;
 	}
 	else if ( lua_isinteger(hLua, i) )
 	{

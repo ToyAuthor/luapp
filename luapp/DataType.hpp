@@ -30,6 +30,12 @@ class Table;
  */
 class Var;
 
-//class Func;   Not support yet.
+
+// For function, userdata, thread
+struct RestType {};
+
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+class Func;
+#endif
 
 }//namespace lua

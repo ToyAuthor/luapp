@@ -14,41 +14,37 @@ namespace lua{
 
 
 //------------------------------------------------------------------------------
-inline void NewModule(Handle h,FuncReg &reg)
+inline void NewModule(NativeState h,FuncReg &reg)
 {
 	luaL_newlib(h,(luaL_Reg*)(reg._get()));
 }
 //------------------------------------------------------------------------------
-inline Handle CreateHandle()
+inline NativeState CreateHandle()
 {
 	return luaL_newstate();
 }
 //------------------------------------------------------------------------------
-inline void DestroyHandle(Handle h)
+inline void DestroyHandle(NativeState h)
 {
 	lua_close(h);
 }
 //------------------------------------------------------------------------------
-inline int PCall(Handle h,int num01,int num02,int num03)
+inline int PCall(NativeState h,int num01,int num02,int num03)
 {
 	return lua_pcall(h,num01,num02,num03);
 }
 //------------------------------------------------------------------------------
-inline void OpenLibs(Handle h)
+inline void OpenLibs(NativeState h)
 {
 	luaL_openlibs(h);
 }
 //------------------------------------------------------------------------------
-// Remove it in next version.
-inline Str GetError(Handle h)
+inline int TypeCast(NativeState h,int index)
 {
-	Str  str(lua_tostring(h, -1));
-	lua_pop(h, 1);
-
-	return str;
+	return lua_type(h,index);
 }
 //------------------------------------------------------------------------------
-inline void DoString(Handle h,lua::Str code)
+inline void DoString(NativeState h,lua::Str code)
 {
 	luaL_dostring(h, code.c_str());
 }
@@ -74,7 +70,7 @@ inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
 	}
 }
 //------------------------------------------------------------------------------
-inline int LoadScript(Handle h,lua::Str name,lua::Str& code)
+inline int LoadScript(NativeState h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
@@ -95,7 +91,7 @@ inline int LoadScript(Handle h,lua::Str name,lua::Str& code)
 	return 1;
 }
 //------------------------------------------------------------------------------
-inline int LoadScript(Handle h,lua::Str filename)
+inline int LoadScript(NativeState h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
@@ -116,7 +112,7 @@ inline int LoadScript(Handle h,lua::Str filename)
 	return 1;
 }
 //------------------------------------------------------------------------------
-inline int DoScript(Handle h,lua::Str name,lua::Str& code)
+inline int DoScript(NativeState h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
@@ -142,7 +138,7 @@ inline int DoScript(Handle h,lua::Str name,lua::Str& code)
 	return 1;
 }
 //------------------------------------------------------------------------------
-inline int DoScript(Handle h,lua::Str filename)
+inline int DoScript(NativeState h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
@@ -168,12 +164,12 @@ inline int DoScript(Handle h,lua::Str filename)
 	return 1;
 }
 //------------------------------------------------------------------------------
-inline void NewTable(Handle h)
+inline void NewTable(NativeState h)
 {
 	lua_newtable(h);
 }
 //------------------------------------------------------------------------------
-inline int NewMetaTable(Handle h,lua::Str tname)
+inline int NewMetaTable(NativeState h,lua::Str tname)
 {
 	#ifdef _LUAPP_CHECK_CAREFUL_
 	luaL_getmetatable(h,tname.c_str());
@@ -187,12 +183,12 @@ inline int NewMetaTable(Handle h,lua::Str tname)
 	return luaL_newmetatable(h,tname.c_str());
 }
 //------------------------------------------------------------------------------
-inline void* NewUserData(Handle h,size_t size)
+inline void* NewUserData(NativeState h,size_t size)
 {
 	return lua_newuserdata(h,size);
 }
 //------------------------------------------------------------------------------
-inline void SetGlobal(Handle h,lua::Str var)
+inline void SetGlobal(NativeState h,lua::Str var)
 {
 	#ifdef _LUAPP_CHECK_CAREFUL_
 	lua_getglobal(h,var.c_str());
@@ -206,78 +202,83 @@ inline void SetGlobal(Handle h,lua::Str var)
 	lua_setglobal(h,var.c_str());
 }
 //------------------------------------------------------------------------------
-inline void GetGlobal(Handle h,lua::Str var)
+inline void GetGlobal(NativeState h,lua::Str var)
 {
 	lua_getglobal(h,var.c_str());
 }
 //------------------------------------------------------------------------------
-inline void SetTable(Handle h,int index)
+inline void SetTable(NativeState h,int index)
 {
 	lua_settable(h,index);
 }
 //------------------------------------------------------------------------------
-inline void GetTable(Handle h,int index)
+inline void GetTable(NativeState h,int index)
 {
 	lua_gettable(h,index);
 }
 //------------------------------------------------------------------------------
-inline void SetField(Handle h,int index, lua::Str name)
+inline void SetField(NativeState h,int index, lua::Str name)
 {
 	lua_setfield(h,index,name.c_str());
 }
 //------------------------------------------------------------------------------
-inline void GetField(Handle h,int index, lua::Str k)
+inline void GetField(NativeState h,int index, lua::Str k)
 {
 	lua_getfield(h,index,k.c_str());
 }
 //------------------------------------------------------------------------------
-inline int SetMetaTable(Handle h,int index)
+inline int SetMetaTable(NativeState h,int index)
 {
 	return lua_setmetatable(h,index);
 }
 //------------------------------------------------------------------------------
-inline void GetMetaTable(Handle h,lua::Str name)
+inline void GetMetaTable(NativeState h,lua::Str name)
 {
 	luaL_getmetatable(h,name.c_str());
 }
 //------------------------------------------------------------------------------
-inline void PushClosure(Handle h,CFunction fn,int n)
+inline void PushNil(NativeState h)
+{
+	lua_pushnil(h);
+}
+//------------------------------------------------------------------------------
+inline void PushClosure(NativeState h,CFunction fn,int n)
 {
 	lua_pushcclosure(h, fn, n);
 }
 //------------------------------------------------------------------------------
-inline void PushFunction(Handle h,CFunction fn)
+inline void PushFunction(NativeState h,CFunction fn)
 {
 	lua_pushcfunction(h,fn);
 }
 //------------------------------------------------------------------------------
-inline void PushString(Handle h,lua::Str str)
+inline void PushString(NativeState h,lua::Str str)
 {
 	lua_pushstring(h, str.c_str());
 }
 //------------------------------------------------------------------------------
-inline void PushValue(Handle h,int index)
+inline void PushValue(NativeState h,int index)
 {
 	lua_pushvalue(h,index);
 }
 //------------------------------------------------------------------------------
-inline void PushNumber(Handle h,double n)
+inline void PushNumber(NativeState h,double n)
 {
 	lua_pushnumber(h,n);
 }
 //------------------------------------------------------------------------------
-inline void PushBoolean(Handle h,bool num)
+inline void PushBoolean(NativeState h,bool num)
 {
 	lua_pushboolean(h,(int)num);
 }
 //------------------------------------------------------------------------------
-inline void PushInteger(Handle h,int num)
+inline void PushInteger(NativeState h,int num)
 {
 	lua_pushinteger(h,num);
 }
 //------------------------------------------------------------------------------
 template<typename S>
-inline void PushUserData(Handle h,S ud)
+inline void PushUserData(NativeState h,S ud)
 {
 	                                               // ...
 	void*  ptr = lua::NewUserData(h, sizeof(S));   // ... [UD]
@@ -285,7 +286,7 @@ inline void PushUserData(Handle h,S ud)
 }
 //------------------------------------------------------------------------------
 template<typename S>
-inline void PushUserData(Handle h,S ud, lua::Str tname)
+inline void PushUserData(NativeState h,S ud, lua::Str tname)
 {
 	                                               // ...
 	void*  ptr = lua::NewUserData(h, sizeof(S));   // ... [UD]
@@ -294,7 +295,7 @@ inline void PushUserData(Handle h,S ud, lua::Str tname)
 	lua::SetMetaTable(h, -2);                      // ... [UD]
 }
 //------------------------------------------------------------------------------
-inline double CheckNumber(Handle h,int index)
+inline double CheckNumber(NativeState h,int index)
 {
 //	return luaL_checknumber(h,index);
 
@@ -309,7 +310,7 @@ inline double CheckNumber(Handle h,int index)
 	return lua_tonumber(h,index);
 }
 //------------------------------------------------------------------------------
-inline bool CheckBoolean(Handle h,int index)
+inline bool CheckBoolean(NativeState h,int index)
 {
 //	return luaL_checkboolean(h,index);
 
@@ -324,7 +325,7 @@ inline bool CheckBoolean(Handle h,int index)
 	return lua_toboolean(h,index)==0 ? false:true;
 }
 //------------------------------------------------------------------------------
-inline int CheckInteger(Handle h,int index)
+inline int CheckInteger(NativeState h,int index)
 {
 //	return luaL_checkinteger(h,index);
 
@@ -344,7 +345,7 @@ inline int CheckInteger(Handle h,int index)
 	return (int)lua_tointeger(h,index);
 }
 //------------------------------------------------------------------------------
-inline Str CheckString(Handle h,int index)
+inline Str CheckString(NativeState h,int index)
 {
 //	return Str(luaL_checkstring(h,index));
 
@@ -359,29 +360,29 @@ inline Str CheckString(Handle h,int index)
 	return lua_tostring(h,index);
 }
 //------------------------------------------------------------------------------
-inline void* CheckUserData(Handle h,int index)
+inline void* CheckUserData(NativeState h,int index)
 {
 	return lua_touserdata(h,index);
 }
 //------------------------------------------------------------------------------
-inline void* CheckUserData(Handle h,int index, lua::Str tname)
+inline void* CheckUserData(NativeState h,int index, lua::Str tname)
 {
 	return luaL_checkudata(h, index, tname.c_str());
 }
 //------------------------------------------------------------------------------
-inline void PushPointer(Handle h,Ptr ptr)
+inline void PushPointer(NativeState h,Ptr ptr)
 {
 	lua_pushlightuserdata(h,ptr);
 }
 //------------------------------------------------------------------------------
 #ifdef _LUAPP_CPP11_
-inline void PushPointer(Handle h,std::nullptr_t)
+inline void PushPointer(NativeState h,std::nullptr_t)
 {
 	lua_pushlightuserdata(h,(void*)0);
 }
 #endif
 //------------------------------------------------------------------------------
-inline Ptr CheckPointer(Handle h,int index)
+inline Ptr CheckPointer(NativeState h,int index)
 {
 //	return (Ptr)luaL_checklightudata(h,index);
 
@@ -405,17 +406,22 @@ inline int UpValueIndex(int index)
 	return lua_upvalueindex(index);
 }
 //------------------------------------------------------------------------------
-inline void Pop(Handle h,int num)
+inline void Pop(NativeState h,int num)
 {
 	lua_pop(h,num);
 }
 //------------------------------------------------------------------------------
-inline void SetTop(Handle h,int num)
+inline void Replace(NativeState h,int num)
+{
+	lua_replace(h,num);
+}
+//------------------------------------------------------------------------------
+inline void SetTop(NativeState h,int num)
 {
 	lua_settop(h,num);
 }
 //------------------------------------------------------------------------------
-inline int GetTop(Handle h)
+inline int GetTop(NativeState h)
 {
 	return lua_gettop(h);
 }
