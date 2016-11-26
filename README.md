@@ -11,12 +11,15 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - [x] Design a C++ container to simulate lua table.
 - [x] Design a class whose instances can hold instances of any type supported by luapp.
 - [x] Let lua script embedded in C++.
-- [x] Be able to require lua script by custom rule.
+- [x] Be able to search lua script by custom rule.
+- [ ] Be able to keep lua function at C++ side.
+- [ ] Be able to keep lua table at C++ side.
 - [ ] Support C++11.(optional)
 
 ### Requirements
 - CMake 2.8+
 - Lua 5.3+
+- C++03+
 
 ### Information
 Item        | Description

@@ -7,8 +7,6 @@
 
 
 #include "lua.hpp"
-#include "luapp/Config.hpp"
-#include "luapp/ShortName.hpp"
 #include "luapp/DataType.hpp"
 #include "luapp/FuncReg.hpp"
 

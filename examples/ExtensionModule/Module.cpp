@@ -7,7 +7,8 @@
  * module.dll
  * ExtensionModule.lua
  *
- * Then type "luainterpreter.exe -i ExtensionModule.lua".
+ * Then type "luainterpreter.exe -i ExtensionModule.lua" to show it.
+ * Then type "os.exit()" to close it.
  */
 
 
