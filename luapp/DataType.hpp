@@ -6,6 +6,7 @@
 #pragma once
 
 #include <string>
+#include "luapp/Config.hpp"
 
 namespace lua{
 
@@ -31,11 +32,16 @@ class Table;
 class Var;
 
 
-// For function, userdata, thread
-struct RestType {};
+// For userdata
+struct User {};
+
+// lua thread
+struct Task {};
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 class Func;
+#else
+struct Func {};
 #endif
 
 }//namespace lua

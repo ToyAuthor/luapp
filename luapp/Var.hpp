@@ -231,6 +231,17 @@ class Var
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 		Var(const lua::Func &t);
 		Var& operator = (const lua::Func &t);
+		#else
+		Var(const lua::Func t)
+		{
+			this->_ptr = new lua::_VarType<lua::Func>(t);
+		}
+		Var& operator = (const ::lua::Func t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::Func>(t);
+			return *this;
+		}
 		#endif
 
 		//---------------------Boolean---------------------
@@ -245,15 +256,27 @@ class Var
 			return *this;
 		}
 
-		//---------------------Rest type---------------------
-		Var(const lua::RestType t)
+		//---------------------Thread---------------------
+		Var(const lua::Task t)
 		{
-			this->_ptr = new lua::_VarType<lua::RestType>(t);
+			this->_ptr = new lua::_VarType<lua::Task>(t);
 		}
-		Var& operator = (const ::lua::RestType t)
+		Var& operator = (const ::lua::Task t)
 		{
 			free_ptr();
-			this->_ptr = new lua::_VarType<lua::RestType>(t);
+			this->_ptr = new lua::_VarType<lua::Task>(t);
+			return *this;
+		}
+
+		//---------------------User data---------------------
+		Var(const lua::User t)
+		{
+			this->_ptr = new lua::_VarType<lua::User>(t);
+		}
+		Var& operator = (const ::lua::User t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::User>(t);
 			return *this;
 		}
 

@@ -102,6 +102,13 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 			lua::Table   t_value = lua::VarCast<lua::Table>(value);
 			_PushValueToLuaTable(hLua,t_value);                       // ... [T] [key] [value]
 		}
+		else if ( lua::VarType<lua::Task>(value) ||
+		          lua::VarType<lua::User>(value) )
+		{
+			lua::log::Cout<<"luapp:ignore unsupported value"<<lua::log::End;
+			lua::Pop(hLua, 1);            // ... [T]
+			continue;
+		}
 		else
 		{
 			lua::Pop(hLua, 1);           // ... [T]
@@ -161,9 +168,15 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 		lua::Table  var = lua::VarCast<lua::Table>(t);
 		PushVarToLua(hLua,var);
 	}
+	else if ( lua::VarType<lua::Task>(t) ||
+	          lua::VarType<lua::User>(t) )
+	{
+		lua::log::Cout<<"warning:It's unsupported value"<<lua::log::End;
+		lua::PushNil(hLua);
+	}
 	else
 	{
-		lua::log::Cout<<"luapp:you push unknown data type"<<lua::log::End;
+		lua::log::Cout<<"luapp:you push unknown or unsupported data type"<<lua::log::End;
 		lua::PushNil(hLua);
 	}
 }
@@ -235,6 +248,16 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		lua::Register::Item   item = hLua->_register->newItem();
 		item->setVar();
 		value._set(hLua,item);
+		(*table)[key] = value;
+	}
+	else if ( type==LUA_TUSERDATA )
+	{
+		lua::User   value;
+		(*table)[key] = value;
+	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   value;
 		(*table)[key] = value;
 	}
 	else if ( lua_isinteger(hLua->_lua, -1) )
@@ -373,10 +396,14 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 
 		*t = func;
 	}
-	else if ( type==LUA_TUSERDATA || type==LUA_TTHREAD )
+	else if ( type==LUA_TUSERDATA )
 	{
-		lua::RestType   var;
-		// Just for detect type.
+		lua::User   var;
+		*t = var;
+	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   var;
 		*t = var;
 	}
 	else if ( lua_isinteger(hLua->_lua, i) )

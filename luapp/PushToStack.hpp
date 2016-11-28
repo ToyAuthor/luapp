@@ -112,6 +112,14 @@ inline void _PushValueToLuaTable(lua::NativeState hLua,lua::Table &table)
 			lua::Table   t_value = lua::VarCast<lua::Table>(value);
 			_PushValueToLuaTable(hLua,t_value);                       // ... [T] [key] [value]
 		}
+		else if ( lua::VarType<lua::Func>(value) ||
+		          lua::VarType<lua::Task>(value) ||
+		          lua::VarType<lua::User>(value) )
+		{
+			lua::log::Cout<<"luapp:ignore unsupported value"<<lua::log::End;
+			lua_pop(hLua, 1);           // ... [T]
+			continue;
+		}
 		else
 		{
 			lua_pop(hLua, 1);           // ... [T]
@@ -165,6 +173,13 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Var &t)
 	{
 		lua::Table  var = lua::VarCast<lua::Table>(t);
 		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Func>(t) ||
+	          lua::VarType<lua::Task>(t) ||
+	          lua::VarType<lua::User>(t) )
+	{
+		lua::log::Cout<<"luapp:ignore unsupported data type"<<lua::log::End;
+		lua_pushnil(hLua);
 	}
 	else
 	{

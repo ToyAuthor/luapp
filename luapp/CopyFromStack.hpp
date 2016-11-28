@@ -76,9 +76,21 @@ inline void _SaveTableValue(lua::NativeState hLua,lua::Table *table,T key)
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TFUNCTION || type==LUA_TUSERDATA || type==LUA_TTHREAD )
+	#ifndef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+	else if ( type==LUA_TFUNCTION )
 	{
-		lua::RestType   value;
+		lua::Func   value;
+		(*table)[key] = value;
+	}
+	#endif
+	else if ( type==LUA_TUSERDATA )
+	{
+		lua::User   value;
+		(*table)[key] = value;
+	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   value;
 		(*table)[key] = value;
 	}
 	else if ( lua_isinteger(hLua, -1) )
@@ -207,10 +219,21 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Var *t,int i)
 		CheckVarFromLua(hLua,&table,i);
 		*t = table;
 	}
-	else if ( type==LUA_TFUNCTION || type==LUA_TUSERDATA || type==LUA_TTHREAD )
+	#ifndef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+	else if ( type==LUA_TFUNCTION )
 	{
-		lua::RestType   var;
-		// Just for detect type.
+		lua::Func   var;
+		*t = var;
+	}
+	#endif
+	else if ( type==LUA_TUSERDATA )
+	{
+		lua::User   var;
+		*t = var;
+	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   var;
 		*t = var;
 	}
 	else if ( lua_isinteger(hLua, i) )
