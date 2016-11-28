@@ -45,13 +45,13 @@ class MyClass
 		}
 };
 
-static lua::Int func_count(lua::Handle L)
+static lua::Int func_count(lua::NativeState L)
 {
-    lua::Int a;
-    lua::Int b;
+	lua::Int a;
+	lua::Int b;
 	lua::CheckVarFromLua(L,&a,1);
 	lua::CheckVarFromLua(L,&b,2);
-    lua::Pop(L,2);
+	lua::Pop(L,2);
 
 //--------------------------------
 //	int count(int a,int b)
@@ -61,8 +61,8 @@ static lua::Int func_count(lua::Handle L)
 //	}
 //--------------------------------
 
-    lua::PushVarToLua(L,c);
-    return 1;
+	lua::PushVarToLua(L,c);
+	return 1;
 }
 
 
@@ -72,7 +72,7 @@ static lua::Int func_count(lua::Handle L)
 	#define MY_DLL_API
 #endif
 
-extern "C" MY_DLL_API int luaopen_module(lua::Handle L)
+extern "C" MY_DLL_API int luaopen_module(lua::NativeState L)
 {
 	lua::State<>    lua(L);
 
