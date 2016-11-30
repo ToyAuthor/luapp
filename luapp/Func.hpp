@@ -13,8 +13,6 @@ class Func
 
 		Func(){}
 
-	//	Func()(lua::Handle h,lua::Register::Item i):_lua(h),_item(i){}
-
 		~Func()
 		{
 			_item = NULL;   // Just make sure it released before this->_lua.

@@ -35,13 +35,13 @@ class Var;
 // For userdata
 struct User {};
 
-// lua thread
-struct Task {};
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 class Func;
+class Task;// lua thread
 #else
 struct Func {};
+struct Task {};// lua thread
 #endif
 
 }//namespace lua

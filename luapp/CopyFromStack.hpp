@@ -82,15 +82,15 @@ inline void _SaveTableValue(lua::NativeState hLua,lua::Table *table,T key)
 		lua::Func   value;
 		(*table)[key] = value;
 	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   value;
+		(*table)[key] = value;
+	}
 	#endif
 	else if ( type==LUA_TUSERDATA )
 	{
 		lua::User   value;
-		(*table)[key] = value;
-	}
-	else if ( type==LUA_TTHREAD )
-	{
-		lua::Task   value;
 		(*table)[key] = value;
 	}
 	else if ( lua_isinteger(hLua, -1) )
@@ -225,15 +225,15 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Var *t,int i)
 		lua::Func   var;
 		*t = var;
 	}
+	else if ( type==LUA_TTHREAD )
+	{
+		lua::Task   var;
+		*t = var;
+	}
 	#endif
 	else if ( type==LUA_TUSERDATA )
 	{
 		lua::User   var;
-		*t = var;
-	}
-	else if ( type==LUA_TTHREAD )
-	{
-		lua::Task   var;
 		*t = var;
 	}
 	else if ( lua_isinteger(hLua, i) )

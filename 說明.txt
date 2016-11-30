@@ -60,9 +60,9 @@ luapp 主要的功能有這些:
     lua::Table   用法大致跟 lua table 一樣，但是等號運算子會真的複製整個容器
     lua::Nil     這跟 lua 的 nil 是一樣的角色定位
     lua::Ptr     一個不定型的指標，傳進 lua 會以 light user data 的身份來儲存
-    lua::Func    這是個 lua function
+    lua::Func    這是個 lua function，其內容有可能是個 C 函式繞了一圈又讓 C++ 來呼叫
+    lua::Task    這個是 lua thread，只是讓 C++ 這邊代為保管而已，不確定這樣的用法可不可行
 
 
-以下三個為 luapp 不支援的 lua 資料型態:
-    thread       這個是 lua 內部功能，也許以後會支援，但是 C++ 這邊頂多只能代為保管
+以下為 luapp 不支援的 lua 資料型態:
     user data    個人覺得 lua::Ptr 使用上更加直覺、簡單，所以不去支援這項

@@ -227,8 +227,8 @@ class Var
 		Var& operator = (const lua::Table &t);
 
 		//---------------------Func---------------------
-		// They are implemented at luapp/Func.hpp
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		// They are implemented at luapp/Func.hpp
 		Var(const lua::Func &t);
 		Var& operator = (const lua::Func &t);
 		#else
@@ -257,6 +257,11 @@ class Var
 		}
 
 		//---------------------Thread---------------------
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		// They are implemented at luapp/Task.hpp
+		Var(const lua::Task &t);
+		Var& operator = (const lua::Task &t);
+		#else
 		Var(const lua::Task t)
 		{
 			this->_ptr = new lua::_VarType<lua::Task>(t);
@@ -267,6 +272,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Task>(t);
 			return *this;
 		}
+		#endif
 
 		//---------------------User data---------------------
 		Var(const lua::User t)

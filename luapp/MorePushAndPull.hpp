@@ -1,6 +1,7 @@
 #pragma once
 
 #include "luapp/Func.hpp"
+#include "luapp/Task.hpp"
 
 namespace lua{
 
@@ -16,9 +17,21 @@ inline void PushVarToLua(lua::Handle,lua::Func t)
 	t._getItem()->getVar();
 }
 
+//------------------------------------------------------------------------------
 
+inline void CheckVarFromLua(lua::Handle h,lua::Task *t, int i)
+{
+	lua::PushValue(h,i);
+	t->_set(h,h->_register->newItem());
+	t->_getItem()->setVar();
+}
 
+inline void PushVarToLua(lua::Handle,lua::Task t)
+{
+	t._getItem()->getVar();
+}
 
+//------------------------------------------------------------------------------
 
 
 
@@ -97,13 +110,17 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 			lua::Func   t_value = lua::VarCast<lua::Func>(value);
 			t_value._getItem()->getVar();                             // ... [T] [key] [value]
 		}
+		else if ( lua::VarType<lua::Task>(value) )
+		{
+			lua::Task   t_value = lua::VarCast<lua::Task>(value);
+			t_value._getItem()->getVar();                             // ... [T] [key] [value]
+		}
 		else if ( lua::VarType<lua::Table>(value) )
 		{
 			lua::Table   t_value = lua::VarCast<lua::Table>(value);
 			_PushValueToLuaTable(hLua,t_value);                       // ... [T] [key] [value]
 		}
-		else if ( lua::VarType<lua::Task>(value) ||
-		          lua::VarType<lua::User>(value) )
+		else if ( lua::VarType<lua::User>(value) )
 		{
 			lua::log::Cout<<"luapp:ignore unsupported value"<<lua::log::End;
 			lua::Pop(hLua, 1);            // ... [T]
@@ -163,13 +180,17 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 		lua::Func   var = lua::VarCast<lua::Func>(t);
 		var._getItem()->getVar();
 	}
+	else if ( lua::VarType<lua::Task>(t) )
+	{
+		lua::Task   var = lua::VarCast<lua::Task>(t);
+		var._getItem()->getVar();
+	}
 	else if ( lua::VarType<lua::Table>(t) )
 	{
 		lua::Table  var = lua::VarCast<lua::Table>(t);
 		PushVarToLua(hLua,var);
 	}
-	else if ( lua::VarType<lua::Task>(t) ||
-	          lua::VarType<lua::User>(t) )
+	else if ( lua::VarType<lua::User>(t) )
 	{
 		lua::log::Cout<<"warning:It's unsupported value"<<lua::log::End;
 		lua::PushNil(hLua);
@@ -257,7 +278,11 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	}
 	else if ( type==LUA_TTHREAD )
 	{
+		lua::PushValue(hLua,-1);
 		lua::Task   value;
+		lua::Register::Item   item = hLua->_register->newItem();
+		item->setVar();
+		value._set(hLua,item);
 		(*table)[key] = value;
 	}
 	else if ( lua_isinteger(hLua->_lua, -1) )
@@ -403,8 +428,13 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TTHREAD )
 	{
-		lua::Task   var;
-		*t = var;
+		lua::PushValue(hLua,-1);
+		lua::Task   func;
+		lua::Register::Item   item = hLua->_register->newItem();
+		item->setVar();
+		func._set(hLua,item);
+
+		*t = func;
 	}
 	else if ( lua_isinteger(hLua->_lua, i) )
 	{
