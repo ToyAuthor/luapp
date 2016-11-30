@@ -112,7 +112,8 @@ class State
 			if(_lua)drop();
 		}
 
-		void bind(lua::Str name,lua::CFunction func)
+		/// Convert the function to lua global function.
+		void setFunc(lua::Str name,lua::CFunction func)
 		{
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 			wrapper::Wrapper<N>::_lua = this->_lua;
@@ -195,13 +196,13 @@ class State
 			adapter::Adapter<C,N>::pushPack(myF);
 		}
 
-		/// Let lua script could use given global function.
+		/// Convert C++ function to lua global function.
 		template<typename F>
-		void bind(lua::Str name,F fn)
+		void setFunc(lua::Str name,F fn)
 		{
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:bind(lua::Str name,F fn) not support module mode."<<lua::log::End;
+				lua::log::Cout<<"error:setFunc(lua::Str name,F fn) not support module mode."<<lua::log::End;
 				return;
 			}
 
@@ -212,12 +213,9 @@ class State
 			wrapper::Wrapper<N>::registerFunction(_lua,name,fn);
 		}
 
-		/**
-		 * Let lua script could use given member function.
-		 * This member function will be looks like a global function in lua.
-		 */
+		/// Convert C++ member function to lua global function.
 		template<typename F,typename C>
-		void bind(lua::Str name,F fn,C *obj)
+		void setFunc(lua::Str name,F fn,C *obj)
 		{
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 			adapter::Adapter<C,N>::_lua = this->_lua;
@@ -228,7 +226,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:bind(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
+				lua::log::Cout<<"error:setFunc(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
 				return;
 			}
 

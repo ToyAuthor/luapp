@@ -76,7 +76,7 @@ extern "C" MY_DLL_API int luaopen_module(lua::NativeState L)
 {
 	lua::State<>    lua(L);
 
-	lua.bind("count",func_count);
+	lua.setFunc("count",func_count);
 
 	lua.bindMethod("name",&MyClass::name);
 	lua.bindClassEx<MyClass>("NewObject");

@@ -33,7 +33,7 @@ int main()
 {
 	lua::State<>    lua;
 
-	lua.bind("NumberPlus",&MyFunction);   // Lua script has MyFunction() now.
+	lua.setFunc("NumberPlus",&MyFunction);   // Lua script has MyFunction() now.
 
 	lua.run(LUAPP_SCRIPT_PATH,"FunctionIntoLua.lua");
 

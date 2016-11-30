@@ -49,7 +49,7 @@ int main()
 
 	lua::State<>    lua;
 
-	lua.bind("PrintMyWord",&MyClass::print,&myClass);
+	lua.setFunc("PrintMyWord",&MyClass::print,&myClass);
 
 	lua.run(LUAPP_SCRIPT_PATH,"MemberFunctionIntoLua.lua");
 
