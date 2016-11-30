@@ -142,5 +142,162 @@ inline Var& Var::operator = (const lua::Func &t)
 	return *this;
 }
 
+//------------------------------------------------------------------------------
+
+template<typename T> struct Closure{};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1>
+struct Closure<R(P1)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1)
+		{
+			return _func.call<R,P1>(p1);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1>
+struct Closure<void(P1)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1)
+		{
+			_func.call(p1);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2>
+struct Closure<R(P1,P2)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2)
+		{
+			return _func.call<R,P1,P2>(p1,p2);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2>
+struct Closure<void(P1,P2)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2)
+		{
+			_func.call(p1,p2);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2, typename P3>
+struct Closure<R(P1,P2,P3)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2,P3 p3)
+		{
+			return _func.call<R,P1,P2,P3>(p1,p2,p3);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2, typename P3>
+struct Closure<void(P1,P2,P3)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2,P3 p3)
+		{
+			_func.call(p1,p2,p3);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2, typename P3, typename P4>
+struct Closure<R(P1,P2,P3,P4)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2,P3 p3,P4 p4)
+		{
+			return _func.call<R,P1,P2,P3,P4>(p1,p2,p3,p4);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2, typename P3, typename P4>
+struct Closure<void(P1,P2,P3,P4)>
+{
+	public:
+
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2,P3 p3,P4 p4)
+		{
+			_func.call(p1,p2,p3,p4);
+		}
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
 
 }
