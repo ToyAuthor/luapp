@@ -4,17 +4,15 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 ### Features
 - [x] Header file only.
 - [x] To register C++ class into lua.
-- [x] To register C++ global function or member function into lua.
+- [x] C++ and lua could call each other's function.
 - [x] Read/Write/Add/Remove lua global variable at C++ side.
-- [x] Call lua global function at C++ side.
-- [x] Be able to create extension module for lua in C++ style.
+- [x] Lua could send any variable to C++, and C++ could send then back.
+- [x] Support to create C extension module.
 - [x] Design a C++ container to simulate lua table.
 - [x] Design a class whose instances can hold instances of any type supported by luapp.
 - [x] Let lua script embedded in C++.
 - [x] Be able to search lua script by custom rule.
-- [x] Be able to keep lua function at C++ side.
-- [ ] Be able to keep lua table at C++ side.
-- [ ] Support C++11.(optional)
+- [ ] Support to call lua function that has multiple return value.
 
 ### Requirements
 - CMake 2.8+
@@ -24,6 +22,7 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 ### Information
 Item        | Description
 ------------|----------
+**Author**  | Yan Xin Wu
 **License** | MIT
 **Version** | 1.3.0.x (using Semantic Versioning 2.0.0)
 

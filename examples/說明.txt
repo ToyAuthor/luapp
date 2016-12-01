@@ -17,9 +17,6 @@ MemberFunctionInjectLua
 CallLuaFunction
 	在 C++ 呼叫 lua 這邊的全域函式
 
-CallMultipleReturnValueFunctionFromLua
-	在 C++ 呼叫 lua 這邊的全域函式，這些全域函式擁有多個回傳值
-
 ClassInjectLua
 	將類別導入 lua 裡面，如此便可以在 lua 宣告使用 C++ 物件了
 
