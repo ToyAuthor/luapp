@@ -32,16 +32,14 @@ class Table;
 class Var;
 
 
-// For userdata
-struct User {};
-
-
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 class Func;
 class Task;// lua thread
+class User;// For userdata
 #else
 struct Func {};
 struct Task {};// lua thread
+struct User {};// For userdata
 #endif
 
 }//namespace lua

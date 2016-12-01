@@ -2,6 +2,7 @@
 
 #include "luapp/Func.hpp"
 #include "luapp/Task.hpp"
+#include "luapp/User.hpp"
 
 namespace lua{
 
@@ -33,7 +34,19 @@ inline void PushVarToLua(lua::Handle,lua::Task t)
 
 //------------------------------------------------------------------------------
 
+inline void CheckVarFromLua(lua::Handle h,lua::User *t, int i)
+{
+	lua::PushValue(h,i);
+	t->_set(h,h->_register->newItem());
+	t->_getItem()->setVar();
+}
 
+inline void PushVarToLua(lua::Handle,lua::User t)
+{
+	t._getItem()->getVar();
+}
+
+//------------------------------------------------------------------------------
 
 
 
@@ -122,9 +135,8 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 		}
 		else if ( lua::VarType<lua::User>(value) )
 		{
-			lua::log::Cout<<"luapp:ignore unsupported value"<<lua::log::End;
-			lua::Pop(hLua, 1);            // ... [T]
-			continue;
+			lua::User   t_value = lua::VarCast<lua::User>(value);
+			t_value._getItem()->getVar();                             // ... [T] [key] [value]
 		}
 		else
 		{
@@ -192,8 +204,8 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	}
 	else if ( lua::VarType<lua::User>(t) )
 	{
-		lua::log::Cout<<"warning:It's unsupported value"<<lua::log::End;
-		lua::PushNil(hLua);
+		lua::User   var = lua::VarCast<lua::User>(t);
+		var._getItem()->getVar();
 	}
 	else
 	{
@@ -273,7 +285,11 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	}
 	else if ( type==LUA_TUSERDATA )
 	{
+		lua::PushValue(hLua,-1);
 		lua::User   value;
+		lua::Register::Item   item = hLua->_register->newItem();
+		item->setVar();
+		value._set(hLua,item);
 		(*table)[key] = value;
 	}
 	else if ( type==LUA_TTHREAD )
@@ -423,8 +439,13 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TUSERDATA )
 	{
-		lua::User   var;
-		*t = var;
+		lua::PushValue(hLua,-1);
+		lua::User   func;
+		lua::Register::Item   item = hLua->_register->newItem();
+		item->setVar();
+		func._set(hLua,item);
+
+		*t = func;
 	}
 	else if ( type==LUA_TTHREAD )
 	{

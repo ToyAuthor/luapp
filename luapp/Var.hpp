@@ -275,6 +275,11 @@ class Var
 		#endif
 
 		//---------------------User data---------------------
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		// They are implemented at luapp/User.hpp
+		Var(const lua::User &t);
+		Var& operator = (const lua::User &t);
+		#else
 		Var(const lua::User t)
 		{
 			this->_ptr = new lua::_VarType<lua::User>(t);
@@ -285,6 +290,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::User>(t);
 			return *this;
 		}
+		#endif
 
 		Var(const Var& bro):_ptr(0)
 		{
