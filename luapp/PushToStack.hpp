@@ -33,6 +33,11 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Ptr t)
 	lua::PushPointer(hLua,t);
 }
 //------------------------------------------------------------------------------
+inline void PushVarToLua(lua::NativeState hLua,lua::Nil)
+{
+	lua::PushNil(hLua);
+}
+//------------------------------------------------------------------------------
 #ifdef _LUAPP_CPP11_
 inline void PushVarToLua(lua::NativeState hLua,std::nullptr_t)
 {

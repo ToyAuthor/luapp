@@ -246,8 +246,6 @@ class State
 					this->cleanHandle();
 					#endif
 				}
-
-				_lua = NULL;
 			#else
 				if ( _lua )
 				{
@@ -258,10 +256,11 @@ class State
 					else
 					{
 						lua::DestroyHandle(_lua);
-						_lua = NULL;
 					}
 				}
 			#endif
+
+			_lua = NULL;
 		}
 
 		int load(lua::Str name,lua::Str& code)
@@ -304,6 +303,11 @@ class State
 			return 1;
 		}
 
+		/*
+		lua.searcher(C) + lua.load(A,B) + lua.run()
+		same as
+		lua.run(A,B,C)
+		*/
 		int run(lua::Str name,lua::Str& code,std::function<lua::Str&(lua::Str)> loader)
 		{
 			if ( _moduleMode )
@@ -327,7 +331,7 @@ class State
 			return result;
 		}
 
-		int run(lua::Str str)
+		int run(lua::Str script)
 		{
 			if ( _moduleMode )
 			{
@@ -335,11 +339,11 @@ class State
 				return (int)0;
 			}
 
-			int result = lua::DoScript(_lua,str);
+			int result = lua::DoScript(_lua,script);
 
 			if ( ! result )
 			{
-				lua::log::Cout<<"lua::State::run(str):"<<this->error()<<lua::log::End;
+				lua::log::Cout<<"lua::State::run():"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -365,7 +369,18 @@ class State
 		template<typename T>
 		void setGlobal(lua::Str name,T t)
 		{
-			PushVarToLua(_lua,t);
+			#ifdef _LUAPP_CHECK_CAREFUL_
+			lua::GetGlobal(_lua,name);
+			lua::Var  v;
+			lua::CheckVarFromLua(_lua,&v,-1);
+			if ( ! lua::VarType<lua::Nil>(v) )
+			{
+				lua::log::Cout<<"warning:this global variable already exist"<<lua::log::End;
+			}
+			lua::Pop(_lua,1);
+			#endif
+
+			lua::PushVarToLua(_lua,t);
 			lua::SetGlobal(_lua,name);
 		}
 
@@ -374,7 +389,7 @@ class State
 		void getGlobal(lua::Str name,T t)
 		{
 			lua::GetGlobal(_lua,name);
-			CheckVarFromLua(_lua,t,-1);
+			lua::CheckVarFromLua(_lua,t,-1);
 			lua::Pop(_lua,1);
 		}
 
@@ -483,14 +498,16 @@ class State
 
 	private:
 
-		void add_script_path_to_lua(lua::Str str)
+		void add_script_path_to_lua(lua::Str path)
 		{
 			                                 // ...
 			lua::GetGlobal(_lua,"package");  // ... package
-			lua::GetField(_lua,-1, "path");  // ... package path
-			lua::PushString(_lua,str+"?.lua;"+lua::CheckString(_lua,-1));
-			                                 // ... package path new_path
-			lua::SetField(_lua,-3, "path");  // ... package path
+			lua::GetField(_lua,-1, "path");  // ... package old_path
+
+			path += "?.lua;" + lua::CheckString(_lua,-1);
+			lua::PushString(_lua,path);      // ... package old_path new_path
+
+			lua::SetField(_lua,-3, "path");  // ... package old_path
 			lua::Pop(_lua,2);                // ...
 		}
 
@@ -561,14 +578,14 @@ class State
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 
-HandleClass::HandleClass(lua::NativeState h)
+inline HandleClass::HandleClass(lua::NativeState h)
 {
 	_lua = h;
 	_register = std::make_shared<lua::Register>(_lua);
 	_moduleMode = true;
 }
 
-HandleClass::HandleClass()
+inline HandleClass::HandleClass()
 {
 	_moduleMode = false;
 	_lua = lua::CreateHandle();

@@ -43,7 +43,7 @@ int main()
 		std::cout << lua::VarCast<lua::Str>(var); // Print "A string"
 	}
 
-//	var = table["C"]["E"];      // Don't do this. It may change value.
+//	var = table["C"]["E"];      // Don't do this. It may change structure of table.
 	var = table>>"C">>"E";      // I recommand you search value by this way.
 
 	if ( lua::VarType<lua::Nil>(var) )

@@ -5,7 +5,7 @@
  * @copyright Public Domain
  * <pre>
  * https://github.com/ToyAuthor/ToyBox
- * https://bitbucket.org/ToyAuthor/
+ * https://bitbucket.org/ToyAuthor/toybox
  * </pre>
  */
 
@@ -63,6 +63,10 @@
 	#define TOY_LINUX
 
 	#if defined(__i386__)
+		#define TOY_LIN32
+	#elif defined(__aarch64__)
+		#define TOY_LIN64
+	#elif defined(__arm__)
 		#define TOY_LIN32
 	#else
 		#define TOY_LIN64

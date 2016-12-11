@@ -51,7 +51,7 @@ struct Proxy00 : public ProxyReturn<C,R>
 };
 
 template<typename C>
-struct Proxy00<C,void> : public ProxyReturn<C,void>
+struct Proxy00<C,void>
 {
 	typedef void(C::*Func)();
 	Proxy00(){}

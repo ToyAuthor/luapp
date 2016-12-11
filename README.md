@@ -41,7 +41,7 @@ print("3 + 4 = " .. num)
 ```c++
 // main.cpp
 
-#include "luapp.hpp"
+#include <luapp.hpp>
 
 class MyClass
 {
