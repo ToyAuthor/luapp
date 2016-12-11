@@ -1,0 +1,150 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">區域變數</font>
+先寫 local 再寫變數名稱賦值就是在建立區域變數了
+用 lua 內建的 print 函式可以檢查出該區域變數是否被刪除了
+被刪除的變數會使得 print 印出 nil
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">8</span><span class="sc0">   </span><span class="sc2">-- 建立區域變數
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- 會印出8
+</span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- 會印出9
+</span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">nil</span><span class="sc0">       </span><span class="sc2">-- 刪除此變數
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- 會印出 nil</span></div>
+
+
+
+
+
+
+
+<font class="title">區域範圍</font>
+區域範圍就是程式碼的某一段
+通常是從 then 或者 do 之類的關鍵字開始直到出現關鍵字 end
+習慣上會用縮排來明確表達區域範圍在哪裡
+
+
+
+<font class="title">區域範圍的規則</font>
+1.區域範圍可重疊
+2.範圍重疊時不可能只重疊一部份，較小的區域範圍一定會被較大的整個重疊
+3.預設區域範圍是從程式碼第一行開始直到最後一行結束，也就是說囊括了整份程式碼文件
+4.建立區域變數時，該變數隸屬於該行所處的範圍，若是該行有多個區域範圍則變數隸屬於最小的那個
+5.當區域範圍結束時，其擁有的區域變數也會跟著消失
+
+
+
+<font class="title">建立區域範圍</font>
+下面範例擁有兩個區域範圍
+一個是囊括了整份程式碼文件的預設範圍
+另一個是用 do 跟 end 圍起來的範圍
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">8</span><span class="sc0">      </span><span class="sc2">-- 下面每一行都讀的到這變數
+</span><span class="sc0">
+</span><span class="sc2">-- 很多情況都會產生自己的區域範圍
+</span><span class="sc2">-- 這裡簡單的用 do end 來圍一塊區域範圍做示範
+</span><span class="sc5">do</span><span class="sc0"> </span><span class="sc2">-- 產生區域範圍
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出8
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出nil，因為此時 x 不存在
+</span><span class="sc0">    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">4</span><span class="sc0">  </span><span class="sc2">-- 建立區域變數 x
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出4
+</span><span class="sc5">end</span><span class="sc0"> </span><span class="sc2">-- 結束此區域範圍
+</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出8
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出ni，因為此時 x 已被刪除了
+</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">當建立的範圍裡又包含其他範圍時會怎樣呢？</font>
+範圍裡又包含其他範圍時就會重疊
+多個範圍同時存在
+越晚出現的範圍會越早消失
+縮排習慣可以提醒你這個規則
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">,</span><span class="sc11">b</span><span class="sc10">,</span><span class="sc11">c</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"---------------------"</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">b</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">c</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">  </span><span class="sc2">-- 下面每一行都能讀的到 x 這個值
+</span><span class="sc0">
+</span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 這裡就只能讀到 x 的值
+</span><span class="sc0">
+</span><span class="sc5">do</span><span class="sc0">
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
+    </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- 此時 y 也能讀到值了
+</span><span class="sc0">    </span><span class="sc5">do</span><span class="sc0">
+        </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">  </span><span class="sc2">-- z 所屬的範圍是最晚出現的，所以 z 會是最早消失的
+</span><span class="sc0">        </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 此時3個範圍都是存在的，3個數字都印的出來
+</span><span class="sc0">    </span><span class="sc5">end</span><span class="sc0">
+    </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- z 印不出來，因為已經離開 z 所在的範圍了
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 又只剩下 x 能讀到了</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">被刪除的變數</font>
+那些變數雖然被刪除了
+但是它們未必已經把佔用的記憶體歸還給電腦了
+
+
+Lua 會找個時間歸還記憶體
+
+或者你可以呼叫這個函式來要求 Lua 立刻進行歸還動作
+collectgarbage("collect")
+
+有時被刪除的變數積太多會讓歸還行為花很多時間
+所以你自己定期去要求 Lua 進行歸還可能會比較好
+
+但是太頻繁的要求進行歸還動作也有可能會浪費更多時間
+
+
+
+<font class="title">變數離開了範圍卻還沒被刪除</font>
+這在<a href="function.html" target="_self">閉包</a>的情況下的確會發生
+因為閉包活了下來
+被閉包引用的變數因此沒有消失
+
+
+
+</pre>
+</body>
+</html>

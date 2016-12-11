@@ -1,0 +1,127 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<font class="title">註解的寫法</font><br \>
+<br \>
+<pre>
+當你想寫一些解釋或者筆記在程式碼上面
+不希望被當成程式碼來解讀時
+就必須寫成註解
+
+
+在 Lua 上的單行註解是以兩條橫線"--"為開頭
+出現"--"之後一直到該行的行尾都會被當成註解
+
+
+多行註解是以"--[["開始
+然後以"]]"為結束
+還可以搭配等號使用
+
+
+</pre>
+<div class="code"><span class="sc2">--這個是單行註解
+</span><span class="sc0">
+</span><span class="sc11">被當成程式碼的文字都會是黑色</span><span class="sc0">
+
+</span><span class="sc11">出現"</span><span class="sc2">--"之後一直到該行的行尾都會被當成註解</span><span class="sc0">
+
+</span><span class="sc1">--[[
+這個是多行註解
+在這裡面不管寫多少行都會當成註解
+]]</span><span class="sc0">
+
+</span><span class="sc11">離開"]]"這個符號就會被當成程式碼了</span><span class="sc0">
+
+</span><span class="sc1">--[[
+一樣是多行註解
+但是不能在內容寫"]]</span><span class="sc12">"
+</span><span class="sc11">這樣子寫就破功了</span><span class="sc0">
+</span><span class="sc11">這部分被當程式碼了</span><span class="sc0">
+</span><span class="sc11">]]</span><span class="sc0">
+
+</span><span class="sc1">--[====[
+想要寫"]]"在多行註解裡就要加上等號
+兩邊的等號要一樣多
+]====]</span><span class="sc0">
+
+</span><span class="sc11">Lua 的這種設計讓你想寫什麼在註解裡都行</span><span class="sc0">
+
+</span><span class="sc1">--[==================[
+]]
+]=]
+]==]
+]===]
+]====]
+]=====]
+]==================]</span><span class="sc0">
+
+</span><span class="sc11">很棒的巧思</span></div>
+<pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+<pre>
+<font class="title">多行註解的小技巧</font>
+一個字符的差別就決定好幾行程式碼算不算數了
+
+<div class="code"><span class="sc1">--[[
+local x = 1
+local y = 2
+local z = 3
+--]]</span><span class="sc0">
+
+</span><span class="sc2">-- [[
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc2">--]]</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

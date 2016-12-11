@@ -1,0 +1,119 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">變數</font>
+Lua 裡的變數跟數學上的變數在功能上差很多
+
+
+數學變數的特徵：
+	1. 計算過程不允許更改變數內容
+	2. 變數內容只會是數字
+	3. 變數只存在於一段算式或者一個函式裡
+
+Lua 變數的特徵：
+	1. 一直都可以修改變數內容，直到變數被刪除為止
+	2. 除了數字還能裝另外<a href="#tag">7種變數內容</a>
+	3. 變數何時被刪除要看你怎麼使用
+
+
+
+<font class="title">變數何時被刪除？</font>
+Lua 對於變數何時被刪除有著兩套規則
+依此規則 Lua 變數可分為這兩類
+1.區域變數
+2.全域變數
+
+原則上
+能使用區域變數的情況就不要使用全域變數
+
+
+<font class="title" id="vtag">區域變數</font>
+先寫 local 再寫變數名稱就是區域變數了
+這裡使用 lua 內建的 print 函式來將一些變數內容給印出來
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出10
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出11
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">nil</span><span class="sc0">   </span><span class="sc2">-- 刪除此變數
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出 nil</span></div>
+
+
+
+
+
+
+
+區域變數的刪除規則另外寫在<a href="scope.html" target="_self">這裡解釋</a>了
+
+
+<font class="title">全域變數</font>
+全域變數的使用很簡單
+但是缺點也特別多
+
+詳細規則另外寫在<a href="global.html" target="_self">這裡解釋</a>了
+
+
+
+<font class="title" id="tag">變數內容的種類</font>
+現在你知道變數有分兩種
+而變數內容有分8種類型
+
+變數之間可以自由交換、複製內容
+
+共以下8種類型
+
+
+1. 數字
+	正負整數、正負小數
+	可以粗略理解成 64bit 記憶體空間可紀錄的所有有理數
+	(你可以修改 Lua 程式來要求使用 32bit 就好)
+
+2. boolean
+	這個類型只擁有 true 跟 false 兩種值
+
+3. <a href="string.html" target="_self">字串</a>
+	用來讓變數可以儲存一段文字或一篇文章
+
+4. <a href="table.html" target="_self">table</a>
+	這是 Lua 唯一可以容納多個變數的類型
+	行為像個資料夾一樣可以裝很多變數以及其他資料夾
+	但是變數不是直接裝上整個資料夾
+	真正裝進來的是類似資料夾捷徑的東西
+	你用等號複製變數是無法複製整個資料夾的
+	就只會複製到捷徑
+	打開來都會是同一個地方
+
+5. user data
+	有時其他語言會把資料寄放在 Lua 這裡
+	這些代為保管的資料就以 user data 的身份暫存在 Lua 這裡
+	Lua 不懂如何使用這些資料
+	只能夠代為保管
+
+7. <a href="function.html" target="_self">函式</a>
+	程式是由數據跟算式所組成的
+	上面的類型都是用來記錄數據
+	只有函式是用來記錄算式
+
+6. thread
+	這個並非真正的多執行緒
+	是 Lua 用純軟體實作出的多工效果
+
+8. nil
+	此類型只有一個值
+	你可以把 nil 當作是一種標籤
+	代表著 none
+	想要刪除一個變數就替它貼上這標籤
+	讀取一個不存在的變數會讀到 nil
+	如同上面<a href="#vtag">區域變數那段</a>已經出現過的用法
+
+
+
+
+</pre>
+</body>
+</html>

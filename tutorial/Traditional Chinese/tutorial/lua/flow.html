@@ -1,0 +1,143 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">程序流程</font>
+看圖就會明白了
+流程的分岔點都是<a href="condition.html" target="_self">判斷式</a>
+判斷過才決定要走哪一條岔路
+
+<img src="../../../image/lua/001.gif" alt="luapp" style="width:164 px;height:311 px;">
+
+<div class="code"><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+<font class="title">使用 else</font>
+
+<img src="../../../image/lua/002.gif" alt="luapp" style="width:178 px;height:304 px;">
+
+<div class="code"><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">else</span><span class="sc0">
+    </span><span class="sc1">-- [B]</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+<font class="title">使用 elseif</font>
+<img src="../../../image/lua/003.gif" alt="luapp" style="width:429 px;height:304 px;">
+
+<div class="code"><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">elseif</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [B]</span><span class="sc0">
+</span><span class="sc5">elseif</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [C]</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+<font class="title">使用 elseif + else</font>
+<img src="../../../image/lua/004.gif" alt="luapp" style="width:488 px;height:305 px;">
+
+<div class="code"><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">elseif</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [B]</span><span class="sc0">
+</span><span class="sc5">elseif</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc1">-- [C]</span><span class="sc0">
+</span><span class="sc5">else</span><span class="sc0">
+    </span><span class="sc1">-- [D]</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">while 迴圈</font>
+<img src="../../../image/lua/005.gif" alt="luapp" style="width:184 px;height:305 px;">
+
+<div class="code"><span class="sc5">while</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">do</span><span class="sc0">
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+<font class="title">repeat 迴圈</font>
+<img src="../../../image/lua/006.gif" alt="luapp" style="width:151 px;height:313 px;">
+
+<div class="code"><span class="sc5">repeat</span><span class="sc0"> 
+    </span><span class="sc1">-- [A]</span><span class="sc0">
+</span><span class="sc5">until</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc10">)</span></div>
+
+
+
+
+
+
+<font class="title">for 迴圈</font>
+這個東西的規則比上面的還要複雜一些
+實際執行程式碼來看結果會比較好理解
+
+<div class="code"><span class="sc2">-- 會依序印出 0 1 2 3 4 5
+</span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">i</span><span class="sc10">=</span><span class="sc4">0</span><span class="sc10">,</span><span class="sc4">5</span><span class="sc10">,</span><span class="sc4">1</span><span class="sc0"> </span><span class="sc5">do</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">i</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc2">-- 會依序印出 3 7 11 15
+</span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">i</span><span class="sc10">=</span><span class="sc4">3</span><span class="sc10">,</span><span class="sc4">15</span><span class="sc10">,</span><span class="sc4">4</span><span class="sc0"> </span><span class="sc5">do</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">i</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+上面是 for 迴圈在數字計數上的用法
+還有另外的用法是用來拜訪 table 內含的每一項變數
+<a href="scope.html" target="_self">在 table 的教學</a>那邊有個範例使用 for 來示範如何將 table 的內容物一一複製出來
+
+
+
+
+
+</pre>
+</body>
+</html>

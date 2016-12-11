@@ -1,0 +1,239 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">函式</font>
+程式是由數據跟算式所組成的
+函式就是用來紀錄算式的
+
+x：參數
+f(x)：回傳值
+
+這是數學上的函式寫法
+f(x) = x+1
+
+這是 lua 語言裡的函式寫法
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc4">2</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 3
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc4">3</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 4
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc4">4</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 5
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc11">f</span><span class="sc10">(</span><span class="sc11">f</span><span class="sc10">(</span><span class="sc4">2</span><span class="sc10">)))</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 印出 5</span></div>
+
+
+
+
+
+
+
+
+
+<font class="title">Lua 函式比數學函數再多了幾樣功能</font>
+這些功能讓 Lua 函式變得更靈活
+
+1.參數跟回傳值不只可以填數字，Lua 變數可選的<a href="variable.html" target="_self">8種類型</a>也都可以填
+2.可以輸入多個參數，也可以不輸入參數
+3.可以回傳多個回傳值，也可以沒有回傳值
+4.可以不透過參數跟回傳值來讀寫函式外部的變數(這牽扯到<a href="#closure">閉包</a>的概念，初學者應先避免使用)
+
+
+
+<font class="title">兩種建立函式的方法</font>
+這兩個是等價寫法
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10"> = </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+去掉 local 關鍵字就變成<a href="global.html" target="_self">全域函式</a>了
+
+
+
+<font class="title">多參數跟多回傳值的寫法</font>
+
+<div class="code"><span class="sc2">-- 多參數，無回傳值
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">+</span><span class="sc11">y</span><span class="sc10">+</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc11">foo</span><span class="sc10">(</span><span class="sc4">1</span><span class="sc10">,</span><span class="sc4">2</span><span class="sc10">,</span><span class="sc4">3</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 6
+</span><span class="sc0">
+</span><span class="sc2">-- 無參數，多回傳值
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc10">,</span><span class="sc4">2</span><span class="sc10">,</span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">   </span><span class="sc2">-- 得到3個回傳值</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">return 的用法</font>
+有回傳值的函式就一定會用到 return
+而且 return 一定要寫在函式的最下面
+這點跟其他程式語言不同
+
+<div class="code"><span class="sc2">-- 錯誤寫法
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"reurn 1"</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc2">-- 正確寫法
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"reurn 1"</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">        </span><span class="sc2">-- return 必須是最後一個動作才行
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">建立函式的地點</font>
+等號的後面都可以寫函式
+函式本來就是變數能裝填的內容物之一
+
+例如：
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">i</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">,</span><span class="sc0">
+    </span><span class="sc11">f</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc10">,</span><span class="sc0">
+    </span><span class="sc11">j</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc11">id</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title" id="closure">閉包</font>
+在 lua 語法裡
+沒有透過參數列就去使用外部變數的函式絕對是個閉包
+以下就是閉包的行為
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">C</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">A</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">B</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">A</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">B</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">C</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc4">1</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出6 (1+2+3)
+</span><span class="sc11">C</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">5</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc4">1</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出8 (1+2+5)
+</span><span class="sc11">C</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc4">1</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出4 (1+2+1)</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+這種函式就是閉包
+輸入一樣的參數卻得到不一樣的回傳值
+數學上的函式是不可能發生這種事的
+
+
+<font class="title" id="closure">閉包的關鍵特質</font>
+直接看code
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">()</span><span class="sc0">
+
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">c</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">)</span><span class="sc0">
+        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">+</span><span class="sc11">c</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">end</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">f</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">()</span><span class="sc0">
+
+</span><span class="sc13">collectgarbage</span><span class="sc10">(</span><span class="sc6">"collect"</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc11">foo</span><span class="sc10">(</span><span class="sc4">5</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 印出15</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+依照<a href="scope.html" target="_self">區域變數</a>的原則
+func 裡面的 c 應該不能活到 foo() 執行的這一步
+但因為 func 裡面的 f 函式是個閉包
+f 將 c 給包了進來
+所以 c 沒被清除
+
+這就是閉包的特質
+被閉包使用到的變數會陪著閉包繼續活著
+
+
+
+</pre>
+</body>
+</html>

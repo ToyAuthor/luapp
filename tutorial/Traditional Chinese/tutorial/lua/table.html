@@ -1,0 +1,233 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">table</font>
+table 用起來像個資料夾
+可以放進各種變數以及其他 table
+用起來的感覺就像是將其它變數裝進來
+然後整包帶著走
+
+
+table 裡所裝的變數也要取名字
+這些名字不會跟 table 外面的變數名稱有衝突
+就像一個班級裡的學生座號不會跟班級外的任何號碼搞混
+
+
+用等號是無法對 table 進行複製的
+table 更像個資料夾捷徑
+對捷徑複製之後
+打開來都還是一樣的地方
+<a href="#tag">最底下</a>有介紹正確的複製方式
+
+
+<font class="title">使用 table</font>
+
+<div class="code"><span class="sc2">-- 普通數字
+</span><span class="sc5">local</span><span class="sc0">  </span><span class="sc11">number</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+
+</span><span class="sc2">-- 普通字串
+</span><span class="sc5">local</span><span class="sc0">  </span><span class="sc11">str</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc6">"yes"</span><span class="sc0">
+
+</span><span class="sc2">-- 建立一個空 table
+</span><span class="sc5">local</span><span class="sc0">  </span><span class="sc11">t</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{}</span><span class="sc0">
+
+</span><span class="sc2">-- table 裡頭沒有 num 跟 name 這兩個變數，所以只會印出 nil
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t.num</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 nil
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t.name</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 印出 nil
+</span><span class="sc0">
+</span><span class="sc2">-- 替 table 裝內容物，現在有 num 跟 name 這兩個變數了
+</span><span class="sc11">t.num</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc0">
+</span><span class="sc11">t.name</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">str</span><span class="sc0">
+
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t.num</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 10
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t.name</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 印出 "yes"
+</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0">  </span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{}</span><span class="sc0">
+</span><span class="sc11">g.subTable</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">t</span><span class="sc0">
+
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g.subTable.num</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 10
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g.subTable.name</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 印出 "yes"</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">初始/新增/刪除 table 內的變數</font>
+
+<div class="code"><span class="sc2">-- 初始擁有3個變數的 table
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{</span><span class="sc11">a</span><span class="sc10">=</span><span class="sc4">3</span><span class="sc10">,</span><span class="sc11">b</span><span class="sc10">=</span><span class="sc4">6</span><span class="sc10">,</span><span class="sc11">c</span><span class="sc10">=</span><span class="sc4">5</span><span class="sc10">}</span><span class="sc0">
+
+</span><span class="sc2">-- 也可以像上面那樣先建立空的 table，然後再增加成員
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{}</span><span class="sc0">
+</span><span class="sc11">t.a</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc11">t.b</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">6</span><span class="sc0">
+</span><span class="sc11">t.c</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">5</span><span class="sc0">
+
+</span><span class="sc2">-- 將已存在的變數刪除
+</span><span class="sc11">t.b</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">nil</span><span class="sc0">
+
+</span><span class="sc2">-- 查詢不存在的變數
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t.f</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 nil，因為 table 裡沒有名為 f 的變數</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">以物件導向風格來使用 table</font>
+
+<div class="code"><span class="sc2">-- 宣告一個 table，裡面擁有3個變數
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">object</span><span class="sc10">=</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc2">-- numA 跟 numB 是數字
+</span><span class="sc0">    </span><span class="sc11">numA</span><span class="sc10">=</span><span class="sc4">10</span><span class="sc10">,</span><span class="sc0">
+    </span><span class="sc11">numB</span><span class="sc10">=</span><span class="sc4">5</span><span class="sc10">,</span><span class="sc0">
+
+    </span><span class="sc2">-- func 是函式
+</span><span class="sc0">    </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">dev</span><span class="sc10">,</span><span class="sc11">i</span><span class="sc10">)</span><span class="sc0">
+        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">dev.numA</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">dev.numB</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">i</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+
+</span><span class="sc2">-- 通常呼叫函式的時候必須將函式所需的參數給齊
+</span><span class="sc11">object.func</span><span class="sc10">(</span><span class="sc11">object</span><span class="sc10">,</span><span class="sc4">13</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc2">-- 但是如果第一個參數就是該 table 自己的話，那麼可以這樣簡寫
+</span><span class="sc11">object</span><span class="sc10">:</span><span class="sc11">func</span><span class="sc10">(</span><span class="sc4">13</span><span class="sc10">)</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title" id="tag">如何複製 table</font>
+
+<div class="code"><span class="sc2">-- 建立一個 table
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t1</span><span class="sc10">=</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">a</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">,</span><span class="sc0">
+    </span><span class="sc11">b</span><span class="sc10">=</span><span class="sc4">2</span><span class="sc10">,</span><span class="sc0">
+    </span><span class="sc11">c</span><span class="sc10">=</span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+
+</span><span class="sc2">-- 很遺憾，這樣沒有複製到整個 table
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t2</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">t1</span><span class="sc0">
+
+
+</span><span class="sc2">-- 因為兩個 table 是一體的，下面程式碼可以證明
+</span><span class="sc0">
+</span><span class="sc11">t1.d</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">100</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t1.d</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 100
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t2.d</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 100
+</span><span class="sc0">
+</span><span class="sc11">t2.d</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">200</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t1.d</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 200
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">t2.d</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 200
+</span><span class="sc0">
+</span><span class="sc2">-- 看到了嗎？它們的數值會一起變化，因為兩個變數是使用同一個 table 的</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+想要真正的複製整個 table 結構
+你必須先建立一個新的 table
+然後將成員變數一個一個複製進來
+
+
+使用下面的做法可以完整複製整個 table
+
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">clone</span><span class="sc10">(</span><span class="sc11">t</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">mt</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc13">getmetatable</span><span class="sc10">(</span><span class="sc11">t</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">result</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{}</span><span class="sc0">
+
+    </span><span class="sc5">for</span><span class="sc0"> </span><span class="sc11">key</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">value</span><span class="sc0"> </span><span class="sc5">in</span><span class="sc0"> </span><span class="sc13">pairs</span><span class="sc10">(</span><span class="sc11">t</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc5">do</span><span class="sc0">
+        </span><span class="sc5">if</span><span class="sc0"> </span><span class="sc13">type</span><span class="sc10">(</span><span class="sc11">value</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">==</span><span class="sc0"> </span><span class="sc6">"table"</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+            </span><span class="sc11">result</span><span class="sc10">[</span><span class="sc11">key</span><span class="sc10">]</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">clone</span><span class="sc10">(</span><span class="sc11">value</span><span class="sc10">)</span><span class="sc0">
+        </span><span class="sc5">else</span><span class="sc0">
+            </span><span class="sc11">result</span><span class="sc10">[</span><span class="sc11">key</span><span class="sc10">]</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">value</span><span class="sc0">
+        </span><span class="sc5">end</span><span class="sc0">
+    </span><span class="sc5">end</span><span class="sc0">
+
+    </span><span class="sc13">setmetatable</span><span class="sc10">(</span><span class="sc11">result</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">mt</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">result</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">t2</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">clone</span><span class="sc10">(</span><span class="sc11">t1</span><span class="sc10">)</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

@@ -1,0 +1,136 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">判斷式</font>
+判斷式也稱為條件式
+用來進行邏輯判斷
+程式非常需要這些判斷
+例如下面情境
+
+<div class="code"><span class="sc2">-- 一個用來計算並印出倒數的函式
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">reciprocal</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">number</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc10">/</span><span class="sc11">number</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+
+</span><span class="sc2">-- 這樣的函式會有問題
+</span><span class="sc0">
+</span><span class="sc11">reciprocal</span><span class="sc10">(</span><span class="sc4">1</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出 1
+</span><span class="sc11">reciprocal</span><span class="sc10">(</span><span class="sc4">0.5</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 印出 2
+</span><span class="sc11">reciprocal</span><span class="sc10">(</span><span class="sc4">0.1</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 印出 10
+</span><span class="sc11">reciprocal</span><span class="sc10">(</span><span class="sc4">0</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 0 是無法計算倒數的，必須告知使用者這問題
+</span><span class="sc0">
+</span><span class="sc2">-- 邏輯上應該要這麼寫才對
+</span><span class="sc1">--[[
+local reciprocal = function(number)
+    如果 number 等於0 就印出 "You can't do this!" 訊息來提醒使用者
+    0 以外的情況就計算 number 的倒數
+end
+]]</span><span class="sc0">
+
+</span><span class="sc2">-- 寫成程式就是這樣
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">reciprocal</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">number</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc6">"You can't do this!"</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">else</span><span class="sc0">
+        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc10">/</span><span class="sc11">number</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc5">end</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">各種邏輯判斷</font>
+
+<div class="code"><span class="sc5">if</span><span class="sc0">     </span><span class="sc11">number</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">  </span><span class="sc2">-- 如果 number 等於0
+</span><span class="sc5">if</span><span class="sc0">     </span><span class="sc11">number</span><span class="sc10">~=</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">  </span><span class="sc2">-- 如果 number 不等於0
+</span><span class="sc5">if</span><span class="sc0"> </span><span class="sc5">not</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">  </span><span class="sc2">-- 如果 number 等於0 並非事實
+</span><span class="sc5">if</span><span class="sc0"> </span><span class="sc5">not</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc10">~=</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">  </span><span class="sc2">-- 如果 number 不等於0 並非事實
+</span><span class="sc0">
+
+</span><span class="sc2">-- 很顯然的
+</span><span class="sc11">number</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0">
+</span><span class="sc2">-- 跟
+</span><span class="sc5">not</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc10">~=</span><span class="sc4">0</span><span class="sc0">
+</span><span class="sc2">-- 是一樣的意思
+</span><span class="sc0">
+</span><span class="sc11">number</span><span class="sc10">~=</span><span class="sc4">0</span><span class="sc0">
+</span><span class="sc2">-- 跟
+</span><span class="sc5">not</span><span class="sc0"> </span><span class="sc11">number</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0">
+</span><span class="sc2">-- 也是一樣的意思
+</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">多條件判斷</font>
+
+<div class="code"><span class="sc2">-- 如果 x,y,z 都是0
+</span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+    </span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+        </span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0">
+            </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"(x,y,z)=(0,0,0)"</span><span class="sc10">)</span><span class="sc0">
+        </span><span class="sc5">end</span><span class="sc0">
+    </span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">and</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">and</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">   </span><span class="sc2">-- 如果 x,y,z 都是0
+</span><span class="sc5">if</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">or</span><span class="sc0">  </span><span class="sc11">y</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">or</span><span class="sc0">  </span><span class="sc11">z</span><span class="sc10">==</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc5">then</span><span class="sc0"> </span><span class="sc5">end</span><span class="sc0">   </span><span class="sc2">-- 如果 x,y,z 其中有一個等於0
+</span></div>
+
+
+
+
+
+
+
+
+
+
+
+其實每一樣條件都各別用一個if來判斷也可以
+選你覺得看起來比較舒服的寫法就好了
+
+
+
+</pre>
+</body>
+</html>

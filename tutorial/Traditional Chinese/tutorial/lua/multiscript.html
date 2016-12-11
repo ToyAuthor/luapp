@@ -1,0 +1,159 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">使用多份腳本文件</font>
+想要引入其他腳本檔案的話
+你只需要在腳本上寫
+require("mycode")
+或者
+require "mycode"
+
+這樣就會搜尋名為 mycode.lua 的腳本
+腳本第一次被 require 的時候會執行內部指令
+之後的 require 就不會再去執行了
+
+
+通常腳本會回傳出一個 table 來提供它內部的功能
+所以下面寫法比較常見
+local t = require("mycode")
+
+
+
+<font class="title">搜尋其他資料夾裡的腳本</font>
+假設你的專案腳本跟直譯器的位置分佈如下
+
+d:/projects/game/luainterpreter.exe
+d:/projects/game/main.lua
+d:/projects/game/load.lua
+d:/projects/game/sound/device.lua
+d:/projects/common/tools.lua
+
+
+那麼在 main.lua 裡讀取 load.lua 跟 device.lua 可以這麼寫
+require("load")
+require("sound.device")
+
+而 tools.lua 因為是位於資料夾外面
+無法只靠 require 指令找到
+
+必須給定搜尋路徑才能用 require 找到 tools.lua
+
+
+<font class="title">設定搜尋路徑</font>
+要在程式碼裡面設定搜尋路徑這麼寫就行了
+_G.package.path = _G.package.path .. ";../../common/?.lua"
+
+這麼寫也行，差別在於先從哪個資料夾開始搜尋而已
+_G.package.path = "../../common/?.lua;" .. _G.package.path
+
+設完搜尋路徑再呼叫 require("tools") 才會有用
+
+
+<font class="title">寫個可以讓其他腳本 require 的腳本</font>
+其實沒有要傳出函式的話是不需要特別做什麼的
+想把函式或者變數傳出去的話
+在腳本的最下面回傳一個 table 就行了
+在 table 上面寫上要提供給其他腳本檔使用的功能
+
+
+</pre>
+<div class="code"><span class="sc2">-------device.lua-------
+</span><span class="sc0">
+</span><span class="sc11">InitialAudioDevice</span><span class="sc10">()</span><span class="sc0">    </span><span class="sc2">--初始一個聲音裝置
+</span><span class="sc0">
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">LoadSound</span><span class="sc10">(</span><span class="sc11">file_name</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc2">--載入音檔
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">PlaySound</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc2">--播放音樂
+</span><span class="sc5">end</span><span class="sc0">
+
+</span><span class="sc2">-- 這裡回傳了一個 table 出去
+</span><span class="sc5">local</span><span class="sc0">	</span><span class="sc11">t</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">{}</span><span class="sc0">
+</span><span class="sc11">t.LoadSound</span><span class="sc10">=</span><span class="sc11">LoadSound</span><span class="sc0">
+</span><span class="sc11">t.PlaySound</span><span class="sc10">=</span><span class="sc11">PlaySound</span><span class="sc0">
+
+</span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">t</span><span class="sc0">
+</span></div>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+這樣其他腳本就能使用它了<br \>
+<br \>
+<br \>
+<div class="code"></span><span class="sc2">-------main.lua-------
+</span><span class="sc0">
+</span><span class="sc2">-- require 的時候就順便執行 InitialAudioDevice() 了
+</span><span class="sc5">local</span><span class="sc0">	</span><span class="sc11">device</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc13">require</span><span class="sc10">(</span><span class="sc6">"sound.device"</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc11">device.LoadSound</span><span class="sc10">(</span><span class="sc6">"d:/music/song.mp3"</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc11">device.PlaySound</span><span class="sc10">()</span><span class="sc0">
+</span></div>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<font class="title">簡潔的寫法</font><br \>
+如果你習慣了 Lua 的語法<br \>
+會覺得這樣寫可讀性最高<br \>
+<br \>
+<div class="code"><span class="sc2">-------device.lua-------
+</span><span class="sc0">
+</span><span class="sc11">InitialAudioDevice</span><span class="sc10">()</span><span class="sc0">	</span><span class="sc2">--初始一個聲音裝置
+</span><span class="sc0">
+</span><span class="sc5">return</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+	</span><span class="sc11">LoadSound</span><span class="sc10">=</span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">file_name</span><span class="sc10">)</span><span class="sc0">
+		</span><span class="sc2">--載入音檔</span><span class="sc0">
+	</span><span class="sc5">end</span><span class="sc10">,</span><span class="sc0">
+	</span><span class="sc11">PlaySound</span><span class="sc10">=</span><span class="sc5">function</span><span class="sc10">()</span><span class="sc0">
+		</span><span class="sc2">--播放音樂</span><span class="sc0">
+	</span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+</span></div>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+<br \>
+</body>
+</html>

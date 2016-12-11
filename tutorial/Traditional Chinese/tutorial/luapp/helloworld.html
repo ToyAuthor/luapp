@@ -1,0 +1,214 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">最一開始的範例</font>
+這個範例很簡單的載入並執行一個腳本
+腳本名稱為 simple.lua
+而這腳本唯一做的事情只有印出 "Hello lua" 字樣
+
+<div class="code"><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"Hello lua"</span><span class="sc10">)</span></div>
+
+
+
+<div class="code"><span class="sc9">#include &lt;luapp.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">State</span><span class="sc10">&lt;&gt;</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">;</span><span class="sc0">
+
+    </span><span class="sc5">if</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc10">!</span><span class="sc0"> </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc6">"simple.lua"</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc6">"error:lua script failed"</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+一樣的事情如果用 lua 官方的 API 來寫會是像這樣
+
+<div class="code"><span class="sc9">#include &lt;lua.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua_State</span><span class="sc10">*</span><span class="sc0">  </span><span class="sc11">lua</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">luaL_newstate</span><span class="sc10">();</span><span class="sc0">
+
+    </span><span class="sc11">luaL_openlibs</span><span class="sc10">(</span><span class="sc11">lua</span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc5">if</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">luaL_loadfile</span><span class="sc10">(</span><span class="sc11">lua</span><span class="sc10">,</span><span class="sc6">"simple.lua"</span><span class="sc10">)!=</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc10">||</span><span class="sc0">
+        </span><span class="sc11">lua_pcall</span><span class="sc10">(</span><span class="sc11">lua</span><span class="sc10">,</span><span class="sc4">0</span><span class="sc10">,</span><span class="sc4">0</span><span class="sc10">,</span><span class="sc4">0</span><span class="sc10">)!=</span><span class="sc4">0</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc6">"error:lua script failed"</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc11">lua_close</span><span class="sc10">(</span><span class="sc11">lua</span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+用官方 API 來寫也不會複雜到哪裡去
+如此簡單的應用當然是不需要用到 luapp
+
+但是其他功能就非常需要 luapp 了
+例如將 C++ 的類別導入 lua 裡面
+
+
+<font class="title">安全的使用多個 lua state</font>
+每個 lua state 之間不會互相干涉彼此
+因此用在不同條執行緒上面也是很安全的
+
+但是 luapp 由於實作上需要使用全域函式跟全域變數
+所以像下面的兩個物件就有可能影響彼此並產生問題
+
+lua::State<>  lua1;
+lua::State<>  lua2;
+
+用下面寫法才能建立兩個完全沒有交集的物件
+
+lua::State<1>  lua1;
+lua::State<2>  lua2;
+
+這樣的設計很彆腳
+而且容易出錯
+暫時還想不出有什麼好的解決方法
+
+
+<font class="title">設定腳本的路徑位置</font>
+原本 lua 腳本是預設從應用程式執行的位置來搜尋腳本檔案的
+想要讓 lua 從其他路徑載入腳本檔的話可以這樣寫
+
+<div class="code"><span class="sc9">#include &lt;lua.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">State</span><span class="sc10">&lt;&gt;</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">;</span><span class="sc0">
+
+    </span><span class="sc5">if</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc10">!</span><span class="sc0"> </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc6">"/opt/scripts"</span><span class="sc10">,</span><span class="sc6">"simple.lua"</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc6">"error:lua script failed"</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+因此可以藉由切換路徑來執行不同的腳本
+
+
+<font class="title">從其他管道輸入腳本</font>
+腳本檔案不一定要是文字檔
+你可以從其他管道取得腳本程式碼
+寫進記憶體再給 lua 讀取
+一個簡單的寫法是這樣
+
+<div class="code"><span class="sc9">#include &lt;luapp.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">State</span><span class="sc10">&lt;&gt;</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">;</span><span class="sc0">
+
+    </span><span class="sc2">// 直接要求執行輸入的 lua 程式碼
+</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc6">"(print(\"Hello lua\")"</span><span class="sc0"> </span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span></div>
+
+
+
+
+
+
+
+
+
+
+
+不過這方法實在過於簡單
+連腳本程式碼的名字都沒有交待一下
+這對除錯工作不是很理想
+因為 lua 無法告訴你是哪一份腳本出問題
+
+
+用下面寫法給予腳本一個名稱會比較好
+
+<div class="code"><span class="sc9">#include &lt;luapp.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">inline</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">string</span><span class="sc0"> </span><span class="sc11">GetFileScript</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">string</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc6">"(print(\"Hello lua\")"</span><span class="sc0"> </span><span class="sc10">);</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">State</span><span class="sc10">&lt;&gt;</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">;</span><span class="sc0">
+
+    </span><span class="sc5">if</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc10">!</span><span class="sc0"> </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc6">"simple"</span><span class="sc10">,</span><span class="sc0"> </span><span class="sc11">GetFileScript</span><span class="sc10">(),</span><span class="sc0"> </span><span class="sc5">NULL</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0"> </span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc6">"error:lua script failed"</span><span class="sc0"> </span><span class="sc10">&lt;&lt;</span><span class="sc0"> </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

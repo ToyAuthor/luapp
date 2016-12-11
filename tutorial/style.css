@@ -1,0 +1,177 @@
+* {margin:0 auto;padding:0px;border-width:0px;}
+
+/* 這些測試皆以FireFox為準
+ *
+ * ,font-family:
+ * ,arial            乾淨俐落的字體
+ * ,Arial Narrow     窄版的arial，字高或行距似乎會變
+ * ,sans-serif       在Ubuntu下似乎不管用
+ * ,monospace
+ * ,fantasy          看起來像手稿一樣，漂亮但只能在少數瀏覽器上使用
+ * ,AR PL UMing TW   看起來像Mincho，在Ubuntu下的粗體不會醜，就當做是Ubuntu下的細明體
+ * ,AR PL UKai TW    當做是Ubuntu下的標楷體
+ * ,"細明體"         只有Windows下能用
+ * ,"微軟正黑體"     只有Windows下能用，字體乾淨無襯線，XP下不清晰
+ * ,Meiryo           日文明瞭體，不難看，但是也不清晰
+ * ,Microsoft YaHei  微軟雅黑體，像是比較粗的正黑體
+ * ,Yu Gothic        游黑體(Win7無法用)
+ * ,sans serif       Ubuntu下樣子像正黑體，無襯線的意思
+ * ,MS Mincho
+ * ,MS Gothic        Windows下清晰好看無襯線，Ubuntu下無法用，有字體高低不整問題
+ * ,FreeMono         Ubuntu下顯示不清楚
+ * ,Ubuntu Mono      不管用
+ * ,Ubuntu Kylin     不管用
+ * ,Dotum            韓
+ * ,Malgun Gothic    韓國清黑體
+ * ,URW Gothic L
+ */
+
+body{
+	font-size:16px;
+	font-family:arial,AR PL UMing TW,"細明體";
+	font-weight:normal;
+	color:#000000;
+	text-align:justify;
+	letter-spacing:1px;
+	line-height:130%;
+}
+table{
+	font-size:16px;
+	font-family:arial,AR PL UMing TW,"微軟正黑體";
+	text-align:left;
+	position: absolute;
+	border-collapse:collapse;
+	padding: 0px;
+	border:3px solid #000000;
+}
+caption{
+	font-size:20px;
+	font-family:arial,Sans Serif,Microsoft YaHei,"細明體";
+	/*font-weight: bold;
+	color:#9D37FF;*/
+	/*color:#6F0000;*/
+	line-height:130%;
+}
+th{
+	font-size:18px;
+	font-family:arial,sans serif,Microsoft YaHei,"細明體";
+	font-weight:normal;
+	color:#000000;
+	background-color:#f5ddf5;
+	border:1px solid #000000;
+	padding:10px;
+}
+td{
+	border:1px solid #000000;
+	font-family:arial,AR PL UMing TW,"細明體";
+	padding:10px;
+}
+pre{
+	font-size:16px;
+	font-family:arial,AR PL UMing TW,"細明體";/* 基本上跟body一樣就好 */
+	color:#000000;
+	line-height:130%;
+}
+a{
+	text-decoration:none;
+	/*text-decoration:underline;*/
+	color:#0000AA;
+	noFocusLine:expression(this.onFocus=this.blur());
+}
+:focus {
+	-moz-outline-style: none;
+}
+a:hover{color:#EC42FF;}
+.title{
+	font-size:22px;
+	font-family:arial,sans serif,Microsoft YaHei,"細明體";
+	text-align:justify;
+	font-weight: normal;
+	color:#FF6C16;
+	line-height:130%;
+}
+.menustyle{
+	height:auto;
+	/*width:403px;/*cols="450px,*"*/
+	/*width:350px;/*cols="414px,*"*/
+	/*width:350px;/*cols="397px,*"*/
+	width:350px;
+	margin:6px;
+	padding:16px;
+	float:left;
+	border-radius:12px;
+	/*border:1px solid #aabbff;*/
+	border:1px solid #aabbff;
+	/*background-color:#000000;*/
+	/*background-color:#ddeeff;*/
+	background-color:#f2f8ff;
+}
+.menubody{
+	background-color:#ffffff;
+}
+/*code highlight*/
+.code{
+	height:auto;
+	width:70%;
+	font-size:16px;
+	/*font-family:arial,AR PL UMing TW,"微軟正黑體";*/
+	/*font-family: &#39;MS Mincho&#39; ,&#39;AR PL UMing TW&#39; ,&#39;arial&#39; ,&#39;&quot;細明體&quot;&#39;;*/
+	font-family:MS Mincho,AR PL UMing TW,arial,"細明體";
+	text-align:left;
+	position: absolute;/*也許用不到*/
+	margin:0px;
+	padding:22px;
+	float:left;/*也許用不到*/
+	border-radius:12px;
+	border:1px solid #000000;
+	white-space:pre;
+	line-height:1;
+	background: #FFFFFF;
+	-moz-tab-size: 4;
+	-o-tab-size:   4;
+	tab-size:      4;
+}
+span {
+	/*font-family:arial,AR PL UMing TW,"細明體";/* 基本上跟body一樣就好 */
+	font-family: &#39;MS Mincho&#39; ,&#39;AR PL UMing TW&#39; ,&#39;arial&#39; ,&#39;&quot;細明體&quot;&#39;;
+	font-size: 16px;
+	color: #000000;
+}
+.sc0 {
+}
+.sc1 {
+	color: #008000;
+}
+.sc2 {
+	color: #008000;/* 註解 */
+}
+.sc4 {
+	color: #FF8000;
+}
+.sc5 {
+	color: #0000FF;/* key word */
+}
+.sc6 {
+	color: #FF0000;/* 字串 */
+}
+.sc7 {
+	color: #FF0000;/* 字元 */
+}
+.sc8 {
+	color: #FF0000;/* [[]] */
+}
+.sc9 {
+	color: #804000;/* 編譯前置作業 */
+}
+.sc10 {
+	/*font-weight: bold;*/
+	color: #000080;
+}
+.sc11 {
+}
+.sc13 {
+	color: #0080C0;/* 特定API */
+}
+.sc16 {
+	color: #0000FF;/* key word */
+}

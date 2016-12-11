@@ -1,0 +1,108 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">讓 lua 可以使用 C++ 的類別</font>
+這可以說是 luapp 最重要的功能：類別綁定
+
+讓 lua 有辦法建立一個物件，裡頭裝著真正的 C++ 物件
+直接看範例就能明白
+
+<div class="code"><span class="sc2">-- 建立物件，這裡會真的 new 一個 C++ 的物件
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">object</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">_G.NewObject</span><span class="sc10">()</span><span class="sc0">
+
+</span><span class="sc2">-- 使用物件的成員函式，這個函式就是 MyClass::count
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">num</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">object</span><span class="sc10">:</span><span class="sc11">count</span><span class="sc10">(</span><span class="sc4">3</span><span class="sc10">,</span><span class="sc4">4</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"3 + 4 = "</span><span class="sc0"> </span><span class="sc10">..</span><span class="sc0"> </span><span class="sc11">num</span><span class="sc10">)</span></div>
+
+
+
+
+
+
+
+
+<div class="code"><span class="sc9">#include &lt;luapp.hpp&gt;
+</span><span class="sc0">
+</span><span class="sc16">class</span><span class="sc0"> </span><span class="sc11">MyClass</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+</span><span class="sc16">public</span><span class="sc10">:</span><span class="sc0">
+
+    </span><span class="sc11">MyClass</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc10">&lt;&lt;</span><span class="sc6">"do MyClass::MyClass()"</span><span class="sc10">&lt;&lt;</span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc10">~</span><span class="sc11">MyClass</span><span class="sc10">()</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">cout</span><span class="sc10">&lt;&lt;</span><span class="sc6">"do MyClass::~MyClass()"</span><span class="sc10">&lt;&lt;</span><span class="sc11">std</span><span class="sc10">::</span><span class="sc11">endl</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">Int</span><span class="sc0"> </span><span class="sc11">count</span><span class="sc10">(</span><span class="sc0"> </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">Int</span><span class="sc0"> </span><span class="sc11">num01</span><span class="sc10">,</span><span class="sc0">
+                    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">Int</span><span class="sc0"> </span><span class="sc11">num02</span><span class="sc10">)</span><span class="sc0">
+    </span><span class="sc10">{</span><span class="sc0">
+        </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc11">num01</span><span class="sc0"> </span><span class="sc10">+</span><span class="sc0"> </span><span class="sc11">num02</span><span class="sc10">;</span><span class="sc0">
+    </span><span class="sc10">}</span><span class="sc0">
+</span><span class="sc10">};</span><span class="sc0">
+
+</span><span class="sc16">int</span><span class="sc0"> </span><span class="sc11">main</span><span class="sc10">()</span><span class="sc0">
+</span><span class="sc10">{</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">::</span><span class="sc11">State</span><span class="sc10">&lt;&gt;</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">;</span><span class="sc0">
+
+    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">bindMethod</span><span class="sc10">(</span><span class="sc6">"count"</span><span class="sc10">,&amp;</span><span class="sc11">MyClass</span><span class="sc10">::</span><span class="sc11">count</span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc2">// NewObject 這個名字會變成 lua 裡的全域函式名稱
+</span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">bindClassEx</span><span class="sc10">&lt;</span><span class="sc11">MyClass</span><span class="sc10">&gt;(</span><span class="sc6">"NewObject"</span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc6">"ClassIntoLua.lua"</span><span class="sc10">);</span><span class="sc0">
+
+    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
+</span><span class="sc10">}</span><span class="sc0">
+</span></div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+這樣就能將一個 C++ 類別導入 lua 來使用了
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

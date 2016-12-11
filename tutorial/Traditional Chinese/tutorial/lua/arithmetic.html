@@ -1,0 +1,173 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<font class="title">四則運算</font><br \>
+<br \>
+<table>
+<caption>運算符號</caption>
+<tr>
+<th>符號</th>
+<th>數學意義</th>
+<th>程式碼</th>
+<th>Answer</th>
+</tr>
+<tr>
+<td>+</td>
+<td>加法</td>
+<td>Answer=1+3</td>
+<td>4</td>
+</tr>
+<tr>
+<td>-</td>
+<td>減法，同時也是負號</td>
+<td>Answer=1-3</td>
+<td>-2</td>
+</tr>
+<tr>
+<td>*</td>
+<td>乘法</td>
+<td>Answer=5*2</td>
+<td>10</td>
+</tr>
+<tr>
+<td>/</td>
+<td>除法</td>
+<td>Answer=5/2</td>
+<td>2.5</td>
+</tr>
+<tr>
+<td>%</td>
+<td>取餘數</td>
+<td>Answer=10%3</td>
+<td>1</td>
+</tr>
+<tr>
+<td>^</td>
+<td>指數計算</td>
+<td>Answer=5^2</td>
+<td>25</td>
+</tr>
+</table>
+<pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+程式跟數學一樣有先乘除後加減的規則
+不過只要用括號分清楚就好了
+不用特別去記哪個運算符號比較優先
+程式碼的可讀性也會比較好
+不要逼讀者去記運算符優先權
+
+
+
+<font class="title">要注意等號跟數學上的意義不同</font>
+例如這樣寫是不符合語法的
+2=1+1
+或者這樣也不行
+1+1=2
+
+程式碼中的等號是複製貼上的意思
+會將等號右邊的計算結果複製貼到等號左邊
+這也是為什麼等號左邊不能出現常數
+常數是固定的
+當然不允許修改
+
+
+所以被貼上的對象一定必須是變數
+不能是常數
+
+例如 x = 1+1 就沒問題
+y = x 也沒問題
+
+
+但是 x+y = 10 卻是禁止的寫法
+這是因為等號右邊的數值根本無法被記下來
+x 跟 y 的數值都不會被改變
+這一行程式碼等於什麼也沒有做
+這邏輯在語法上就已經說不通了
+
+
+數學上的等號在程式碼裡是沒有用處的
+畢竟數學上的等號是用來表示結果輸出值
+程式計算的輸出值又不能顯示在程式碼上面
+
+
+<font class="title">合乎語法的計算</font>
+
+</pre>
+<div class="code"><span class="sc11">x</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc0">
+
+</span><span class="sc11">x</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">;</span><span class="sc11">y</span><span class="sc10">=</span><span class="sc4">2</span><span class="sc10">;</span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">3</span><span class="sc0">		</span><span class="sc2">-- 原本該斷行的程式碼可以靠";"連起來寫在同一行
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">,</span><span class="sc4">2</span><span class="sc10">,</span><span class="sc4">3</span><span class="sc0">		</span><span class="sc2">-- 注意等號兩邊的數量要一樣多就行了
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">+</span><span class="sc4">2</span><span class="sc10">+</span><span class="sc4">3</span><span class="sc0">
+
+</span><span class="sc11">x</span><span class="sc10">=</span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">				</span><span class="sc2">-- 將 x 放進算式算完再把結果輸入 x 是沒問題的
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">=</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">x</span><span class="sc0">				</span><span class="sc2">-- 將兩個變數值做交換
+</span><span class="sc0">
+</span></div>
+<pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+<font class="title">不合乎語法的計算</font>
+
+</pre>
+<div class="code"><span class="sc4">1</span><span class="sc10">=</span><span class="sc11">x</span><span class="sc0">					</span><span class="sc2">-- 常數無法被賦值
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">=</span><span class="sc4">2</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">3</span><span class="sc0">		</span><span class="sc2">-- 改用";"才行
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">		</span><span class="sc2">-- 看到兩個數字之間只有空格就可以確定錯了
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">+</span><span class="sc11">y</span><span class="sc10">+</span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc10">+</span><span class="sc4">2</span><span class="sc10">+</span><span class="sc4">3</span><span class="sc0">		</span><span class="sc2">-- x+y+z 是個運算結果，無法被賦值
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">+</span><span class="sc11">y</span><span class="sc10">+</span><span class="sc11">z</span><span class="sc0">				</span><span class="sc2">-- 運算結果沒對任何變數賦值
+</span><span class="sc0">
+</span><span class="sc11">x</span><span class="sc10">=</span><span class="sc11">y</span><span class="sc10">=</span><span class="sc11">z</span><span class="sc10">=</span><span class="sc4">1</span><span class="sc0">				</span><span class="sc2">-- 看起來很方便，但是 Lua 不允許這麼寫
+</span></div>
+<pre>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</pre>
+</body>
+</html>

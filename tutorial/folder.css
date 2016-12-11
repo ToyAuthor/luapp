@@ -1,0 +1,42 @@
+a{color:#000000;}
+/*a:hover{color:rgb(50%,100%,0%);}*/
+/*a:hover{color:#00DC03;}*/
+a:hover{color:#000000;font-weight:bold;}
+
+
+.folder
+{
+	font-size:16px;
+	font-family:arial,AR PL UMing TW,"細明體";
+	/*font-weight:bold;*/
+	font-weight:normal;
+	/*color:#991188;*/
+	/*color:#660055;*/
+	color:#000000;
+	letter-spacing:1px;
+	line-height:130%;
+	cursor:default;
+	text-align:left;
+	padding-left:16px;
+	width:auto;
+	height:auto;
+	position:relative;
+	margin-bottom:0px;
+}
+.folder.title
+{
+	display:block;
+	background-repeat :no-repeat;
+	background-image :url(c.png);
+}
+.folder.content
+{
+	/*border:1px #80b0ef;*/
+	/*border:1px #cc55aa;*/
+	border:1px #000000;
+	/*border:2px #ff99f0;*/
+	margin-left:8px;
+	padding-left:8px;
+	border-left-style:solid;
+	display:none;
+}

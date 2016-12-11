@@ -1,0 +1,102 @@
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+<link href="../../../style.css" rel="stylesheet" type="text/css" media="screen" />
+</head>
+<body style="padding:13px">
+<pre>
+<font class="title">全域變數</font>
+直接寫個之前沒出現過的變數名字馬上賦值就是全域變數了
+
+<div class="code"><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出10
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">nil</span><span class="sc0">   </span><span class="sc2">-- 刪除此變數
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出 nil</span></div>
+
+
+
+
+
+
+<font class="title">跟區域變數很容易搞混</font>
+如下面程式碼所示
+
+<div class="code"><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">100</span><span class="sc0">
+
+
+</span><span class="sc2">-- 只看最後這3行很容易誤以為xyz都是全域變數
+-- 實際上 y 依然是區域變數
+</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
+</span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span></div>
+
+
+
+
+
+
+
+
+
+所有全域變數都是 _G 的內部變數
+_G 是 Lua 預設一開始就存在的 <a href="table.html" target="_self">table</a>
+
+
+所以全域變數 x 的真正完整名稱是 _G.x
+如果一直使用完整名稱的話
+是可以幫助你避免搞混的
+
+<div class="code"><span class="sc11">_G.x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">100</span><span class="sc0">
+
+</span><span class="sc11">_G.x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
+</span><span class="sc11">_G.z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span></div>
+
+
+
+
+
+
+
+這樣的寫法會比較明確
+
+
+
+<font class="title">全域變數的優缺點</font>
+如果不刪除的話
+全域變數會一直存在直到程式關閉
+
+全域變數的優點是規則簡單
+一寫出來就到處都能查詢跟修改
+但是對程式維護上會造成很多麻煩
+變成用不良架構來換取便利性
+
+
+缺點有下面這堆
+
+
+1.每一行 lua 程式碼都能修改這個變數
+	這跟公佈自己的保險箱密碼很類似了
+	當保險箱內容物被偷走時
+	知道密碼的人越多
+	你要追查的對象就越多
+	全域變數會讓程式出錯時很難找問題
+
+2.變數命名會被迫取比較長
+	越來越多人加入會員
+	沒有人退出
+	帳號名稱自然會越取越長
+	這絕對會增加程式編寫時的精神負擔
+
+3.需要自己刪除變數
+	只要你不刪除變數
+	Lua 就會死咬著這個全域變數不放
+	靠自己去刪除很容易有漏網之魚
+	靠 Lua 自己去清理是比較理想的
+
+
+</pre>
+</body>
+</html>
