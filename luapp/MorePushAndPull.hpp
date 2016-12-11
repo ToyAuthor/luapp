@@ -1,10 +1,27 @@
 #pragma once
 
+#include "luapp/Map.hpp"
 #include "luapp/Func.hpp"
 #include "luapp/Task.hpp"
 #include "luapp/User.hpp"
 
 namespace lua{
+
+//------------------------------------------------------------------------------
+
+inline void CheckVarFromLua(lua::Handle h,lua::Map *t, int i)
+{
+	lua::PushValue(h,i);
+	t->_set(h,h->_register->newItem());
+	t->_getItem()->setVar();
+}
+
+inline void PushVarToLua(lua::Handle,lua::Map t)
+{
+	t._getItem()->getVar();
+}
+
+//------------------------------------------------------------------------------
 
 inline void CheckVarFromLua(lua::Handle h,lua::Func *t, int i)
 {
@@ -118,6 +135,11 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 			lua::Bool   t_value = lua::VarCast<lua::Bool>(value);
 			PushVarToLua(hLua,t_value);                               // ... [T] [key] [value]
 		}
+		else if ( lua::VarType<lua::Map>(value) )
+		{
+			lua::Map    t_value = lua::VarCast<lua::Map>(value);
+			t_value._getItem()->getVar();                             // ... [T] [key] [value]
+		}
 		else if ( lua::VarType<lua::Func>(value) )
 		{
 			lua::Func   t_value = lua::VarCast<lua::Func>(value);
@@ -186,6 +208,11 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	{
 		lua::Ptr  var = lua::VarCast<lua::Ptr>(t);
 		PushVarToLua(hLua,var);
+	}
+	else if ( lua::VarType<lua::Map>(t) )
+	{
+		lua::Map    var = lua::VarCast<lua::Map>(t);
+		var._getItem()->getVar();
 	}
 	else if ( lua::VarType<lua::Func>(t) )
 	{
@@ -477,7 +504,323 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 }
 //------------------------------------------------------------------------------
 
+template<typename T>
+lua::Var Map::operator >> (const T key)
+{
+	_item->getVar();                 // ... [T]
+	lua::PushVarToLua(_lua,key);     // ... [T] [key]
+	lua::GetTable(_lua,-2);          // ... [T] [value]
 
+	lua::Var  var;
+	lua::CheckVarFromLua(_lua,&var,-1);
 
+	lua::Pop(_lua,2);                // ...
 
+	return var;
 }
+
+template<typename T>
+Map::_Value& Map::operator [] (const T key)
+{
+	_temp._level = 0;
+	_item->getVar();                   // ... [T]
+
+	if ( lua::TypeCast(_lua, -1)!=LUA_TTABLE )
+	{
+		lua::Pop(_lua,1);              // ...
+		lua::PushNil(_lua);            // ... [nil]
+
+		lua::log::Cout<<"error:lua::Map doesn't have a table."<<lua::log::End;
+		_temp._level = 1;
+
+		return _temp;
+	}
+
+	lua::PushVarToLua(_lua,key);       // ... [T] [key]
+	_temp._level = 2;
+
+	return _temp;
+}
+
+template<typename T>
+Map::_Value& Map::_Value::operator [] (const T key)
+{
+	// ... [?] [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return *this;
+	}
+
+	// ... [T] [pre_key]
+
+	lua::PushValue(_map->_lua,-1);  // ... [T] [pre_key] [pre_key]
+
+	lua::GetTable(_map->_lua,-3);   // ... [T] [pre_key] [value]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TTABLE )
+	{
+		                                      // ... [T] [pre_key] [value]
+		lua::PushVarToLua(_map->_lua,key);    // ... [T] [pre_key] [Table] [key]
+	}
+	else
+	{
+		lua::Pop(_map->_lua,1);               // ... [T] [pre_key]
+		lua::PushValue(_map->_lua,-1);        // ... [T] [pre_key] [pre_key]
+		lua::PushValue(_map->_lua,-1);        // ... [T] [pre_key] [pre_key] [pre_key]
+		lua::NewTable(_map->_lua);            // ... [T] [pre_key] [pre_key] [pre_key] [Table]
+		lua::SetTable(_map->_lua,-5);         // ... [T] [pre_key] [pre_key]
+		lua::GetTable(_map->_lua,-3);         // ... [T] [pre_key] [Table]
+		lua::PushVarToLua(_map->_lua,key);    // ... [T] [pre_key] [Table] [key]
+	}
+
+	this->_level+=2;
+
+	return *this;
+}
+
+//---------------------Map::_Value::operator = ---------------------start
+
+inline lua::Nil Map::_Value::operator = (lua::Nil value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Str Map::_Value::operator = (lua::Str value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Int Map::_Value::operator = (lua::Int value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Num Map::_Value::operator = (lua::Num value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Ptr Map::_Value::operator = (lua::Ptr value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Var Map::_Value::operator = (lua::Var value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Map Map::_Value::operator = (lua::Map value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Bool Map::_Value::operator = (lua::Bool value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Func Map::_Value::operator = (lua::Func value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Task Map::_Value::operator = (lua::Task value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::User Map::_Value::operator = (lua::User value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+inline lua::Table Map::_Value::operator = (lua::Table value)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	{
+		return value;
+	}
+
+	// ... [Table] [key]
+
+	lua::PushVarToLua(_map->_lua,value);   // ... [Table] [key] [value]
+	lua::SetTable(_map->_lua,-3);          // ... [Table]
+
+	lua::Pop(_map->_lua,this->_level-1);
+	this->_level = 0;
+
+	return value;
+}
+
+//---------------------Map::_Value::operator = ---------------------
+
+}//namespace lua

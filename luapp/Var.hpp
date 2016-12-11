@@ -226,6 +226,25 @@ class Var
 		Var(const lua::Table &t);
 		Var& operator = (const lua::Table &t);
 
+		//---------------------Boolean---------------------
+		Var(const lua::Bool t)
+		{
+			this->_ptr = new lua::_VarType<lua::Bool>(t);
+		}
+		Var& operator = (const ::lua::Bool t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::Bool>(t);
+			return *this;
+		}
+
+		//---------------------Map---------------------
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		// They are implemented at luapp/Map.hpp
+		Var(const lua::Map &t);
+		Var& operator = (const lua::Map &t);
+		#endif
+
 		//---------------------Func---------------------
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 		// They are implemented at luapp/Func.hpp
@@ -243,18 +262,6 @@ class Var
 			return *this;
 		}
 		#endif
-
-		//---------------------Boolean---------------------
-		Var(const lua::Bool t)
-		{
-			this->_ptr = new lua::_VarType<lua::Bool>(t);
-		}
-		Var& operator = (const ::lua::Bool t)
-		{
-			free_ptr();
-			this->_ptr = new lua::_VarType<lua::Bool>(t);
-			return *this;
-		}
 
 		//---------------------Thread---------------------
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_

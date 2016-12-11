@@ -33,6 +33,7 @@ class Var;
 
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+class Map;
 class Func;
 class Task;// lua thread
 class User;// For userdata
