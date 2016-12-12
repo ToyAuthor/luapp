@@ -6,7 +6,7 @@
 <body style="padding:13px">
 <pre>
 <font class="title">區域變數</font>
-先寫 local 再寫變數名稱賦值就是在建立區域變數了
+先寫 local 再寫變數名稱然後賦值就是在建立區域變數了
 用 lua 內建的 print 函式可以檢查出該區域變數是否被刪除了
 被刪除的變數會使得 print 印出 nil
 
@@ -23,40 +23,38 @@
 
 
 
-<font class="title">區域範圍</font>
-區域範圍就是程式碼的某一段
-通常是從 then 或者 do 之類的關鍵字開始直到出現關鍵字 end
-習慣上會用縮排來明確表達區域範圍在哪裡
+
+<font class="title">自動刪除區域變數</font>
+區域變數不像<a href="global.html" target="_self">全域變數</a>需要手動刪除
+當時機一到
+區域變數會自動刪除自己
 
 
-
-<font class="title">區域範圍的規則</font>
-1.區域範圍可重疊
-2.範圍重疊時不可能只重疊一部份，較小的區域範圍一定會被較大的整個重疊
-3.預設區域範圍是從程式碼第一行開始直到最後一行結束，也就是說囊括了整份程式碼文件
-4.建立區域變數時，該變數隸屬於該行所處的範圍，若是該行有多個區域範圍則變數隸屬於最小的那個
-5.當區域範圍結束時，其擁有的區域變數也會跟著消失
+區域變數自動刪除的地點有兩個：
+	1.遇到關鍵字 end，但不是任何一個 end 都可以
+	2.程式碼最後一行的結尾
 
 
+要說明區域變數遇到哪一個 end 才會自動刪除
+而哪一種區域變數要等到最後一行的結尾才會自動刪除
+用縮排來解釋是最簡單容易理解的
 
-<font class="title">建立區域範圍</font>
-下面範例擁有兩個區域範圍
-一個是囊括了整份程式碼文件的預設範圍
-另一個是用 do 跟 end 圍起來的範圍
+下面兩個範例只使用 do 跟 end 這兩個關鍵字來造成縮排
+do 跟 end 之間的每行程式碼都右移一個 tab 的長度
+這就是縮排
 
 <div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">8</span><span class="sc0">      </span><span class="sc2">-- 下面每一行都讀的到這變數
 </span><span class="sc0">
-</span><span class="sc2">-- 很多情況都會產生自己的區域範圍
-</span><span class="sc2">-- 這裡簡單的用 do end 來圍一塊區域範圍做示範
-</span><span class="sc5">do</span><span class="sc0"> </span><span class="sc2">-- 產生區域範圍
+</span><span class="sc2">-- 這裡簡單的用 do end 來造成縮排
+</span><span class="sc5">do</span><span class="sc0">
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出8
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出nil，因為此時 x 不存在
 </span><span class="sc0">    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">4</span><span class="sc0">  </span><span class="sc2">-- 建立區域變數 x
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出4
-</span><span class="sc5">end</span><span class="sc0"> </span><span class="sc2">-- 結束此區域範圍
+</span><span class="sc5">end</span><span class="sc0">
 </span><span class="sc0">
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出8
-</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出ni，因為此時 x 已被刪除了
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出ni，因為此時 x 已自動刪除了
 </span></div>
 
 
@@ -70,36 +68,40 @@
 
 
 
+只要縮排有整理好
+再多層縮排也不會搞混區域變數的刪除時機
+下面範例已經清楚的告訴你何時遇到 end 會自動刪除
 
-
-<font class="title">當建立的範圍裡又包含其他範圍時會怎樣呢？</font>
-範圍裡又包含其他範圍時就會重疊
-多個範圍同時存在
-越晚出現的範圍會越早消失
-縮排習慣可以提醒你這個規則
-
-<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">func</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">,</span><span class="sc11">b</span><span class="sc10">,</span><span class="sc11">c</span><span class="sc10">)</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"---------------------"</span><span class="sc10">)</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">a</span><span class="sc10">)</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">b</span><span class="sc10">)</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">c</span><span class="sc10">)</span><span class="sc0">
-</span><span class="sc5">end</span><span class="sc0">
-
-</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">  </span><span class="sc2">-- 下面每一行都能讀的到 x 這個值
+<div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">  </span><span class="sc2">-- 下面每一行都能讀的到 x 這個值
 </span><span class="sc0">
-</span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 這裡就只能讀到 x 的值
+</span><span class="sc2">-- 這裡就只能讀到 x 的值，y z 還沒出現
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
 </span><span class="sc0">
 </span><span class="sc5">do</span><span class="sc0">
     </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">y</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc0">
-    </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- 此時 y 也能讀到值了
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 2，此時 y 也能讀到值了
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
 </span><span class="sc0">    </span><span class="sc5">do</span><span class="sc0">
-        </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">  </span><span class="sc2">-- z 所屬的範圍是最晚出現的，所以 z 會是最早消失的
-</span><span class="sc0">        </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 此時3個範圍都是存在的，3個數字都印的出來
+        </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">z</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">3</span><span class="sc0">
+        </span><span class="sc2">-- 此時3個變數都是存在的，3個數字都印的出來
+</span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
+</span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 2
+</span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 3
 </span><span class="sc0">    </span><span class="sc5">end</span><span class="sc0">
-    </span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">      </span><span class="sc2">-- z 印不出來，因為已經離開 z 所在的範圍了
+    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 2
+</span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil，因為已經自動刪除了
 </span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc2">-- y 也自動刪除了，又只剩下 x 能讀到了
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil</span></div>
 
-</span><span class="sc11">func</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">,</span><span class="sc11">y</span><span class="sc10">,</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 又只剩下 x 能讀到了</span></div>
+
+
 
 
 
