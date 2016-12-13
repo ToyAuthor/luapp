@@ -23,6 +23,9 @@ ClassInjectLua
 MultipleLuaFile
 	示範一下 lua 腳本裡又引入其他腳本的情況
 
+LoadScriptFromBuffer
+	可從記憶體讀取 lua 腳本，因此腳本可以自由的儲存在很多地方，例如壓縮檔
+
 ExtensionModule
 	協助建立擴充模組(外掛)
 
