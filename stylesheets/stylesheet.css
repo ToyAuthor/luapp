@@ -221,7 +221,7 @@ em {
 
 table {
   width: 100%;
-  border: 1px solid #a1a1a1;
+  border: 1px solid #909090;
 }
 
 th {
@@ -231,7 +231,7 @@ th {
 td {
   font-weight: 300;
   text-align: center;
-  border: 1px solid #a1a1a1;/*ebebeb*/
+  border: 1px solid #909090;/*ebebeb*/
 }
 
 form {
@@ -258,7 +258,7 @@ h3 {
   margin-bottom: 8px;
   font-size: 18px;
   font-weight: bold;
-  color: #d5000d;
+  color: #6d6d6d;/* d5000d 0058ff */
 }
 
 h4 {

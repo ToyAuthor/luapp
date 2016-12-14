@@ -1,7 +1,7 @@
-a{color:#000000;}
+a{color:#226699;}
 /*a:hover{color:rgb(50%,100%,0%);}*/
 /*a:hover{color:#00DC03;}*/
-a:hover{color:#000000;font-weight:bold;}
+a:hover{color:#226699;font-weight:bold;}
 
 
 .folder
@@ -12,7 +12,7 @@ a:hover{color:#000000;font-weight:bold;}
 	font-weight:normal;
 	/*color:#991188;*/
 	/*color:#660055;*/
-	color:#000000;
+	color:#226699;
 	letter-spacing:1px;
 	line-height:130%;
 	cursor:default;
@@ -33,7 +33,7 @@ a:hover{color:#000000;font-weight:bold;}
 {
 	/*border:1px #80b0ef;*/
 	/*border:1px #cc55aa;*/
-	border:1px #000000;
+	border:1px #226699;
 	/*border:2px #ff99f0;*/
 	margin-left:8px;
 	padding-left:8px;
