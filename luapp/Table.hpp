@@ -81,9 +81,12 @@ class Table
 				enum Stage
 				{
 					INT_STAGE = 0,
-					NUM_STAGE = 1,
-					STR_STAGE = 2,
-					END_STAGE = 3
+					NUM_STAGE,
+					STR_STAGE,
+					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+					BOL_STAGE,
+					#endif
+					END_STAGE
 				};
 
 				~Iterator(){}
@@ -94,10 +97,17 @@ class Table
 				}
 
 				// Only called by lua::Table
-				Iterator( std::map<lua::Int,lua::Var>::iterator itInt,
+				Iterator(
+				          #ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+				          std::map<lua::Bool,lua::Var>::iterator itBool,
+				          #endif
+				          std::map<lua::Int,lua::Var>::iterator itInt,
 				          std::map<lua::Num,lua::Var>::iterator itNum,
 				          std::map<lua::Str,lua::Var>::iterator itStr,
 
+				          #ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+				          std::map<lua::Bool,lua::Var>::iterator endBool,
+				          #endif
 				          std::map<lua::Int,lua::Var>::iterator endInt,
 				          std::map<lua::Num,lua::Var>::iterator endNum,
 				          std::map<lua::Str,lua::Var>::iterator endStr ):_stage(INT_STAGE)
@@ -110,11 +120,20 @@ class Table
 					_endNum = endNum;
 					_endStr = endStr;
 
+					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+					_itBool = itBool;
+					_endBool = endBool;
+					#endif
+
 					_eableList[END_STAGE] = true;     // Always true
 
 					_eableList[0] = ( itInt==endInt ) ? false : true;
 					_eableList[1] = ( itNum==endNum ) ? false : true;
 					_eableList[2] = ( itStr==endStr ) ? false : true;
+
+					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+					_eableList[3] = ( itBool==endBool ) ? false : true;
+					#endif
 
 					while ( ! _eableList[_stage] )
 					{
@@ -151,6 +170,12 @@ class Table
 							*key   = _itStr->first;
 							*value = _itStr->second;
 							break;
+						#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+						case BOL_STAGE:
+							*key   = _itBool->first;
+							*value = _itBool->second;
+							break;
+						#endif
 						default:
 							*key   = lua::Var();
 							*value = lua::Var();
@@ -174,7 +199,12 @@ class Table
 
 			private:
 
+				#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+				bool   _eableList[5];
+				#else
 				bool   _eableList[4];
+				#endif
+
 				int    _stage;
 
 				std::map<lua::Int,lua::Var>::iterator   _itInt;
@@ -185,6 +215,11 @@ class Table
 				std::map<lua::Num,lua::Var>::iterator   _endNum;
 				std::map<lua::Str,lua::Var>::iterator   _endStr;
 
+				#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+				std::map<lua::Bool,lua::Var>::iterator   _itBool;
+				std::map<lua::Bool,lua::Var>::iterator   _endBool;
+				#endif
+
 				inline void copy_mykind(Iterator &other)
 				{
 					_itInt = other._itInt;
@@ -193,6 +228,12 @@ class Table
 					_eableList[0] = other._eableList[0];
 					_eableList[1] = other._eableList[1];
 					_eableList[2] = other._eableList[2];
+
+					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+					_itBool = other._itBool;
+					_eableList[3] = other._eableList[3];
+					#endif
+
 					_stage = other._stage;
 				}
 
@@ -221,6 +262,15 @@ class Table
 								_eableList[STR_STAGE] = false;
 							}
 							break;
+						#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+						case BOL_STAGE:
+							_itBool++;
+							if ( _itBool == _endBool )
+							{
+								_eableList[BOL_STAGE] = false;
+							}
+							break;
+						#endif
 						default:
 							;  // Nothing have to do.
 					}
@@ -275,6 +325,18 @@ class Table
 			return _mapStr[key];
 		}
 
+		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+		lua::Var& operator [] (lua::Bool key)
+		{
+			return _mapBool[key];
+		}
+
+		lua::Var& operator >> (lua::Bool key)
+		{
+			return _mapBool[key];
+		}
+		#endif
+
 		bool isExist(lua::Int key)
 		{
 			std::map<lua::Int,lua::Var>::iterator it = _mapInt.find(key);
@@ -311,17 +373,40 @@ class Table
 			return false;
 		}
 
+		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+		bool isExist(lua::Bool key)
+		{
+			std::map<lua::Bool,lua::Var>::iterator it = _mapBool.find(key);
+
+			if ( it == _mapBool.end() )
+			{
+				return true;
+			}
+
+			return false;
+		}
+		#endif
+
 		void swap(lua::Table &bro)
 		{
 			this->_mapInt.swap( bro._mapInt );
 			this->_mapNum.swap( bro._mapNum );
 			this->_mapStr.swap( bro._mapStr );
+
+			#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+			this->_mapBool.swap( bro._mapBool );
+			#endif
 		}
 
 		Iterator getBegin()
 		{
+			#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+			return Iterator( _mapBool.begin(),_mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
+			                 _mapBool.end(),  _mapInt.end(),   _mapNum.end(),   _mapStr.end() );
+			#else
 			return Iterator( _mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
 			                 _mapInt.end(),   _mapNum.end(),   _mapStr.end() );
+			#endif
 		}
 
 	private:
@@ -332,12 +417,19 @@ class Table
 			this->_mapInt = bro._mapInt;
 			this->_mapNum = bro._mapNum;
 			this->_mapStr = bro._mapStr;
+
+			#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+			this->_mapBool = bro._mapBool;
+			#endif
 		}
 
 		std::map<lua::Int,lua::Var>    _mapInt;
 		std::map<lua::Num,lua::Var>    _mapNum;
 		std::map<lua::Str,lua::Var>    _mapStr;
-	//	std::map<lua::Bool,lua::Var>   _mapBool;  // I don't think we need boolean index.
+
+		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
+		std::map<lua::Bool,lua::Var>   _mapBool;
+		#endif
 };
 
 inline lua::Var::Var(const ::lua::Table &t)

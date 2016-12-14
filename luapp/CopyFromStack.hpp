@@ -124,15 +124,15 @@ inline void _SwitchTableKey(lua::NativeState hLua,lua::Table *table)
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	/* Not implement yet. Maybe I will ignore it ever.
+	#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 	else if ( lua_type(hLua, -1)==LUA_TBOOLEAN )
 	{
 		lua::Bool  key;
 		lua::CheckVarFromLua(hLua,&key,-1);
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	*/
+	#endif
 	else if ( lua_isinteger(hLua, -1) )
 	{
 		lua::Int   key;

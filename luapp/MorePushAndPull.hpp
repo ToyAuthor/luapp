@@ -98,13 +98,13 @@ inline void _PushValueToLuaTable(lua::Handle hLua,lua::Table &table)
 			lua::Num   t_key = lua::VarCast<lua::Num>(key);
 			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
-		/*
+		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 		else if ( lua::VarType<lua::Bool>(key) )
 		{
 			lua::Bool  t_key = lua::VarCast<lua::Bool>(key);
 			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
-		*/
+		#endif
 		else
 		{
 			continue;    // Just in case.
@@ -359,15 +359,15 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	/* Not implement yet. Maybe I will ignore it ever.
+	#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 	else if ( lua::TypeCast(hLua, -1)==LUA_TBOOLEAN )
 	{
 		lua::Bool  key;
 		lua::CheckVarFromLua(hLua,&key,-1);
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
-	*/
+	#endif
 	else if ( lua_isinteger(hLua->_lua, -1) )
 	{
 		lua::Int   key;

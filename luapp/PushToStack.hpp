@@ -75,13 +75,13 @@ inline void _PushValueToLuaTable(lua::NativeState hLua,lua::Table &table)
 			lua::Num   t_key = lua::VarCast<lua::Num>(key);
 			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
-		/*
+		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 		else if ( lua::VarType<lua::Bool>(key) )
 		{
 			lua::Bool  t_key = lua::VarCast<lua::Bool>(key);
 			PushVarToLua(hLua,t_key);                        // ... [T] [key]
 		}
-		*/
+		#endif
 		else
 		{
 			continue;    // Just in case.

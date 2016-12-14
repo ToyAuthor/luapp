@@ -26,5 +26,7 @@
 // Release shared pointer when lua::State deconstruction. It make luapp slow down.
 #define _LUAPP_CLEAN_LUA_HANDLE_
 
+// Enable boolean index for lua::Table.
+#define _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 
 #include "luapp/Log.hpp"

@@ -15,6 +15,20 @@ local function PrintGlobalTable(t)
 		_text = "    "     -- Tab size
 	}
 
+	local function modify_key(key)
+		if type(key)=="string" then
+			key = [["]] .. key .. [["]]
+		elseif type(key)=="boolean" then
+			if key then
+				key = "true"
+			else
+				key = "false"
+			end
+		end
+
+		return key
+	end
+
 	local function print_table(tt,indent)
 
 		print(indent:str() .. "{")
@@ -22,15 +36,7 @@ local function PrintGlobalTable(t)
 
 		for key, value in pairs(tt) do
 
-			if type(key)=="string" then
-				key = [["]] .. key .. [["]]
-			elseif type(key)=="boolean" then
-				if key then
-					key = "true"
-				else
-					key = "false"
-				end
-			end
+			key = modify_key(key)
 
 			if type(value)=="table" then
 				print(indent:str() .. key .. " =")
