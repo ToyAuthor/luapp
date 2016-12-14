@@ -82,7 +82,7 @@ class Register
 		{
 			if ( id>=(lua::Int)_list.size() )
 			{
-				lua::log::Cout<<"error:can't remove a id that doesn't exist."<<lua::log::End;
+				lua::Log<<"error:can't remove a id that doesn't exist."<<lua::log::End;
 				return;
 			}
 
@@ -137,7 +137,7 @@ class Register
 			#ifdef _LUAPP_CHECK_CAREFUL_
 			if ( nameExist(id) )
 			{
-				lua::log::Cout<<"error:create name already exist."<<lua::log::End;
+				lua::Log<<"error:create name already exist."<<lua::log::End;
 			}
 			#endif
 
@@ -164,7 +164,7 @@ class Register
 
 			if ( isNil() )
 			{
-				lua::log::Cout<<"error:_G._luapp_data not exist."<<lua::log::End;
+				lua::Log<<"error:_G._luapp_data not exist."<<lua::log::End;
 				lua::Pop(_lua,1);
 				return false;
 			}
@@ -173,7 +173,7 @@ class Register
 
 			if ( isNil() )
 			{
-				lua::log::Cout<<"error:_G._luapp_data.temp_variable not exist."<<lua::log::End;
+				lua::Log<<"error:_G._luapp_data.temp_variable not exist."<<lua::log::End;
 				lua::Pop(_lua,2);
 				return false;
 			}

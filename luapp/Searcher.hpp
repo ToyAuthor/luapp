@@ -31,7 +31,7 @@ class Searcher
 
 			if ( ! Searcher<N>::_findScriptFromBuffer )
 			{
-				lua::log::Cout<<"error:no one call Searcher::setup()"<<lua::log::End;
+				lua::Log<<"error:no one call Searcher::setup()"<<lua::log::End;
 				return 1;
 			}
 
@@ -39,13 +39,13 @@ class Searcher
 
 			if ( code.empty() )
 			{
-				lua::log::Cout<<"error:script not find"<<lua::log::End;
+				lua::Log<<"error:script not find"<<lua::log::End;
 				return 1;
 			}
 
 			if ( ! lua::LoadScript(L,name,code) )
 			{
-				lua::log::Cout<<"Searcher:"<<Searcher<N>::error(L)<<lua::log::End;
+				lua::Log<<"Searcher:"<<Searcher<N>::error(L)<<lua::log::End;
 			}
 
 			return 1;

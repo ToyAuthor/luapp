@@ -48,7 +48,7 @@ class FuncReg
 			#ifdef _LUAPP_CHECK_CAREFUL_
 			if ( func ==NULL )
 			{
-				lua::log::Cout<<"error:never enter null pointer to lua::FuncReg"<<lua::log::End;
+				lua::Log<<"error:never enter null pointer to lua::FuncReg"<<lua::log::End;
 				return;
 			}
 			#endif

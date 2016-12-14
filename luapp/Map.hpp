@@ -52,7 +52,7 @@ class Map
 
 		void _set(lua::Handle h,lua::Register::Item i)
 		{
-			if ( _lua ) lua::log::Cout<<"warning:why you set handle of function again?"<<lua::log::End;
+			if ( _lua ) lua::Log<<"warning:why you set handle of function again?"<<lua::log::End;
 			_item = i;
 			_lua = h;
 		}

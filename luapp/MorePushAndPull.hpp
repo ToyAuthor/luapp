@@ -236,7 +236,7 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	}
 	else
 	{
-		lua::log::Cout<<"luapp:you push unknown or unsupported data type"<<lua::log::End;
+		lua::Log<<"luapp:you push unknown or unsupported data type"<<lua::log::End;
 		lua::PushNil(hLua);
 	}
 }
@@ -287,7 +287,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::log::Cout<<"luapp:No one know what type is it"<<lua::log::End;
+		lua::Log<<"luapp:No one know what type is it"<<lua::log::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -440,7 +440,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::log::Cout<<"luapp:No one know what type is it. That's new"<<lua::log::End;
+		lua::Log<<"luapp:No one know what type is it. That's new"<<lua::log::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -498,7 +498,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else
 	{
-		lua::log::Cout<<"luapp:you get something luapp can't handle with"<<lua::log::End;
+		lua::Log<<"luapp:you get something luapp can't handle with"<<lua::log::End;
 		*t = lua::Var();
 	}
 }
@@ -530,7 +530,7 @@ Map::_Value& Map::operator [] (const T key)
 		lua::Pop(_lua,1);              // ...
 		lua::PushNil(_lua);            // ... [nil]
 
-		lua::log::Cout<<"error:lua::Map doesn't have a table."<<lua::log::End;
+		lua::Log<<"error:lua::Map doesn't have a table."<<lua::log::End;
 		_temp._level = 1;
 
 		return _temp;

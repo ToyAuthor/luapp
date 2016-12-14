@@ -201,7 +201,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:setFunc(lua::Str name,F fn) not support module mode."<<lua::log::End;
+				lua::Log<<"error:setFunc(lua::Str name,F fn) not support module mode."<<lua::log::End;
 				return;
 			}
 
@@ -225,7 +225,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:setFunc(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
+				lua::Log<<"error:setFunc(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
 				return;
 			}
 
@@ -269,7 +269,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::log::Cout<<"lua::State::load(name,code):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::load(name,code):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -281,7 +281,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::log::Cout<<"lua::State::load(filename):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::load(filename):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -291,7 +291,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -312,7 +312,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -325,7 +325,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::log::Cout<<"lua::State::run(name,code,loader):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::run(name,code,loader):"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -335,7 +335,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::log::Cout<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
 				return (int)0;
 			}
 
@@ -343,7 +343,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::log::Cout<<"lua::State::run():"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::run():"<<this->error()<<lua::log::End;
 			}
 
 			return result;
@@ -375,7 +375,7 @@ class State
 			lua::CheckVarFromLua(_lua,&v,-1);
 			if ( ! lua::VarType<lua::Nil>(v) )
 			{
-				lua::log::Cout<<"warning:this global variable already exist"<<lua::log::End;
+				lua::Log<<"warning:this global variable already exist"<<lua::log::End;
 			}
 			lua::Pop(_lua,1);
 			#endif
@@ -591,7 +591,7 @@ inline HandleClass::HandleClass()
 
 	if ( ! _lua )
 	{
-		lua::log::Cout<<"error:can't get lua_State."<<lua::log::End;
+		lua::Log<<"error:can't get lua_State."<<lua::log::End;
 	}
 
 	lua::OpenLibs(_lua);

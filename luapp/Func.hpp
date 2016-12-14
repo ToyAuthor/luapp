@@ -20,7 +20,7 @@ class Func
 
 		void call()
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::void call()"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::void call()"<<lua::log::End;
 			_item->getVar();         // ... [F]
 			lua::PCall(_lua,0,0,0);  // ...
 		}
@@ -28,7 +28,7 @@ class Func
 		template<typename R>
 		R call()
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::R call()"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::R call()"<<lua::log::End;
 			_item->getVar();         // ... [F]
 			lua::PCall(_lua,0,1,0);  // ... [R]
 			R   result;
@@ -40,7 +40,7 @@ class Func
 		template<typename A1>
 		void call(A1 a1)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::void call(A1 a1)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PCall(_lua,1,0,0);
@@ -49,7 +49,7 @@ class Func
 		template<typename R,typename A1>
 		R call(A1 a1)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::R call(A1 a1)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PCall(_lua,1,1,0);
@@ -62,7 +62,7 @@ class Func
 		template<typename A1,typename A2>
 		void call(A1 a1, A2 a2)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::void call(A1 a1, A2 a2)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
@@ -72,7 +72,7 @@ class Func
 		template<typename R,typename A1,typename A2>
 		R call(A1 a1, A2 a2)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::R call(A1 a1, A2 a2)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
@@ -86,7 +86,7 @@ class Func
 		template<typename A1,typename A2,typename A3>
 		void call(A1 a1, A2 a2, A3 a3)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::void call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
@@ -97,7 +97,7 @@ class Func
 		template<typename R,typename A1,typename A2,typename A3>
 		R call(A1 a1, A2 a2, A3 a3)
 		{
-			if ( ! _lua ) lua::log::Cout<<"error:Func::R call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+			if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
 			_item->getVar();
 			lua::PushVarToLua(_lua,a1);
 			lua::PushVarToLua(_lua,a2);
@@ -111,7 +111,7 @@ class Func
 
 		void _set(lua::Handle h,lua::Register::Item i)
 		{
-			if ( _lua ) lua::log::Cout<<"warning:why you set handle of function again?"<<lua::log::End;
+			if ( _lua ) lua::Log<<"warning:why you set handle of function again?"<<lua::log::End;
 			_item = i;
 			_lua = h;
 		}

@@ -74,7 +74,8 @@ inline const Printer& End(const lua::log::Printer& m)
 	return m;
 }
 
-static ::lua::log::Printer      Cout;
-
 }//namespace log
+
+static ::lua::log::Printer      Log;
+
 }//namespace lua
