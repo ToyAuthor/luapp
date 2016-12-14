@@ -61,7 +61,6 @@ class Searcher
 			if ( lua::VarType<lua::Str>(var) )
 			{
 				str = lua::VarCast<lua::Str>(var);
-			//	lua::Pop(L,-1);    I can't make sure it is error message.
 			}
 
 			return str;

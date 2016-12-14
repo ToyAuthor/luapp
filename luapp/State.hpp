@@ -527,7 +527,6 @@ class State
 			if ( lua::VarType<lua::Str>(var) )
 			{
 				str = lua::VarCast<lua::Str>(var);
-			//	lua::Pop(_lua,-1);    I can't make sure it is error message.
 			}
 
 			return str;

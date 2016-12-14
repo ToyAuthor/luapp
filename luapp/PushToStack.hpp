@@ -122,12 +122,12 @@ inline void _PushValueToLuaTable(lua::NativeState hLua,lua::Table &table)
 		          lua::VarType<lua::User>(value) )
 		{
 			lua::log::Cout<<"luapp:ignore unsupported value"<<lua::log::End;
-			lua_pop(hLua, 1);           // ... [T]
+			lua::Pop(hLua, 1);           // ... [T]
 			continue;
 		}
 		else
 		{
-			lua_pop(hLua, 1);           // ... [T]
+			lua::Pop(hLua, 1);           // ... [T]
 			continue;
 		}
 

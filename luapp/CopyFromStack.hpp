@@ -121,7 +121,7 @@ inline void _SwitchTableKey(lua::NativeState hLua,lua::Table *table)
 	{
 		lua::Str   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
 	/* Not implement yet. Maybe I will ignore it ever.
@@ -137,22 +137,22 @@ inline void _SwitchTableKey(lua::NativeState hLua,lua::Table *table)
 	{
 		lua::Int   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
 	else if ( lua_isnumber(hLua, -1) )
 	{
 		lua::Num   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 		_SaveTableValue(hLua,table,key);
 	}
 	else// Just in case.
 	{
-		lua_pop(hLua, 1);                 // ... [T] [key] [value]
+		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
 	}
 
-	lua_pop(hLua, 1);                     // ... [T] [key]
+	lua::Pop(hLua, 1);                     // ... [T] [key]
 }
 //------------------------------------------------------------------------------
 inline void _VisitTable(lua::NativeState hLua,lua::Table *table)
@@ -180,7 +180,7 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Table *table,int i)
 	                                 // ...
 	lua_pushvalue(hLua,i);           // ... [T]
 	::lua::_VisitTable(hLua,table);  // ... [T]
-	lua_pop(hLua, 1);                // ...
+	lua::Pop(hLua, 1);               // ...
 }
 //------------------------------------------------------------------------------
 inline void CheckVarFromLua(lua::NativeState hLua,lua::Var *t,int i)
