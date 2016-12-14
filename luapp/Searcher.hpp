@@ -20,7 +20,7 @@ class Searcher
 			Searcher<N>::_findScriptFromBuffer = searcher;
 			lua::PushFunction(L,&Searcher<N>::thunk);
 			lua::SetGlobal(L,"luapp_searcher");
-			lua::DoString(L,"table.insert(package.searchers, 2, luapp_searcher) \n");
+			lua::DoString(L,"table.insert(package.searchers, 2, _G.luapp_searcher);_G.luapp_searcher=nil\n");
 		}
 
 	private:
