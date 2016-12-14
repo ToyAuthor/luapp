@@ -132,7 +132,7 @@ class Adapter
 			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
 			{
 				lua::PushString(L, Adapter<C,N>::_list[i]._name);
-				lua::PushNumber(L, i);
+				lua::PushInteger(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
 			}
@@ -173,7 +173,7 @@ class Adapter
 			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
 			{
 				lua::PushString(L, Adapter<C,N>::_list[i]._name);
-				lua::PushNumber(L, i);
+				lua::PushInteger(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
 			}
@@ -205,7 +205,7 @@ class Adapter
 		static int thunk(lua::NativeState L)
 		{
 			                                                        // [this] [arg1] [arg2] ... [argN]
-			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
+			int id = lua::CheckInteger(L, lua::UpValueIndex(1));
 			lua::PushNumber(L, 0);                                  // [this] [arg1] [arg2] ... [argN] [0]
 			lua::GetTable(L, 1);                                    // [this] [arg1] [arg2] ... [argN] [UD]
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));

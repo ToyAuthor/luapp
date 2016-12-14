@@ -52,7 +52,7 @@ class Wrapper
 			struct Pack         func(name,GetProxy(fn));
 			_funcList.push_back(func);
 
-			lua::PushNumber(L, _funcList.size()-1);
+			lua::PushInteger(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
 			lua::SetGlobal(L, name);
 		}
@@ -68,7 +68,7 @@ class Wrapper
 			struct Pack         func(name,GetProxy(fn,obj));
 			_funcList.push_back(func);
 
-			lua::PushNumber(L, _funcList.size()-1);
+			lua::PushInteger(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
 			lua::SetGlobal(L, name);
 		}
@@ -83,7 +83,7 @@ class Wrapper
 
 		static int thunk(lua::NativeState L)
 		{
-			int id = (int)lua::CheckNumber(L, lua::UpValueIndex(1));
+			int id = lua::CheckInteger(L, lua::UpValueIndex(1));
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 			return _funcList[id]._proxy->Do(Wrapper<N>::_lua);
