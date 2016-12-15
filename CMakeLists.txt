@@ -8,6 +8,7 @@ endif()
 set(LUAPP_BINARY_DIR  ${PROJECT_BINARY_DIR}/bin)
 
 # Build lua.
+add_definitions(-DLUA_INT_INT)
 add_subdirectory(lua)
 
 # Just for demo.

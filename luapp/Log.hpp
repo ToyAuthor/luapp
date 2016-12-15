@@ -25,6 +25,22 @@ class Printer
 			return *this;
 		}
 
+		const Printer& operator << (const long int num) const
+		{
+			std::printf("%ld",num);
+			return *this;
+		}
+
+		const Printer& operator << (const long long num) const
+		{
+			#ifdef _WIN32
+			std::printf("%I64d",num);
+			#else
+			std::printf("%ld",num);
+			#endif
+			return *this;
+		}
+
 		const Printer& operator << (const float num) const
 		{
 			std::printf("%f",num);
