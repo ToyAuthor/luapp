@@ -382,6 +382,15 @@ class State
 			lua::Pop(_lua,1);
 		}
 
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		lua::Func getFunc(lua::Str name)
+		{
+			lua::Func  func;
+			this->getGlobal(name,&func);
+			return func;
+		}
+		#endif
+
 		/// Get global function(one or no return value).
 		template<typename F>
 		void getFunc(const char *name,lua::Function<F> *func)
@@ -466,6 +475,7 @@ class State
 		}
 
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		/// Bind lua native function.
 		lua::Func bind(lua::CFunction func)
 		{
 			lua::Func   fu;
@@ -475,6 +485,32 @@ class State
 
 			item->setVar();
 			fu._set(_lua,item);
+
+			return fu;
+		}
+
+		/// Bind C++ function.
+		template<typename F>
+		lua::Func bind(F func)
+		{
+			lua::Func   fu;
+			lua::Str    name("luapp_temp");
+			this->setFunc(name,func);
+			this->getGlobal(name,&fu);
+			lua::RemoveGlobal(_lua,name);
+
+			return fu;
+		}
+
+		/// Bind C++ member function.
+		template<typename F,typename C>
+		lua::Func bind(F func,C *obj)
+		{
+			lua::Func   fu;
+			lua::Str    name("luapp_temp");
+			this->setFunc(name,func,obj);
+			this->getGlobal(name,&fu);
+			lua::RemoveGlobal(_lua,name);
 
 			return fu;
 		}

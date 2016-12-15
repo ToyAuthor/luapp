@@ -821,6 +821,300 @@ inline lua::Table Map::_Value::operator = (lua::Table value)
 	return value;
 }
 
-//---------------------Map::_Value::operator = ---------------------
+//---------------------Map::_Value::operator = ---------------------end
+
+
+
+//--------------------------It work for lua::Func--------------------------start
+
+
+void Func::call()
+{
+	if ( ! _lua ) lua::Log<<"error:Func::void call()"<<lua::log::End;
+	_item->getVar();         // ... [F]
+	lua::PCall(_lua,0,0,0);  // ...
+}
+
+template<typename R>
+R Func::call()
+{
+	if ( ! _lua ) lua::Log<<"error:Func::R call()"<<lua::log::End;
+	_item->getVar();         // ... [F]
+	lua::PCall(_lua,0,1,0);  // ... [R]
+	R   result;
+	lua::CheckVarFromLua(_lua,&result,-1);
+	lua::Pop(_lua,1);
+	return result;
+}
+
+template<typename A1>
+void Func::call(A1 a1)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PCall(_lua,1,0,0);
+}
+
+template<typename R,typename A1>
+R Func::call(A1 a1)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PCall(_lua,1,1,0);
+	R   result;
+	lua::CheckVarFromLua(_lua,&result,-1);
+	lua::Pop(_lua,1);
+	return result;
+}
+
+template<typename A1,typename A2>
+void Func::call(A1 a1, A2 a2)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PushVarToLua(_lua,a2);
+	lua::PCall(_lua,2,0,0);
+}
+
+template<typename R,typename A1,typename A2>
+R Func::call(A1 a1, A2 a2)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PushVarToLua(_lua,a2);
+	lua::PCall(_lua,2,1,0);
+	R   result;
+	lua::CheckVarFromLua(_lua,&result,-1);
+	lua::Pop(_lua,1);
+	return result;
+}
+
+template<typename A1,typename A2,typename A3>
+void Func::call(A1 a1, A2 a2, A3 a3)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PushVarToLua(_lua,a2);
+	lua::PushVarToLua(_lua,a3);
+	lua::PCall(_lua,3,0,0);
+}
+
+template<typename R,typename A1,typename A2,typename A3>
+R Func::call(A1 a1, A2 a2, A3 a3)
+{
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+	_item->getVar();
+	lua::PushVarToLua(_lua,a1);
+	lua::PushVarToLua(_lua,a2);
+	lua::PushVarToLua(_lua,a3);
+	lua::PCall(_lua,3,1,0);
+	R   result;
+	lua::CheckVarFromLua(_lua,&result,-1);
+	lua::Pop(_lua,1);
+	return result;
+}
+
+//------------------------------------------------------------------------------
+
+template<typename T> struct Closure{};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1>
+struct Closure<R(P1)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1)
+		{
+			return _func.call<R,P1>(p1);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1>
+struct Closure<void(P1)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1)
+		{
+			_func.call(p1);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2>
+struct Closure<R(P1,P2)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2)
+		{
+			return _func.call<R,P1,P2>(p1,p2);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2>
+struct Closure<void(P1,P2)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2)
+		{
+			_func.call(p1,p2);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2, typename P3>
+struct Closure<R(P1,P2,P3)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2,P3 p3)
+		{
+			return _func.call<R,P1,P2,P3>(p1,p2,p3);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2, typename P3>
+struct Closure<void(P1,P2,P3)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2,P3 p3)
+		{
+			_func.call(p1,p2,p3);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename R, typename P1, typename P2, typename P3, typename P4>
+struct Closure<R(P1,P2,P3,P4)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		R operator()(P1 p1,P2 p2,P3 p3,P4 p4)
+		{
+			return _func.call<R,P1,P2,P3,P4>(p1,p2,p3,p4);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+template<typename P1, typename P2, typename P3, typename P4>
+struct Closure<void(P1,P2,P3,P4)>
+{
+	public:
+
+		Closure(){}
+		Closure(const Func &f):_func(f){}
+		~Closure(){}
+
+		void operator()(P1 p1,P2 p2,P3 p3,P4 p4)
+		{
+			_func.call(p1,p2,p3,p4);
+		}
+
+		lua::Func get() { return _func; }
+
+	private:
+
+		lua::Func   _func;
+};
+
+//------------------------------------------------------------------------------
+
+template<typename F>
+inline void PushVarToLua(lua::Handle hLua,lua::Closure<F> func)
+{
+	PushVarToLua(hLua,func.get());
+}
+
+template<typename F>
+inline void CheckVarFromLua(lua::Handle hLua,lua::Closure<F> *t, int i)
+{
+	lua::Func  func;
+	CheckVarFromLua(hLua,&func,i);
+	*t = func;
+}
+
+//--------------------------It work for lua::Func--------------------------end
 
 }//namespace lua
