@@ -350,7 +350,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 //------------------------------------------------------------------------------
 inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 {
-	                                      // ... [T] [key] [value] [key]
+	                                       // ... [T] [key] [value] [key]
 
 	if ( lua::TypeCast(hLua, -1)==LUA_TSTRING )
 	{

@@ -52,6 +52,7 @@ inline int DoScript(Handle h,lua::Str filename) { return DoScript(h->_lua,filena
 inline void NewTable(Handle h) { NewTable(h->_lua); }
 inline int NewMetaTable(Handle h,lua::Str tname) { return NewMetaTable(h->_lua,tname); }
 inline void* NewUserData(Handle h,size_t size) { return NewUserData(h->_lua,size); }
+inline void RemoveGlobal(Handle h,lua::Str var) { RemoveGlobal(h->_lua,var); }
 inline void SetGlobal(Handle h,lua::Str var) { SetGlobal(h->_lua,var); }
 inline void GetGlobal(Handle h,lua::Str var) { GetGlobal(h->_lua,var); }
 inline void SetTable(Handle h,int index) { SetTable(h->_lua,index); }

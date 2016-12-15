@@ -45,7 +45,7 @@ class MyClass
 		}
 };
 
-static lua::Int func_count(lua::NativeState L)
+static int func_count(lua::NativeState L)
 {
 	lua::Int a;
 	lua::Int b;

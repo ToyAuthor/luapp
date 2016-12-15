@@ -115,7 +115,7 @@ inline void _SaveTableValue(lua::NativeState hLua,lua::Table *table,T key)
 //------------------------------------------------------------------------------
 inline void _SwitchTableKey(lua::NativeState hLua,lua::Table *table)
 {
-	                                      // ... [T] [key] [value] [key]
+	                                       // ... [T] [key] [value] [key]
 
 	if ( lua_type(hLua, -1)==LUA_TSTRING )
 	{

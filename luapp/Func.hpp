@@ -1,3 +1,7 @@
+/**
+ * @file   Func.cpp
+ * @brief  A functor could work on C++ and lua.
+ */
 
 #pragma once
 

@@ -1,3 +1,7 @@
+/**
+ * @file   LoadScriptFromBuffer.cpp
+ * @brief  Load the lua script from std::string.
+ */
 
 #include <cstdlib>
 #include "luapp.hpp"

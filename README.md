@@ -18,6 +18,7 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - CMake 2.8+
 - Lua 5.3+
 - C++03+
+- Visual Studio 2010+
 
 ### Information
 Item        | Description

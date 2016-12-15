@@ -369,17 +369,6 @@ class State
 		template<typename T>
 		void setGlobal(lua::Str name,T t)
 		{
-			#ifdef _LUAPP_CHECK_CAREFUL_
-			lua::GetGlobal(_lua,name);
-			lua::Var  v;
-			lua::CheckVarFromLua(_lua,&v,-1);
-			if ( ! lua::VarType<lua::Nil>(v) )
-			{
-				lua::Log<<"warning:this global variable already exist"<<lua::log::End;
-			}
-			lua::Pop(_lua,1);
-			#endif
-
 			lua::PushVarToLua(_lua,t);
 			lua::SetGlobal(_lua,name);
 		}

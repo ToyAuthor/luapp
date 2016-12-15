@@ -188,6 +188,12 @@ inline void* NewUserData(NativeState h,size_t size)
 	return lua_newuserdata(h,size);
 }
 //------------------------------------------------------------------------------
+inline void RemoveGlobal(NativeState h,lua::Str var)
+{
+	lua_pushnil(h);
+	lua_setglobal(h,var.c_str());
+}
+//------------------------------------------------------------------------------
 inline void SetGlobal(NativeState h,lua::Str var)
 {
 	#ifdef _LUAPP_CHECK_CAREFUL_
