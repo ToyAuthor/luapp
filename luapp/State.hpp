@@ -325,7 +325,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::run(name,code,loader):"<<this->error()<<lua::End;
+				lua::Log<<"lua::State::run(name,code,loader)"<<lua::End;
 			}
 
 			return result;
@@ -343,7 +343,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::run():"<<this->error()<<lua::End;
+				lua::Log<<"lua::State::run()"<<lua::End;
 			}
 
 			return result;
@@ -540,21 +540,6 @@ class State
 		{
 			_funcReg.refresh();
 			lua::NewModule(_lua,_funcReg);
-		}
-
-		lua::Str error()
-		{
-			lua::Var  var;
-			lua::CheckVarFromLua(_lua,&var,-1);
-
-			lua::Str  str("error message not found");
-
-			if ( lua::VarType<lua::Str>(var) )
-			{
-				str = lua::VarCast<lua::Str>(var);
-			}
-
-			return str;
 		}
 
 		#if defined(_LUAPP_KEEP_LOCAL_LUA_VARIABLE_) && defined(_LUAPP_CLEAN_LUA_HANDLE_)

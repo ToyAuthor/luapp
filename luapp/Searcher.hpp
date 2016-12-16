@@ -45,25 +45,10 @@ class Searcher
 
 			if ( ! lua::LoadScript(L,name,code) )
 			{
-				lua::Log<<"Searcher:"<<Searcher<N>::error(L)<<lua::End;
+				lua::Log<<"error:Searcher load script failed"<<lua::End;
 			}
 
 			return 1;
-		}
-
-		static lua::Str error(lua::NativeState L)
-		{
-			lua::Var  var;
-			lua::CheckVarFromLua(L,&var,-1);
-
-			lua::Str  str("error message not found");
-
-			if ( lua::VarType<lua::Str>(var) )
-			{
-				str = lua::VarCast<lua::Str>(var);
-			}
-
-			return str;
 		}
 
 		static std::function<lua::Str&(lua::Str)>   _findScriptFromBuffer;

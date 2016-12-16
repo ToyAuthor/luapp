@@ -31,7 +31,18 @@ inline void DestroyHandle(NativeState h)
 //------------------------------------------------------------------------------
 inline int PCall(NativeState h,int num01,int num02,int num03)
 {
-	return lua_pcall(h,num01,num02,num03);
+	int  result = lua_pcall(h,num01,num02,num03);
+
+	if ( result != LUA_OK )
+	{
+		const char *msg = lua_tostring(h,-1);
+
+		lua::Log<<"error:lua_pcall get error."<<lua::End;
+		lua::Log<<msg<<lua::End;
+		lua_pop(h, 1);  // remove message
+	}
+
+	return result;
 }
 //------------------------------------------------------------------------------
 inline void OpenLibs(NativeState h)
@@ -49,13 +60,13 @@ inline void DoString(NativeState h,lua::Str code)
 	luaL_dostring(h, code.c_str());
 }
 //------------------------------------------------------------------------------
-inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
+inline void _PrintScriptLoadingError(NativeState h,int error_code,lua::Str& filename)
 {
 	switch ( error_code )
 	{
 		case 0:
 			lua::Log<<"warning:big mistake! It's not a error."<<lua::End;
-			break;
+			return;
 		case LUA_ERRFILE:
 			lua::Log<<"error:cannot open the file:"<<filename<<lua::End;
 			break;
@@ -68,6 +79,10 @@ inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
 		default:
 			lua::Log<<"error:load script failed for some reason"<<lua::End;
 	}
+
+	const char *msg = lua_tostring(h,-1);
+	lua::Log<<msg<<lua::End;
+	lua_pop(h, 1);  // remove message
 }
 //------------------------------------------------------------------------------
 inline int LoadScript(NativeState h,lua::Str name,lua::Str& code)
@@ -81,9 +96,11 @@ inline int LoadScript(NativeState h,lua::Str name,lua::Str& code)
 	{
 		int result = luaL_loadbuffer(h,code.c_str(), code.size(), name.c_str());
 
-		if ( result )
+		if ( result != LUA_OK )
 		{
-			_PrintScriptLoadingError(result,name);
+			_PrintScriptLoadingError(h,result,name);
+			lua::Log<<"error:luaL_loadbuffer get error."<<lua::End;
+
 			return 0;
 		}
 	}
@@ -104,7 +121,8 @@ inline int LoadScript(NativeState h,lua::Str filename)
 
 		if ( result )
 		{
-			_PrintScriptLoadingError(result,filename);
+			_PrintScriptLoadingError(h,result,filename);
+			lua::Log<<"error:luaL_loadfile get error."<<lua::End;
 			return 0;
 		}
 	}
@@ -125,12 +143,13 @@ inline int DoScript(NativeState h,lua::Str name,lua::Str& code)
 
 		if ( result )
 		{
-			_PrintScriptLoadingError(result,name);
+			_PrintScriptLoadingError(h,result,name);
+			lua::Log<<"error:luaL_loadbuffer get error."<<lua::End;
 			return 0;
 		}
 	}
 
-	if( lua_pcall(h,0,0,0) )
+	if( ::lua::PCall(h,0,0,0) )
 	{
 		return 0;
 	}
@@ -151,12 +170,13 @@ inline int DoScript(NativeState h,lua::Str filename)
 
 		if ( result )
 		{
-			_PrintScriptLoadingError(result,filename);
+			_PrintScriptLoadingError(h,result,filename);
+			lua::Log<<"error:luaL_loadfile get error."<<lua::End;
 			return 0;
 		}
 	}
 
-	if( lua_pcall(h,0,0,0) )
+	if( ::lua::PCall(h,0,0,0) )
 	{
 		return 0;
 	}
