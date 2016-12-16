@@ -1023,18 +1023,18 @@ R Func::call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6)
 
 //------------------------------------------------------------------------------
 
-template<typename T> struct Closure{};
+template<typename T> struct Function{};
 
 //---------------------------------------------------------------------
 
 template<typename R, typename P1>
-struct Closure<R(P1)>
+struct Function<R(P1)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1)
 		{
@@ -1049,13 +1049,13 @@ struct Closure<R(P1)>
 };
 
 template<typename P1>
-struct Closure<void(P1)>
+struct Function<void(P1)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1)
 		{
@@ -1072,13 +1072,13 @@ struct Closure<void(P1)>
 //---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2>
-struct Closure<R(P1,P2)>
+struct Function<R(P1,P2)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1,P2 p2)
 		{
@@ -1093,13 +1093,13 @@ struct Closure<R(P1,P2)>
 };
 
 template<typename P1, typename P2>
-struct Closure<void(P1,P2)>
+struct Function<void(P1,P2)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1,P2 p2)
 		{
@@ -1116,13 +1116,13 @@ struct Closure<void(P1,P2)>
 //---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3>
-struct Closure<R(P1,P2,P3)>
+struct Function<R(P1,P2,P3)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1,P2 p2,P3 p3)
 		{
@@ -1137,13 +1137,13 @@ struct Closure<R(P1,P2,P3)>
 };
 
 template<typename P1, typename P2, typename P3>
-struct Closure<void(P1,P2,P3)>
+struct Function<void(P1,P2,P3)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1,P2 p2,P3 p3)
 		{
@@ -1160,13 +1160,13 @@ struct Closure<void(P1,P2,P3)>
 //---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3, typename P4>
-struct Closure<R(P1,P2,P3,P4)>
+struct Function<R(P1,P2,P3,P4)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1,P2 p2,P3 p3,P4 p4)
 		{
@@ -1181,13 +1181,13 @@ struct Closure<R(P1,P2,P3,P4)>
 };
 
 template<typename P1, typename P2, typename P3, typename P4>
-struct Closure<void(P1,P2,P3,P4)>
+struct Function<void(P1,P2,P3,P4)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1,P2 p2,P3 p3,P4 p4)
 		{
@@ -1204,13 +1204,13 @@ struct Closure<void(P1,P2,P3,P4)>
 //---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5>
-struct Closure<R(P1,P2,P3,P4,P5)>
+struct Function<R(P1,P2,P3,P4,P5)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1,P2 p2,P3 p3,P4 p4,P5 p5)
 		{
@@ -1225,13 +1225,13 @@ struct Closure<R(P1,P2,P3,P4,P5)>
 };
 
 template<typename P1, typename P2, typename P3, typename P4, typename P5>
-struct Closure<void(P1,P2,P3,P4,P5)>
+struct Function<void(P1,P2,P3,P4,P5)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1,P2 p2,P3 p3,P4 p4,P5 p5)
 		{
@@ -1248,13 +1248,13 @@ struct Closure<void(P1,P2,P3,P4,P5)>
 //---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-struct Closure<R(P1,P2,P3,P4,P5,P6)>
+struct Function<R(P1,P2,P3,P4,P5,P6)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		R operator()(P1 p1,P2 p2,P3 p3,P4 p4,P5 p5,P6 p6)
 		{
@@ -1269,13 +1269,13 @@ struct Closure<R(P1,P2,P3,P4,P5,P6)>
 };
 
 template<typename P1, typename P2, typename P3, typename P4, typename P5, typename P6>
-struct Closure<void(P1,P2,P3,P4,P5,P6)>
+struct Function<void(P1,P2,P3,P4,P5,P6)>
 {
 	public:
 
-		Closure(){}
-		Closure(const Func &f):_func(f){}
-		~Closure(){}
+		Function(){}
+		Function(const Func &f):_func(f){}
+		~Function(){}
 
 		void operator()(P1 p1,P2 p2,P3 p3,P4 p4,P5 p5,P6 p6)
 		{
@@ -1292,13 +1292,13 @@ struct Closure<void(P1,P2,P3,P4,P5,P6)>
 //------------------------------------------------------------------------------
 
 template<typename F>
-inline void PushVarToLua(lua::Handle hLua,lua::Closure<F> func)
+inline void PushVarToLua(lua::Handle hLua,lua::Function<F> func)
 {
 	PushVarToLua(hLua,func.get());
 }
 
 template<typename F>
-inline void CheckVarFromLua(lua::Handle hLua,lua::Closure<F> *t, int i)
+inline void CheckVarFromLua(lua::Handle hLua,lua::Function<F> *t, int i)
 {
 	lua::Func  func;
 	CheckVarFromLua(hLua,&func,i);

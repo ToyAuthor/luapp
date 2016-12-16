@@ -69,8 +69,8 @@ int main()
 
 	lua::State<>    lua;
 
-	lua::Closure<lua::Str(lua::Str,lua::Str)>   cat = lua.bind(&MyStrcat);
-	lua::Closure<void(lua::Num)>                pri = lua.bind(&MyClass::print,&obj);
+	lua::Function<lua::Str(lua::Str,lua::Str)>   cat = lua.bind(&MyStrcat);
+	lua::Function<void(lua::Num)>                pri = lua.bind(&MyClass::print,&obj);
 
 	lua.run(LUAPP_SCRIPT_PATH,"MakeFunctor.lua");
 
