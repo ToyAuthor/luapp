@@ -4,8 +4,8 @@
  */
 
 
-#include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
@@ -34,7 +34,7 @@ int main()
 
 	lua.getFunc("func",&func);
 
-	lua::Log<<"Return value is "<<func(1,2,3)<<lua::End;
+	std::cout<<"Return value is "<<func(1,2,3)<<std::endl;
 
 	return EXIT_SUCCESS;
 }

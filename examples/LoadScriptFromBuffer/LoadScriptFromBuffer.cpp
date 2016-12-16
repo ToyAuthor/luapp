@@ -4,6 +4,7 @@
  */
 
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
@@ -46,7 +47,7 @@ class MyClass
 
 		lua::Int add(lua::Int a,lua::Int b,lua::Int c)
 		{
-			lua::Log<<a<<","<<b<<","<<c<<lua::End;
+			std::cout<<a<<","<<b<<","<<c<<std::endl;
 			return a+b+c;
 		}
 };

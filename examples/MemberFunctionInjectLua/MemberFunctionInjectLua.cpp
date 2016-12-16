@@ -4,8 +4,8 @@
  */
 
 
-#include <cstdio>
 #include <cstdlib>
+#include <iostream>
 #include "luapp.hpp"
 
 
@@ -28,17 +28,17 @@ class MyClass
 
 		MyClass()
 		{
-			printf("do MyClass::MyClass()\n");
+			std::cout<<"do MyClass::MyClass()"<<std::endl;
 		}
 
 		~MyClass()
 		{
-			printf("do MyClass::~MyClass()\n");
+			std::cout<<"do MyClass::~MyClass()"<<std::endl;
 		}
 
 		lua::Int print( lua::Str str)
 		{
-			printf("do MyClass::print()=%s\n",str.c_str());
+			std::cout<<"do MyClass::print()="<<str<<std::endl;
 			return 30;
 		}
 };

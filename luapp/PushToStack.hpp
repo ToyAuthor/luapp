@@ -121,7 +121,7 @@ inline void _PushValueToLuaTable(lua::NativeState hLua,lua::Table &table)
 		          lua::VarType<lua::Task>(value) ||
 		          lua::VarType<lua::User>(value) )
 		{
-			lua::Log<<"luapp:ignore unsupported value"<<lua::End;
+			lua::Log<<"error:ignore unsupported value"<<lua::End;
 			lua::Pop(hLua, 1);           // ... [T]
 			continue;
 		}
@@ -183,12 +183,12 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Var &t)
 	          lua::VarType<lua::Task>(t) ||
 	          lua::VarType<lua::User>(t) )
 	{
-		lua::Log<<"luapp:ignore unsupported data type"<<lua::End;
+		lua::Log<<"error:ignore unsupported data type"<<lua::End;
 		lua_pushnil(hLua);
 	}
 	else
 	{
-		lua::Log<<"luapp:you push unknown data type"<<lua::End;
+		lua::Log<<"error:you push unknown data type"<<lua::End;
 		lua_pushnil(hLua);
 	}
 }

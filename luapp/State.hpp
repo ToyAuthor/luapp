@@ -269,7 +269,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::load(name,code):"<<this->error()<<lua::End;
+				lua::Log<<"lua::State::load(name,code)"<<lua::End;
 			}
 
 			return result;
@@ -281,7 +281,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::load(filename):"<<this->error()<<lua::End;
+				lua::Log<<"lua::State::load(filename)"<<lua::End;
 			}
 
 			return result;

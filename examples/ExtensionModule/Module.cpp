@@ -12,8 +12,6 @@
  */
 
 
-#include <cstdio>
-#include <cstdlib>
 #include "luapp.hpp"
 
 

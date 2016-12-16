@@ -3,7 +3,7 @@
  * @brief  Make lua::Func by C/C++ function.
  */
 
-#include <cstdio>
+
 #include <cstdlib>
 #include <iostream>
 #include "luapp.hpp"
@@ -20,16 +20,18 @@ end
 -----------------------------------------------------
 */
 
+//------------------------------------------------------------------------------
+
 class MyClass
 {
 	public:
 
-		MyClass():id(100.0f){}
+		MyClass():id(100.0){}
 		~MyClass(){}
 
 		void print(lua::Num num)
 		{
-			lua::Log<< id+num <<lua::End;
+			std::cout<< id+num <<std::endl;
 		}
 
 		lua::Num   id;
@@ -39,6 +41,25 @@ static lua::Str MyStrcat(lua::Str a,lua::Str b)
 {
 	return a+b;
 }
+
+//------------------------------------------------------------------------------
+
+template<typename F1,typename F2>
+static void PrintSample(F1 cat,F2 pri)
+{
+	std::cout<<"-----------------------"<<std::endl;
+	std::cout<< cat("sss","ttt") <<std::endl;
+	pri(5.6);
+}
+
+template<typename F1,typename F2>
+static void PrintSample(lua::State<> *lua,const char* name,F1 cat,F2 pri)
+{
+	std::cout<<"-----------------------"<<std::endl;
+	lua->call(name,cat,pri);
+}
+
+//------------------------------------------------------------------------------
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 
@@ -53,12 +74,8 @@ int main()
 
 	lua.run(LUAPP_SCRIPT_PATH,"MakeFunctor.lua");
 
-	lua::Log<<"-----------------------"<<lua::End;
-	lua::Log<< cat("sss","ttt") <<lua::End;
-	pri(5.6f);
-	lua::Log<<"-----------------------"<<lua::End;
-	lua.call("PrintAgain",cat,pri);
-	lua::Log<<"-----------------------"<<lua::End;
+	PrintSample(cat,pri);                       // Call them at C++ side.
+	PrintSample(&lua,"PrintAgain",cat,pri);     // Call them at lua side.
 
 	return EXIT_SUCCESS;
 }
@@ -67,7 +84,7 @@ int main()
 
 int main()
 {
-	lua::Log<<"Define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_ to show this demo"<<lua::End;
+	std::cout<<"Define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_ to show this demo"<<std::endl;
 	return EXIT_SUCCESS;
 }
 

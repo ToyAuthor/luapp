@@ -5,7 +5,6 @@
 
 
 #include <cstdlib>
-#include <iostream>
 #include "luapp.hpp"
 
 

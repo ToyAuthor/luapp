@@ -4,7 +4,6 @@
  */
 
 
-#include <cstdio>
 #include <cstdlib>
 #include <iostream>
 #include "luapp.hpp"
@@ -31,12 +30,12 @@ class MyClass
 
 		MyClass()
 		{
-			printf("do MyClass::MyClass()\n");
+			std::cout<<"do MyClass::MyClass()"<<std::endl;
 		}
 
 		~MyClass()
 		{
-			printf("do MyClass::~MyClass()\n");
+			std::cout<<"do MyClass::~MyClass()"<<std::endl;
 		}
 
 		lua::Int count( lua::Int num01,
@@ -45,12 +44,12 @@ class MyClass
 		                lua::Str num04,
 		                lua::Str num05)
 		{
-			printf("do MyClass::Count() start\n");
+			std::cout<<"do MyClass::Count() start"<<std::endl;
 
-			printf("param2+param3=%f\n",num02+num03);
-			printf("param4+param5=%s\n",(num04+num05).c_str());
+			std::cout<<"param2+param3="<< num02 + num03 <<std::endl;
+			std::cout<<"param4+param5="<< num04 + num05 <<std::endl;
 
-			printf("do MyClass::Count() end\n");
+			std::cout<<"do MyClass::Count() end"<<std::endl;
 			return num01+1;
 		}
 };

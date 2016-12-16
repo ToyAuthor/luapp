@@ -236,7 +236,7 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	}
 	else
 	{
-		lua::Log<<"luapp:you push unknown or unsupported data type"<<lua::End;
+		lua::Log<<"error:you push unknown or unsupported data type"<<lua::End;
 		lua::PushNil(hLua);
 	}
 }
@@ -287,7 +287,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::Log<<"luapp:No one know what type is it"<<lua::End;
+		lua::Log<<"error:No one know what type is it"<<lua::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -440,7 +440,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::Log<<"luapp:No one know what type is it. That's new"<<lua::End;
+		lua::Log<<"error:No one know what type is it. That's new"<<lua::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -498,7 +498,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else
 	{
-		lua::Log<<"luapp:you get something luapp can't handle with"<<lua::End;
+		lua::Log<<"error:you get something luapp can't handle with"<<lua::End;
 		*t = lua::Var();
 	}
 }
@@ -847,6 +847,8 @@ R Func::call()
 	return result;
 }
 
+//---------------------------------------------------------------------
+
 template<typename A1>
 void Func::call(A1 a1)
 {
@@ -868,6 +870,8 @@ R Func::call(A1 a1)
 	lua::Pop(_lua,1);
 	return result;
 }
+
+//---------------------------------------------------------------------
 
 template<typename A1,typename A2>
 void Func::call(A1 a1, A2 a2)
@@ -892,6 +896,8 @@ R Func::call(A1 a1, A2 a2)
 	lua::Pop(_lua,1);
 	return result;
 }
+
+//---------------------------------------------------------------------
 
 template<typename A1,typename A2,typename A3>
 void Func::call(A1 a1, A2 a2, A3 a3)
@@ -923,7 +929,7 @@ R Func::call(A1 a1, A2 a2, A3 a3)
 
 template<typename T> struct Closure{};
 
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template<typename R, typename P1>
 struct Closure<R(P1)>
@@ -967,7 +973,7 @@ struct Closure<void(P1)>
 		lua::Func   _func;
 };
 
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2>
 struct Closure<R(P1,P2)>
@@ -1011,7 +1017,7 @@ struct Closure<void(P1,P2)>
 		lua::Func   _func;
 };
 
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3>
 struct Closure<R(P1,P2,P3)>
@@ -1055,7 +1061,7 @@ struct Closure<void(P1,P2,P3)>
 		lua::Func   _func;
 };
 
-//------------------------------------------------------------------------------
+//---------------------------------------------------------------------
 
 template<typename R, typename P1, typename P2, typename P3, typename P4>
 struct Closure<R(P1,P2,P3,P4)>

@@ -12,7 +12,7 @@ add_definitions(-DLUA_INT_INT)
 add_subdirectory(lua)
 
 # Just for demo.
-add_definitions(-DLUAPP_SCRIPT_PATH="${PROJECT_SOURCE_DIR}/script/")
+add_definitions(-DLUAPP_SCRIPT_PATH="${PROJECT_SOURCE_DIR}/script")
 
 set(LUAPP_INCLUDE_DIR ${PROJECT_SOURCE_DIR} ${PROJECT_SOURCE_DIR}/lua)
 set(LUAPP_LIBRARY_NAME "lua")
