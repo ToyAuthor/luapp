@@ -31,7 +31,7 @@ int main()
 
 	lua.run(LUAPP_SCRIPT_PATH,"MultipleLuaFile.lua");
 
-	lua::Function<Int(Int,Int,Int)>   func;
+	lua::GlobalFunction<Int(Int,Int,Int)>   func;
 
 	lua.getFunc("func",&func);
 

@@ -1,5 +1,5 @@
 /**
- * @file   Function.hpp
+ * @file   GlobalFunction.hpp
  * @brief  Let you call the function come from lua.
  */
 
@@ -13,12 +13,12 @@ namespace lua{
 
 
 template<typename R>
-struct Function{};
+struct GlobalFunction{};
 
 template<>
-struct Function<void()>
+struct GlobalFunction<void()>
 {
-	Function(){}
+	GlobalFunction(){}
 
 	void operator()() const
 	{
@@ -30,9 +30,9 @@ struct Function<void()>
 };
 
 template<typename R>
-struct Function<R()>
+struct GlobalFunction<R()>
 {
-	Function(){}
+	GlobalFunction(){}
 
 	R operator()() const
 	{
@@ -50,7 +50,7 @@ struct Function<R()>
 };
 
 template<typename A1>
-struct Function<void(A1)>
+struct GlobalFunction<void(A1)>
 {
 	void operator()(A1 a1) const
 	{
@@ -63,7 +63,7 @@ struct Function<void(A1)>
 };
 
 template<typename R,typename A1>
-struct Function<R(A1)>
+struct GlobalFunction<R(A1)>
 {
 	R operator()(A1 a1) const
 	{
@@ -83,7 +83,7 @@ struct Function<R(A1)>
 };
 
 template<typename A1,typename A2>
-struct Function<void(A1,A2)>
+struct GlobalFunction<void(A1,A2)>
 {
 	void operator()(A1 a1,A2 a2) const
 	{
@@ -97,7 +97,7 @@ struct Function<void(A1,A2)>
 };
 
 template<typename R,typename A1,typename A2>
-struct Function<R(A1,A2)>
+struct GlobalFunction<R(A1,A2)>
 {
 	R operator()(A1 a1,A2 a2) const
 	{
@@ -118,7 +118,7 @@ struct Function<R(A1,A2)>
 };
 
 template<typename A1,typename A2,typename A3>
-struct Function<void(A1,A2,A3)>
+struct GlobalFunction<void(A1,A2,A3)>
 {
 	void operator()(A1 a1,A2 a2,A3 a3) const
 	{
@@ -133,7 +133,7 @@ struct Function<void(A1,A2,A3)>
 };
 
 template<typename R,typename A1,typename A2,typename A3>
-struct Function<R(A1,A2,A3)>
+struct GlobalFunction<R(A1,A2,A3)>
 {
 	R operator()(A1 a1,A2 a2,A3 a3) const
 	{
@@ -155,7 +155,7 @@ struct Function<R(A1,A2,A3)>
 };
 
 template<typename A1,typename A2,typename A3,typename A4>
-struct Function<void(A1,A2,A3,A4)>
+struct GlobalFunction<void(A1,A2,A3,A4)>
 {
 	void operator()(A1 a1,A2 a2,A3 a3,A4 a4) const
 	{
@@ -171,7 +171,7 @@ struct Function<void(A1,A2,A3,A4)>
 };
 
 template<typename R,typename A1,typename A2,typename A3,typename A4>
-struct Function<R(A1,A2,A3,A4)>
+struct GlobalFunction<R(A1,A2,A3,A4)>
 {
 	R operator()(A1 a1,A2 a2,A3 a3,A4 a4) const
 	{
@@ -194,7 +194,7 @@ struct Function<R(A1,A2,A3,A4)>
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5>
-struct Function<void(A1,A2,A3,A4,A5)>
+struct GlobalFunction<void(A1,A2,A3,A4,A5)>
 {
 	void operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5) const
 	{
@@ -211,7 +211,7 @@ struct Function<void(A1,A2,A3,A4,A5)>
 };
 
 template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5>
-struct Function<R(A1,A2,A3,A4,A5)>
+struct GlobalFunction<R(A1,A2,A3,A4,A5)>
 {
 	R operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5) const
 	{
@@ -235,7 +235,7 @@ struct Function<R(A1,A2,A3,A4,A5)>
 };
 
 template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-struct Function<void(A1,A2,A3,A4,A5,A6)>
+struct GlobalFunction<void(A1,A2,A3,A4,A5,A6)>
 {
 	void operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6) const
 	{
@@ -253,7 +253,7 @@ struct Function<void(A1,A2,A3,A4,A5,A6)>
 };
 
 template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-struct Function<R(A1,A2,A3,A4,A5,A6)>
+struct GlobalFunction<R(A1,A2,A3,A4,A5,A6)>
 {
 	R operator()(A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6) const
 	{

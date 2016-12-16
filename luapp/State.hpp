@@ -8,7 +8,7 @@
 
 #include "luapp/Adapter.hpp"
 #include "luapp/Wrapper.hpp"
-#include "luapp/Function.hpp"
+#include "luapp/GlobalFunction.hpp"
 #include "luapp/Searcher.hpp"
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
@@ -393,7 +393,7 @@ class State
 
 		/// Get global function(one or no return value).
 		template<typename F>
-		void getFunc(const char *name,lua::Function<F> *func)
+		void getFunc(const char *name,lua::GlobalFunction<F> *func)
 		{
 			func->_lua=_lua;
 			func->_funcName=name;
