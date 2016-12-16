@@ -87,7 +87,7 @@ class Printer
 
 inline const ::lua::log::Printer& End(const ::lua::log::Printer& m)
 {
-	std::printf("\n");
+	std::printf(" - luapp message\n");
 	return m;
 }
 
