@@ -36,7 +36,7 @@ class Printer
 			#ifdef _WIN32
 			std::printf("%I64d",num);
 			#else
-			std::printf("%ld",num);
+			std::printf("%lld",num);
 			#endif
 			return *this;
 		}
@@ -83,14 +83,13 @@ class Printer
 		}
 };
 
+}//namespace log
 
-inline const Printer& End(const lua::log::Printer& m)
+inline const ::lua::log::Printer& End(const ::lua::log::Printer& m)
 {
 	std::printf("\n");
 	return m;
 }
-
-}//namespace log
 
 static ::lua::log::Printer      Log;
 

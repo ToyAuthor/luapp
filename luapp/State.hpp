@@ -201,7 +201,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::Log<<"error:setFunc(lua::Str name,F fn) not support module mode."<<lua::log::End;
+				lua::Log<<"error:setFunc(lua::Str name,F fn) not support module mode."<<lua::End;
 				return;
 			}
 
@@ -225,7 +225,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				lua::Log<<"error:setFunc(lua::Str name,F fn,C *obj) not support module mode."<<lua::log::End;
+				lua::Log<<"error:setFunc(lua::Str name,F fn,C *obj) not support module mode."<<lua::End;
 				return;
 			}
 
@@ -269,7 +269,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::load(name,code):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::load(name,code):"<<this->error()<<lua::End;
 			}
 
 			return result;
@@ -281,7 +281,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::load(filename):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::load(filename):"<<this->error()<<lua::End;
 			}
 
 			return result;
@@ -291,7 +291,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::End;
 				return (int)0;
 			}
 
@@ -312,7 +312,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::End;
 				return (int)0;
 			}
 
@@ -325,7 +325,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::run(name,code,loader):"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::run(name,code,loader):"<<this->error()<<lua::End;
 			}
 
 			return result;
@@ -335,7 +335,7 @@ class State
 		{
 			if ( _moduleMode )
 			{
-				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::log::End;
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::End;
 				return (int)0;
 			}
 
@@ -343,7 +343,7 @@ class State
 
 			if ( ! result )
 			{
-				lua::Log<<"lua::State::run():"<<this->error()<<lua::log::End;
+				lua::Log<<"lua::State::run():"<<this->error()<<lua::End;
 			}
 
 			return result;
@@ -616,7 +616,7 @@ inline HandleClass::HandleClass()
 
 	if ( ! _lua )
 	{
-		lua::Log<<"error:can't get lua_State."<<lua::log::End;
+		lua::Log<<"error:can't get lua_State."<<lua::End;
 	}
 
 	lua::OpenLibs(_lua);

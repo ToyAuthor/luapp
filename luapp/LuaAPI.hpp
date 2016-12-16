@@ -54,19 +54,19 @@ inline void _PrintScriptLoadingError(int error_code,lua::Str& filename)
 	switch ( error_code )
 	{
 		case 0:
-			lua::Log<<"warning:big mistake! It's not a error."<<lua::log::End;
+			lua::Log<<"warning:big mistake! It's not a error."<<lua::End;
 			break;
 		case LUA_ERRFILE:
-			lua::Log<<"error:cannot open the file:"<<filename<<lua::log::End;
+			lua::Log<<"error:cannot open the file:"<<filename<<lua::End;
 			break;
 		case LUA_ERRSYNTAX:
-			lua::Log<<"error:syntax error during pre-compilation"<<lua::log::End;
+			lua::Log<<"error:syntax error during pre-compilation"<<lua::End;
 			break;
 		case LUA_ERRMEM:
-			lua::Log<<"error:memory allocation error"<<lua::log::End;
+			lua::Log<<"error:memory allocation error"<<lua::End;
 			break;
 		default:
-			lua::Log<<"error:load script failed for some reason"<<lua::log::End;
+			lua::Log<<"error:load script failed for some reason"<<lua::End;
 	}
 }
 //------------------------------------------------------------------------------
@@ -74,7 +74,7 @@ inline int LoadScript(NativeState h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
-		lua::Log<<"error:script name is empty string"<<lua::log::End;
+		lua::Log<<"error:script name is empty string"<<lua::End;
 		return 0;
 	}
 	else
@@ -95,7 +95,7 @@ inline int LoadScript(NativeState h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
-		lua::Log<<"error:file name is empty string"<<lua::log::End;
+		lua::Log<<"error:file name is empty string"<<lua::End;
 		return 0;
 	}
 	else
@@ -116,7 +116,7 @@ inline int DoScript(NativeState h,lua::Str name,lua::Str& code)
 {
 	if ( name.empty() )
 	{
-		lua::Log<<"error:script name is empty string"<<lua::log::End;
+		lua::Log<<"error:script name is empty string"<<lua::End;
 		return 0;
 	}
 	else
@@ -142,7 +142,7 @@ inline int DoScript(NativeState h,lua::Str filename)
 {
 	if ( filename.empty() )
 	{
-		lua::Log<<"error:file name is empty string"<<lua::log::End;
+		lua::Log<<"error:file name is empty string"<<lua::End;
 		return 0;
 	}
 	else
@@ -175,7 +175,7 @@ inline int NewMetaTable(NativeState h,lua::Str tname)
 	luaL_getmetatable(h,tname.c_str());
 	if ( lua_type(h, -1)!=LUA_TNIL )
 	{
-		lua::Log<<"error:this meta table already exist."<<lua::log::End;
+		lua::Log<<"error:this meta table already exist."<<lua::End;
 	}
 	lua_pop(h,1);
 	#endif
@@ -200,7 +200,7 @@ inline void SetGlobal(NativeState h,lua::Str var)
 	lua_getglobal(h,var.c_str());
 	if ( lua_type(h, -1)!=LUA_TNIL )
 	{
-		lua::Log<<"warning:this global variable already exist."<<lua::log::End;
+		lua::Log<<"warning:this global variable already exist."<<lua::End;
 	}
 	lua_pop(h,1);
 	#endif
@@ -308,7 +308,7 @@ inline double CheckNumber(NativeState h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h,index)!=LUA_TNUMBER )
 	{
-		lua::Log<<"error:lua::CheckNumber"<<lua::log::End;
+		lua::Log<<"error:lua::CheckNumber"<<lua::End;
 		return 0.0;
 	}
 	#endif
@@ -323,7 +323,7 @@ inline bool CheckBoolean(NativeState h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h,index)!=LUA_TBOOLEAN )
 	{
-		lua::Log<<"error:lua::CheckBoolean"<<lua::log::End;
+		lua::Log<<"error:lua::CheckBoolean"<<lua::End;
 		return false;
 	}
 	#endif
@@ -338,12 +338,12 @@ inline int CheckInteger(NativeState h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TNUMBER )
 	{
-		lua::Log<<"error:lua::CheckInteger"<<lua::log::End;
+		lua::Log<<"error:lua::CheckInteger"<<lua::End;
 		return 0;
 	}
 	else if ( ! lua_isinteger(h,index) )
 	{
-		lua::Log<<"error:lua::CheckInteger: not a integer"<<lua::log::End;
+		lua::Log<<"error:lua::CheckInteger: not a integer"<<lua::End;
 		return 0;
 	}
 	#endif
@@ -358,7 +358,7 @@ inline Str CheckString(NativeState h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TSTRING )
 	{
-		lua::Log<<"error:lua::CheckString"<<lua::log::End;
+		lua::Log<<"error:lua::CheckString"<<lua::End;
 		return Str("none");
 	}
 	#endif
@@ -395,7 +395,7 @@ inline Ptr CheckPointer(NativeState h,int index)
 	#ifdef _LUAPP_CHECK_DATA_TYPE_
 	if ( lua_type(h, index)!=LUA_TLIGHTUSERDATA )
 	{
-		lua::Log<<"error:lua::CheckPointer"<<lua::log::End;
+		lua::Log<<"error:lua::CheckPointer"<<lua::End;
 		#ifdef _LUAPP_CPP11_
 		return nullptr;
 		#else

@@ -34,7 +34,7 @@ int main()
 
 	lua.getFunc("func",&func);
 
-	lua::Log<<"Return value is "<<func(1,2,3)<<lua::log::End;
+	lua::Log<<"Return value is "<<func(1,2,3)<<lua::End;
 
 	return EXIT_SUCCESS;
 }

@@ -65,7 +65,7 @@ class shared_ptr
 			#ifdef _LUAPP_CHECK_CAREFUL_
 				if( ! ptr )
 				{
-					lua::Log<<"error:don't input null pointer."<<lua::log::End;
+					lua::Log<<"error:don't input null pointer."<<lua::End;
 				}
 			#endif
 		}
@@ -111,7 +111,7 @@ class shared_ptr
 			#ifdef _LUAPP_CHECK_CAREFUL_
 				if( ! _ptr )
 				{
-					lua::Log<<"error:operator->() for null pointer."<<lua::log::End;
+					lua::Log<<"error:operator->() for null pointer."<<lua::End;
 				}
 			#endif
 
@@ -123,7 +123,7 @@ class shared_ptr
 			#ifdef _LUAPP_CHECK_CAREFUL_
 				if( ! _ptr )
 				{
-					lua::Log<<"error:operator *() for null pointer."<<lua::log::End;
+					lua::Log<<"error:operator *() for null pointer."<<lua::End;
 				}
 			#endif
 
@@ -195,11 +195,11 @@ class shared_ptr
 				{
 					if( model._counter )
 					{
-						lua::Log<<"error:copy a break pointer."<<lua::log::End;
+						lua::Log<<"error:copy a break pointer."<<lua::End;
 					}
 					else
 					{
-						lua::Log<<"warning:Are you sure? Overwrite by a null shared_ptr?."<<lua::log::End;
+						lua::Log<<"warning:Are you sure? Overwrite by a null shared_ptr?."<<lua::End;
 					}
 				}
 			#endif

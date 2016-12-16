@@ -46,7 +46,7 @@ class MyClass
 
 		lua::Int add(lua::Int a,lua::Int b,lua::Int c)
 		{
-			lua::Log<<a<<","<<b<<","<<c<<lua::log::End;
+			lua::Log<<a<<","<<b<<","<<c<<lua::End;
 			return a+b+c;
 		}
 };

@@ -236,7 +236,7 @@ inline void PushVarToLua(lua::Handle hLua,lua::Var &t)
 	}
 	else
 	{
-		lua::Log<<"luapp:you push unknown or unsupported data type"<<lua::log::End;
+		lua::Log<<"luapp:you push unknown or unsupported data type"<<lua::End;
 		lua::PushNil(hLua);
 	}
 }
@@ -287,7 +287,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::Log<<"luapp:No one know what type is it"<<lua::log::End;
+		lua::Log<<"luapp:No one know what type is it"<<lua::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -440,7 +440,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::Log<<"luapp:No one know what type is it. That's new"<<lua::log::End;
+		lua::Log<<"luapp:No one know what type is it. That's new"<<lua::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{
@@ -498,7 +498,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 	}
 	else
 	{
-		lua::Log<<"luapp:you get something luapp can't handle with"<<lua::log::End;
+		lua::Log<<"luapp:you get something luapp can't handle with"<<lua::End;
 		*t = lua::Var();
 	}
 }
@@ -530,7 +530,7 @@ Map::_Value& Map::operator [] (const T key)
 		lua::Pop(_lua,1);              // ...
 		lua::PushNil(_lua);            // ... [nil]
 
-		lua::Log<<"error:lua::Map doesn't have a table."<<lua::log::End;
+		lua::Log<<"error:lua::Map doesn't have a table."<<lua::End;
 		_temp._level = 1;
 
 		return _temp;
@@ -830,7 +830,7 @@ inline lua::Table Map::_Value::operator = (lua::Table value)
 
 void Func::call()
 {
-	if ( ! _lua ) lua::Log<<"error:Func::void call()"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::void call()"<<lua::End;
 	_item->getVar();         // ... [F]
 	lua::PCall(_lua,0,0,0);  // ...
 }
@@ -838,7 +838,7 @@ void Func::call()
 template<typename R>
 R Func::call()
 {
-	if ( ! _lua ) lua::Log<<"error:Func::R call()"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::R call()"<<lua::End;
 	_item->getVar();         // ... [F]
 	lua::PCall(_lua,0,1,0);  // ... [R]
 	R   result;
@@ -850,7 +850,7 @@ R Func::call()
 template<typename A1>
 void Func::call(A1 a1)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PCall(_lua,1,0,0);
@@ -859,7 +859,7 @@ void Func::call(A1 a1)
 template<typename R,typename A1>
 R Func::call(A1 a1)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PCall(_lua,1,1,0);
@@ -872,7 +872,7 @@ R Func::call(A1 a1)
 template<typename A1,typename A2>
 void Func::call(A1 a1, A2 a2)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PushVarToLua(_lua,a2);
@@ -882,7 +882,7 @@ void Func::call(A1 a1, A2 a2)
 template<typename R,typename A1,typename A2>
 R Func::call(A1 a1, A2 a2)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PushVarToLua(_lua,a2);
@@ -896,7 +896,7 @@ R Func::call(A1 a1, A2 a2)
 template<typename A1,typename A2,typename A3>
 void Func::call(A1 a1, A2 a2, A3 a3)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::void call(A1 a1, A2 a2, A3 a3)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PushVarToLua(_lua,a2);
@@ -907,7 +907,7 @@ void Func::call(A1 a1, A2 a2, A3 a3)
 template<typename R,typename A1,typename A2,typename A3>
 R Func::call(A1 a1, A2 a2, A3 a3)
 {
-	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2, A3 a3)"<<lua::log::End;
+	if ( ! _lua ) lua::Log<<"error:Func::R call(A1 a1, A2 a2, A3 a3)"<<lua::End;
 	_item->getVar();
 	lua::PushVarToLua(_lua,a1);
 	lua::PushVarToLua(_lua,a2);

@@ -29,7 +29,7 @@ class MyClass
 
 		void print(lua::Num num)
 		{
-			lua::Log<< id+num <<lua::log::End;
+			lua::Log<< id+num <<lua::End;
 		}
 
 		lua::Num   id;
@@ -53,12 +53,12 @@ int main()
 
 	lua.run(LUAPP_SCRIPT_PATH,"MakeFunctor.lua");
 
-	lua::Log<<"-----------------------"<<lua::log::End;
-	lua::Log<< cat("sss","ttt") <<lua::log::End;
+	lua::Log<<"-----------------------"<<lua::End;
+	lua::Log<< cat("sss","ttt") <<lua::End;
 	pri(5.6f);
-	lua::Log<<"-----------------------"<<lua::log::End;
+	lua::Log<<"-----------------------"<<lua::End;
 	lua.call("PrintAgain",cat,pri);
-	lua::Log<<"-----------------------"<<lua::log::End;
+	lua::Log<<"-----------------------"<<lua::End;
 
 	return EXIT_SUCCESS;
 }
@@ -67,7 +67,7 @@ int main()
 
 int main()
 {
-	lua::Log<<"Define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_ to show this demo"<<lua::log::End;
+	lua::Log<<"Define _LUAPP_KEEP_LOCAL_LUA_VARIABLE_ to show this demo"<<lua::End;
 	return EXIT_SUCCESS;
 }
 
