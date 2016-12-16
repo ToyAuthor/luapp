@@ -146,11 +146,31 @@ class Var
 		}
 
 		//---------------------Integer---------------------
-		Var(const lua::Int t)
+		Var(const int t)
 		{
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 		}
-		Var& operator = (const ::lua::Int t)
+		Var& operator = (const int t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::Int>(t);
+			return *this;
+		}
+		Var(const long int t)
+		{
+			this->_ptr = new lua::_VarType<lua::Int>(t);
+		}
+		Var& operator = (const long int t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::Int>(t);
+			return *this;
+		}
+		Var(const long long t)
+		{
+			this->_ptr = new lua::_VarType<lua::Int>(t);
+		}
+		Var& operator = (const long long t)
 		{
 			free_ptr();
 			this->_ptr = new lua::_VarType<lua::Int>(t);
@@ -209,12 +229,22 @@ class Var
 			return *this;
 		}
 
-		//---------------------Double---------------------
-		Var(const lua::Num t)
+		//---------------------Real---------------------
+		Var(const float t)
 		{
 			this->_ptr = new lua::_VarType<lua::Num>(t);
 		}
-		Var& operator = (const lua::Num t)
+		Var& operator = (const float t)
+		{
+			free_ptr();
+			this->_ptr = new lua::_VarType<lua::Num>(t);
+			return *this;
+		}
+		Var(const double t)
+		{
+			this->_ptr = new lua::_VarType<lua::Num>(t);
+		}
+		Var& operator = (const double t)
 		{
 			free_ptr();
 			this->_ptr = new lua::_VarType<lua::Num>(t);

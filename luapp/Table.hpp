@@ -295,12 +295,27 @@ class Table
 			return *this;
 		}
 
-		lua::Var& operator [] (lua::Int key)
+		lua::Var& operator [] (int key)
 		{
 			return _mapInt[key];
 		}
 
-		lua::Var& operator [] (lua::Num key)
+		lua::Var& operator [] (long int key)
+		{
+			return _mapInt[key];
+		}
+
+		lua::Var& operator [] (long long key)
+		{
+			return _mapInt[key];
+		}
+
+		lua::Var& operator [] (float key)
+		{
+			return _mapNum[key];
+		}
+
+		lua::Var& operator [] (double key)
 		{
 			return _mapNum[key];
 		}
@@ -310,12 +325,27 @@ class Table
 			return _mapStr[key];
 		}
 
-		lua::Var& operator >> (lua::Int key)
+		lua::Var& operator >> (int key)
 		{
 			return _mapInt[key];
 		}
 
-		lua::Var& operator >> (lua::Num key)
+		lua::Var& operator >> (long int key)
+		{
+			return _mapInt[key];
+		}
+
+		lua::Var& operator >> (long long key)
+		{
+			return _mapInt[key];
+		}
+
+		lua::Var& operator >> (float key)
+		{
+			return _mapNum[key];
+		}
+
+		lua::Var& operator >> (double key)
 		{
 			return _mapNum[key];
 		}
