@@ -58,6 +58,21 @@ struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6)>
 {
 	typedef C ClassType;
 };
+template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7)>
+{
+	typedef C ClassType;
+};
+template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)>
+{
+	typedef C ClassType;
+};
+template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>
+{
+	typedef C ClassType;
+};
 //-----------------ClassTypeFilter-----------------end
 
 
@@ -467,6 +482,51 @@ class State
 			lua::PushVarToLua(_lua,a5);
 			lua::PushVarToLua(_lua,a6);
 			lua::PCall(_lua,6,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7)
+		{
+			lua::GetGlobal(_lua,name);
+			lua::PushVarToLua(_lua,a1);
+			lua::PushVarToLua(_lua,a2);
+			lua::PushVarToLua(_lua,a3);
+			lua::PushVarToLua(_lua,a4);
+			lua::PushVarToLua(_lua,a5);
+			lua::PushVarToLua(_lua,a6);
+			lua::PushVarToLua(_lua,a7);
+			lua::PCall(_lua,7,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8)
+		{
+			lua::GetGlobal(_lua,name);
+			lua::PushVarToLua(_lua,a1);
+			lua::PushVarToLua(_lua,a2);
+			lua::PushVarToLua(_lua,a3);
+			lua::PushVarToLua(_lua,a4);
+			lua::PushVarToLua(_lua,a5);
+			lua::PushVarToLua(_lua,a6);
+			lua::PushVarToLua(_lua,a7);
+			lua::PushVarToLua(_lua,a8);
+			lua::PCall(_lua,8,0,0);
+		}
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+		void call(lua::Str name,A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9)
+		{
+			lua::GetGlobal(_lua,name);
+			lua::PushVarToLua(_lua,a1);
+			lua::PushVarToLua(_lua,a2);
+			lua::PushVarToLua(_lua,a3);
+			lua::PushVarToLua(_lua,a4);
+			lua::PushVarToLua(_lua,a5);
+			lua::PushVarToLua(_lua,a6);
+			lua::PushVarToLua(_lua,a7);
+			lua::PushVarToLua(_lua,a8);
+			lua::PushVarToLua(_lua,a9);
+			lua::PCall(_lua,9,0,0);
 		}
 
 		void searcher(std::function<lua::Str&(lua::Str)> loader)

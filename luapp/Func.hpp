@@ -63,6 +63,24 @@ class Func
 		template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
 		R call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6);
 
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+		void call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7);
+
+		template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+		R call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7);
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+		void call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8);
+
+		template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+		R call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8);
+
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+		void call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9);
+
+		template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+		R call(A1 a1, A2 a2, A3 a3, A4 a4, A5 a5, A6 a6, A7 a7, A8 a8, A9 a9);
+
 		void _set(lua::Handle h,lua::Register::Item i)
 		{
 			if ( _lua ) lua::Log<<"warning:why you set handle of function again?"<<lua::End;
