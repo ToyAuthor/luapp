@@ -13,7 +13,20 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Bool t)
 	lua::PushBoolean(hLua,t);
 }
 //------------------------------------------------------------------------------
+/*
 inline void PushVarToLua(lua::NativeState hLua,lua::Int t)
+{
+	lua::PushInteger(hLua,t);
+}*/
+inline void PushVarToLua(lua::NativeState hLua,int t)
+{
+	lua::PushInteger(hLua,t);
+}
+inline void PushVarToLua(lua::NativeState hLua,long int t)
+{
+	lua::PushInteger(hLua,t);
+}
+inline void PushVarToLua(lua::NativeState hLua,long long int t)
 {
 	lua::PushInteger(hLua,t);
 }

@@ -98,11 +98,16 @@ inline void CheckVarFromLua(Handle h,lua::Str *t,  int i) { CheckVarFromLua(h->_
 inline void CheckVarFromLua(Handle h,lua::Ptr *t,  int i) { CheckVarFromLua(h->_lua,t,i); }
 
 inline void PushVarToLua(lua::Handle h,lua::Bool   t) { PushVarToLua(h->_lua,t); }
-inline void PushVarToLua(lua::Handle h,lua::Int    t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,lua::Num    t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,lua::Str    t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,lua::Ptr    t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,lua::Nil    t) { PushVarToLua(h->_lua,t); }
+/*
+inline void PushVarToLua(lua::Handle h,lua::Int    t) { PushVarToLua(h->_lua,t); }
+*/
+inline void PushVarToLua(lua::Handle h,int         t) { PushVarToLua(h->_lua,t); }
+inline void PushVarToLua(lua::Handle h,long int    t) { PushVarToLua(h->_lua,t); }
+inline void PushVarToLua(lua::Handle h,long long   t) { PushVarToLua(h->_lua,t); }
 
 #else
 
