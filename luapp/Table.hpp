@@ -325,6 +325,11 @@ class Table
 			return _mapStr[key];
 		}
 
+		lua::Var& operator [] (const char* key)
+		{
+			return _mapStr[lua::Str(key)];
+		}
+
 		lua::Var& operator >> (int key)
 		{
 			return _mapInt[key];
@@ -353,6 +358,11 @@ class Table
 		lua::Var& operator >> (lua::Str key)
 		{
 			return _mapStr[key];
+		}
+
+		lua::Var& operator >> (const char* key)
+		{
+			return _mapStr[lua::Str(key)];
 		}
 
 		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
@@ -485,6 +495,11 @@ lua::Var& ::lua::Var::operator [] (const T key)
 	return (*(reinterpret_cast<lua::Table*>(this->getPtr())))[key];
 }
 
+lua::Var& ::lua::Var::operator [] (const char* key)
+{
+	return (*this)[lua::Str(key)];
+}
+
 template<typename T>
 const lua::Var& lua::Var::operator >> (const T key) const
 {
@@ -496,6 +511,11 @@ const lua::Var& lua::Var::operator >> (const T key) const
 	}
 
 	return (*const_cast<lua::Var*>(this))[key];
+}
+
+const lua::Var& lua::Var::operator >> (const char* key) const
+{
+	return *this>>lua::Str(key);
 }
 
 }//namespace lua

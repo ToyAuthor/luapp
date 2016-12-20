@@ -505,18 +505,59 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 //------------------------------------------------------------------------------
 
 template<typename T>
-lua::Var Map::operator >> (const T key)
+lua::_Map_Address& lua::Map::operator >> (const T key)
 {
 	_item->getVar();                 // ... [T]
 	lua::PushVarToLua(_lua,key);     // ... [T] [key]
 	lua::GetTable(_lua,-2);          // ... [T] [value]
+	lua::Replace(_lua, -2);          // ... [value]
 
-	lua::Var  var;
-	lua::CheckVarFromLua(_lua,&var,-1);
+	return _temp2;
+}
 
-	lua::Pop(_lua,2);                // ...
+lua::_Map_Address& lua::Map::operator >> (const char* key)
+{
+	return *this>>lua::Str(key);
+}
 
-	return var;
+template<typename T>
+lua::_Map_Address& lua::_Map_Address::operator >> (const T key)
+{
+	// ... [?]
+
+	if ( lua::TypeCast(this->_lua,-1)!=LUA_TTABLE )
+	{
+		lua::Pop(this->_lua,1);        // ...
+		lua::PushNil(this->_lua);      // ... [nil]
+		return *this;
+	}
+
+	lua::PushVarToLua(this->_lua,key); // ... [T] [key]
+	lua::GetTable(this->_lua,-2);      // ... [T] [value]
+	lua::Replace(this->_lua, -2);      // ... [value]
+
+	return *this;
+}
+
+lua::_Map_Address& lua::_Map_Address::operator >> (const char* key)
+{
+	return *this>>lua::Str(key);
+}
+
+void lua::_Map_Address::_checkVar(lua::Var *var)
+{
+	lua::CheckVarFromLua(this->_lua,var,-1);
+}
+
+inline Var::Var(lua::_Map_Address &t):_ptr(0)
+{
+	t._checkVar(this);
+}
+
+inline Var& Var::operator = (lua::_Map_Address &t)
+{
+	t._checkVar(this);
+	return *this;
 }
 
 template<typename T>
@@ -540,6 +581,11 @@ Map::_Value& Map::operator [] (const T key)
 	_temp._level = 2;
 
 	return _temp;
+}
+
+Map::_Value& Map::operator [] (const char* key)
+{
+	return (*this)[lua::Str(key)];
 }
 
 template<typename T>
@@ -577,6 +623,11 @@ Map::_Value& Map::_Value::operator [] (const T key)
 	this->_level+=2;
 
 	return *this;
+}
+
+Map::_Value& Map::_Value::operator [] (const char* key)
+{
+	return (*this)[lua::Str(key)];
 }
 
 //---------------------Map::_Value::operator = ---------------------start

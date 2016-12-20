@@ -6,6 +6,21 @@
 
 namespace lua{
 
+// Work for lua::Map
+struct _Map_Address
+{
+	_Map_Address(){}
+	~_Map_Address(){}
+
+	// They implemented at luapp/MorePushAndPull.hpp
+	void _checkVar(lua::Var *var);
+	template<typename T>
+	_Map_Address& operator >> (const T key);
+	_Map_Address& operator >> (const char* key);
+
+	lua::Handle          _lua;
+};
+
 class Map
 {
 	public:
@@ -18,6 +33,7 @@ class Map
 			// They implemented at luapp/MorePushAndPull.hpp
 			template<typename T>
 			_Value& operator [] (const T key);
+			_Value& operator [] (const char* key);
 			lua::Nil operator = (lua::Nil value);
 			lua::Str operator = (lua::Str value);
 			lua::Int operator = (lua::Int value);
@@ -44,17 +60,19 @@ class Map
 
 		// It implemented at luapp/MorePushAndPull.hpp
 		template<typename T>
-		lua::Var operator >> (const T key);
-
-		// It implemented at luapp/MorePushAndPull.hpp
+		lua::_Map_Address& operator >> (const T key);
+		lua::_Map_Address& operator >> (const char* key);
 		template<typename T>
 		_Value& operator [] (const T key);
+		_Value& operator [] (const char* key);
 
 		void _set(lua::Handle h,lua::Register::Item i)
 		{
 			if ( _lua ) lua::Log<<"warning:why you set handle of function again?"<<lua::End;
 			_item = i;
 			_lua = h;
+
+			_temp2._lua = _lua;
 		}
 
 		lua::Register::Item _getItem()
@@ -67,6 +85,7 @@ class Map
 		lua::Handle          _lua;
 		lua::Register::Item  _item;
 		_Value               _temp;
+		_Map_Address         _temp2;
 };
 
 inline Var::Var(const lua::Map &t):_ptr(0)

@@ -90,6 +90,14 @@ namespace lua{
 
 //-----------------------------------------------------
 
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+
+struct _Map_Address;
+
+#endif // _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+
+//-----------------------------------------------------
+
 struct _VarTypeBase
 {
 	virtual ~_VarTypeBase(){}
@@ -270,9 +278,13 @@ class Var
 
 		//---------------------Map---------------------
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-		// They are implemented at luapp/Map.hpp
+		// They implemented at luapp/Map.hpp
 		Var(const lua::Map &t);
 		Var& operator = (const lua::Map &t);
+
+		// They implemented at luapp/MorePushAndPull.hpp
+		Var& operator = (lua::_Map_Address &t);
+		Var(lua::_Map_Address &t);
 		#endif
 
 		//---------------------Func---------------------
@@ -353,6 +365,8 @@ class Var
 		template<typename T>
 		Var& operator [] (const T key);
 
+		Var& operator [] (const char* key);
+
 		/*
 		 * It's implemented at luapp/Table.hpp
 		 * A shortcut for finding value when this is a Table.
@@ -360,6 +374,8 @@ class Var
 		 */
 		template<typename T>
 		const Var& operator >> (const T key) const;
+
+		const Var& operator >> (const char* key) const;
 
 		const std::type_info& getType() const
 		{
