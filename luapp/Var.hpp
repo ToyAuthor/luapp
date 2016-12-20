@@ -289,9 +289,28 @@ class Var
 
 		//---------------------Func---------------------
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-		// They are implemented at luapp/Func.hpp
+		// They implemented at luapp/Func.hpp
 		Var(const lua::Func &t);
 		Var& operator = (const lua::Func &t);
+		void operator () ();
+		template<typename A1>
+		void operator () (A1 a1);
+		template<typename A1,typename A2>
+		void operator () (A1 a1,A2 a2);
+		template<typename A1,typename A2,typename A3>
+		void operator () (A1 a1,A2 a2,A3 a3);
+		template<typename A1,typename A2,typename A3,typename A4>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4);
+		template<typename A1,typename A2,typename A3,typename A4,typename A5>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4,A5 a5);
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6);
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7);
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8);
+		template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+		void operator () (A1 a1,A2 a2,A3 a3,A4 a4,A5 a5,A6 a6,A7 a7,A8 a8,A9 a9);
 		#else
 		Var(const lua::Func t):_ptr(0)
 		{
