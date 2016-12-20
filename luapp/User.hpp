@@ -36,7 +36,7 @@ class User
 		lua::Register::Item  _item;
 };
 
-inline Var::Var(const lua::User &t)
+inline Var::Var(const lua::User &t):_ptr(0)
 {
 	this->_ptr = new ::lua::_VarType<lua::User>(t);
 }

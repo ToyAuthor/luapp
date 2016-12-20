@@ -69,7 +69,7 @@ class Map
 		_Value               _temp;
 };
 
-inline Var::Var(const lua::Map &t)
+inline Var::Var(const lua::Map &t):_ptr(0)
 {
 	this->_ptr = new ::lua::_VarType<lua::Map>(t);
 }

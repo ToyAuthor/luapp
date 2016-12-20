@@ -36,7 +36,7 @@ class Task
 		lua::Register::Item  _item;
 };
 
-inline Var::Var(const lua::Task &t)
+inline Var::Var(const lua::Task &t):_ptr(0)
 {
 	this->_ptr = new ::lua::_VarType<lua::Task>(t);
 }

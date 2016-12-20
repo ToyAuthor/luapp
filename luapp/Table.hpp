@@ -462,7 +462,7 @@ class Table
 		#endif
 };
 
-inline lua::Var::Var(const ::lua::Table &t)
+inline lua::Var::Var(const ::lua::Table &t):_ptr(0)
 {
 	this->_ptr = new ::lua::_VarType<lua::Table>(t);
 }

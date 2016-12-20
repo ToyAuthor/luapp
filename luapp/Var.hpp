@@ -128,13 +128,13 @@ class Var
 {
 	public:
 
-		Var()
+		Var():_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
 		}
 
 		//---------------------nil---------------------
-		Var(const lua::Nil t)
+		Var(const lua::Nil t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Nil>(t);
 		}
@@ -146,7 +146,7 @@ class Var
 		}
 
 		//---------------------Integer---------------------
-		Var(const int t)
+		Var(const int t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 		}
@@ -156,7 +156,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 			return *this;
 		}
-		Var(const long int t)
+		Var(const long int t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 		}
@@ -166,7 +166,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 			return *this;
 		}
-		Var(const long long t)
+		Var(const long long t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 		}
@@ -178,7 +178,7 @@ class Var
 		}
 
 		//---------------------String---------------------
-		Var(const lua::Str t)
+		Var(const lua::Str t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Str>(t);
 		}
@@ -188,7 +188,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Str>(t);
 			return *this;
 		}
-		Var(const char *t)
+		Var(const char *t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Str>(lua::Str(t));
 		}
@@ -200,7 +200,7 @@ class Var
 		}
 
 		//---------------------Pointer---------------------
-		Var(const lua::Ptr t)
+		Var(const lua::Ptr t):_ptr(0)
 		{
 			#ifdef _LUAPP_CPP11_
 			if ( t==nullptr ) {
@@ -230,7 +230,7 @@ class Var
 		}
 
 		//---------------------Real---------------------
-		Var(const float t)
+		Var(const float t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Num>(t);
 		}
@@ -240,7 +240,7 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Num>(t);
 			return *this;
 		}
-		Var(const double t)
+		Var(const double t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Num>(t);
 		}
@@ -257,7 +257,7 @@ class Var
 		Var& operator = (const lua::Table &t);
 
 		//---------------------Boolean---------------------
-		Var(const lua::Bool t)
+		Var(const lua::Bool t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Bool>(t);
 		}
@@ -281,7 +281,7 @@ class Var
 		Var(const lua::Func &t);
 		Var& operator = (const lua::Func &t);
 		#else
-		Var(const lua::Func t)
+		Var(const lua::Func t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Func>(t);
 		}
@@ -299,7 +299,7 @@ class Var
 		Var(const lua::Task &t);
 		Var& operator = (const lua::Task &t);
 		#else
-		Var(const lua::Task t)
+		Var(const lua::Task t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::Task>(t);
 		}
@@ -317,7 +317,7 @@ class Var
 		Var(const lua::User &t);
 		Var& operator = (const lua::User &t);
 		#else
-		Var(const lua::User t)
+		Var(const lua::User t):_ptr(0)
 		{
 			this->_ptr = new lua::_VarType<lua::User>(t);
 		}

@@ -100,7 +100,7 @@ class Func
 
 };
 
-inline Var::Var(const lua::Func &t)
+inline Var::Var(const lua::Func &t):_ptr(0)
 {
 	this->_ptr = new ::lua::_VarType<lua::Func>(t);
 }
