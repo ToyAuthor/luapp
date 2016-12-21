@@ -7,4 +7,5 @@
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 #include "luapp/MorePushAndPull.hpp"
+#include "luapp/Function.hpp"
 #endif
