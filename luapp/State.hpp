@@ -109,7 +109,7 @@ class State
 
 					if ( ! _lua )
 					{
-						lua::log::Cout<<"error:can't get lua_State."<<lua::log::End;
+						lua::Log<<"error:can't get lua_State."<<lua::End;
 					}
 
 					lua::OpenLibs(_lua);

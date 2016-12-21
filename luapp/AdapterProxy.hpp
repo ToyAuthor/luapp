@@ -51,7 +51,7 @@ struct Proxy00 : public ProxyReturn<C,R>
 };
 
 template<typename C>
-struct Proxy00<C,void>
+struct Proxy00<C,void> : public Proxy<C>
 {
 	typedef void(C::*Func)();
 	Proxy00(){}
@@ -86,7 +86,7 @@ struct Proxy01 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1>
-struct Proxy01<C,void,A1>
+struct Proxy01<C,void,A1> : public Proxy<C>
 {
 	typedef void (C::*Func)(A1);
 	Proxy01(){}
@@ -127,7 +127,7 @@ struct Proxy02 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2>
-struct Proxy02<C,void,A1,A2>
+struct Proxy02<C,void,A1,A2> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2);
 
@@ -173,7 +173,7 @@ struct Proxy03 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3>
-struct Proxy03<C,void,A1,A2,A3>
+struct Proxy03<C,void,A1,A2,A3> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3);
 
@@ -223,7 +223,7 @@ struct Proxy04 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4>
-struct Proxy04<C,void,A1,A2,A3,A4>
+struct Proxy04<C,void,A1,A2,A3,A4> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4);
 
@@ -277,7 +277,7 @@ struct Proxy05 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4,typename A5>
-struct Proxy05<C,void,A1,A2,A3,A4,A5>
+struct Proxy05<C,void,A1,A2,A3,A4,A5> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4,A5);
 
@@ -335,7 +335,7 @@ struct Proxy06 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-struct Proxy06<C,void,A1,A2,A3,A4,A5,A6>
+struct Proxy06<C,void,A1,A2,A3,A4,A5,A6> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4,A5,A6);
 
@@ -397,7 +397,7 @@ struct Proxy07 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-struct Proxy07<C,void,A1,A2,A3,A4,A5,A6,A7>
+struct Proxy07<C,void,A1,A2,A3,A4,A5,A6,A7> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4,A5,A6,A7);
 
@@ -463,7 +463,7 @@ struct Proxy08 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-struct Proxy08<C,void,A1,A2,A3,A4,A5,A6,A7,A8>
+struct Proxy08<C,void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4,A5,A6,A7,A8);
 
@@ -533,7 +533,7 @@ struct Proxy09 : public ProxyReturn<C,R>
 };
 
 template<typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-struct Proxy09<C,void,A1,A2,A3,A4,A5,A6,A7,A8,A9>
+struct Proxy09<C,void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy<C>
 {
 	typedef void(C::*Func)(A1,A2,A3,A4,A5,A6,A7,A8,A9);
 

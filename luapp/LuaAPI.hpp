@@ -288,7 +288,7 @@ inline void PushValue(NativeState h,int index)
 	lua_pushvalue(h,index);
 }
 //------------------------------------------------------------------------------
-inline void PushNumber(NativeState h,double n)
+inline void PushNumber(NativeState h,lua::Num n)
 {
 	lua_pushnumber(h,n);
 }
@@ -298,7 +298,7 @@ inline void PushBoolean(NativeState h,bool num)
 	lua_pushboolean(h,(int)num);
 }
 //------------------------------------------------------------------------------
-inline void PushInteger(NativeState h,int num)
+inline void PushInteger(NativeState h,lua::Int num)
 {
 	lua_pushinteger(h,num);
 }
@@ -321,7 +321,7 @@ inline void PushUserData(NativeState h,S ud, lua::Str tname)
 	lua::SetMetaTable(h, -2);                      // ... [UD]
 }
 //------------------------------------------------------------------------------
-inline double CheckNumber(NativeState h,int index)
+inline lua::Num CheckNumber(NativeState h,int index)
 {
 //	return luaL_checknumber(h,index);
 
@@ -329,7 +329,7 @@ inline double CheckNumber(NativeState h,int index)
 	if ( lua_type(h,index)!=LUA_TNUMBER )
 	{
 		lua::Log<<"error:lua::CheckNumber"<<lua::End;
-		return 0.0;
+		return (lua::Num)0.0;
 	}
 	#endif
 
@@ -351,7 +351,7 @@ inline bool CheckBoolean(NativeState h,int index)
 	return lua_toboolean(h,index)==0 ? false:true;
 }
 //------------------------------------------------------------------------------
-inline int CheckInteger(NativeState h,int index)
+inline lua::Int CheckInteger(NativeState h,int index)
 {
 //	return luaL_checkinteger(h,index);
 
@@ -359,16 +359,16 @@ inline int CheckInteger(NativeState h,int index)
 	if ( lua_type(h, index)!=LUA_TNUMBER )
 	{
 		lua::Log<<"error:lua::CheckInteger"<<lua::End;
-		return 0;
+		return (lua::Int)0;
 	}
 	else if ( ! lua_isinteger(h,index) )
 	{
 		lua::Log<<"error:lua::CheckInteger: not a integer"<<lua::End;
-		return 0;
+		return (lua::Int)0;
 	}
 	#endif
 
-	return (int)lua_tointeger(h,index);
+	return (lua::Int)lua_tointeger(h,index);
 }
 //------------------------------------------------------------------------------
 inline Str CheckString(NativeState h,int index)
