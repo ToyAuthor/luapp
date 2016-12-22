@@ -6,7 +6,7 @@
 
 namespace lua{
 
-// Work for lua::Map
+// Work for lua::Map::operator >>
 struct _Map_Address
 {
 	_Map_Address(){}
@@ -25,6 +25,7 @@ class Map
 {
 	public:
 
+		// Work for lua::Map::operator []
 		struct _Value
 		{
 			_Value(Map *m):_map(m),_level(0){}
@@ -58,6 +59,17 @@ class Map
 			_item = NULL;   // Just make sure it released before this->_lua.
 		}
 
+		Map(const Map& bro):_temp(this)
+		{
+			copy_my_kind(bro);
+		}
+
+		Map& operator = (const Map& bro)
+		{
+			copy_my_kind(bro);
+			return *this;
+		}
+
 		// It implemented at luapp/MorePushAndPull.hpp
 		template<typename T>
 		lua::_Map_Address& operator >> (const T key);
@@ -82,10 +94,19 @@ class Map
 
 	private:
 
+		void copy_my_kind(const Map& _bro)
+		{
+			Map   &bro = const_cast<Map&>(_bro);
+			this->_lua  = bro._lua;
+			this->_item = bro._item;
+			this->_temp._map = bro._temp._map;
+			this->_temp2._lua = bro._lua;
+		}
+
 		lua::Handle          _lua;
 		lua::Register::Item  _item;
 		_Value               _temp;
-		_Map_Address         _temp2;
+		lua::_Map_Address    _temp2;
 };
 
 inline Var::Var(const lua::Map &t):_ptr(0)
