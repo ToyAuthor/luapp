@@ -495,7 +495,7 @@ lua::Var& ::lua::Var::operator [] (const T key)
 	return (*(reinterpret_cast<lua::Table*>(this->getPtr())))[key];
 }
 
-lua::Var& ::lua::Var::operator [] (const char* key)
+inline lua::Var& ::lua::Var::operator [] (const char* key)
 {
 	return (*this)[lua::Str(key)];
 }
@@ -513,7 +513,7 @@ const lua::Var& lua::Var::operator >> (const T key) const
 	return (*const_cast<lua::Var*>(this))[key];
 }
 
-const lua::Var& lua::Var::operator >> (const char* key) const
+inline const lua::Var& lua::Var::operator >> (const char* key) const
 {
 	return *this>>lua::Str(key);
 }

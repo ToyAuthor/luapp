@@ -515,7 +515,7 @@ lua::_Map_Address& lua::Map::operator >> (const T key)
 	return _temp2;
 }
 
-lua::_Map_Address& lua::Map::operator >> (const char* key)
+inline lua::_Map_Address& lua::Map::operator >> (const char* key)
 {
 	return *this>>lua::Str(key);
 }
@@ -539,12 +539,12 @@ lua::_Map_Address& lua::_Map_Address::operator >> (const T key)
 	return *this;
 }
 
-lua::_Map_Address& lua::_Map_Address::operator >> (const char* key)
+inline lua::_Map_Address& lua::_Map_Address::operator >> (const char* key)
 {
 	return *this>>lua::Str(key);
 }
 
-void lua::_Map_Address::_checkVar(lua::Var *var)
+inline void lua::_Map_Address::_checkVar(lua::Var *var)
 {
 	lua::CheckVarFromLua(this->_lua,var,-1);
 }
@@ -583,7 +583,7 @@ Map::_Value& Map::operator [] (const T key)
 	return _temp;
 }
 
-Map::_Value& Map::operator [] (const char* key)
+inline Map::_Value& Map::operator [] (const char* key)
 {
 	return (*this)[lua::Str(key)];
 }
@@ -625,7 +625,7 @@ Map::_Value& Map::_Value::operator [] (const T key)
 	return *this;
 }
 
-Map::_Value& Map::_Value::operator [] (const char* key)
+inline Map::_Value& Map::_Value::operator [] (const char* key)
 {
 	return (*this)[lua::Str(key)];
 }

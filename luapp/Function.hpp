@@ -7,7 +7,7 @@ namespace lua{
 
 //---------------------------------------------------------------------
 
-void Func::call()
+inline void Func::call()
 {
 	if ( ! _lua ) lua::Log<<"error:Func::void call()"<<lua::End;
 	_item->getVar();         // ... [F]
