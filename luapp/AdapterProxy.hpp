@@ -572,61 +572,61 @@ struct Proxy09<C,void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy<C>
 template <typename C,typename R>
 static Proxy<C>* GetProxy(R(C::*f)())
 {
-	return (Proxy<C>*)new Proxy00<C,R>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy00<C,R>(f));
 }
 
 template <typename C,typename R,typename A1>
 static Proxy<C>* GetProxy(R(C::*f)(A1))
 {
-	return (Proxy<C>*)new Proxy01<C,R,A1>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy01<C,R,A1>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2))
 {
-	return (Proxy<C>*)new Proxy02<C,R,A1,A2>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy02<C,R,A1,A2>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3))
 {
-	return (Proxy<C>*)new Proxy03<C,R,A1,A2,A3>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy03<C,R,A1,A2,A3>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4))
 {
-	return (Proxy<C>*)new Proxy04<C,R,A1,A2,A3,A4>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy04<C,R,A1,A2,A3,A4>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5))
 {
-	return (Proxy<C>*)new Proxy05<C,R,A1,A2,A3,A4,A5>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy05<C,R,A1,A2,A3,A4,A5>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6))
 {
-	return (Proxy<C>*)new Proxy06<C,R,A1,A2,A3,A4,A5,A6>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy06<C,R,A1,A2,A3,A4,A5,A6>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6,A7))
 {
-	return (Proxy<C>*)new Proxy07<C,R,A1,A2,A3,A4,A5,A6,A7>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy07<C,R,A1,A2,A3,A4,A5,A6,A7>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6,A7,A8))
 {
-	return (Proxy<C>*)new Proxy08<C,R,A1,A2,A3,A4,A5,A6,A7,A8>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy08<C,R,A1,A2,A3,A4,A5,A6,A7,A8>(f));
 }
 
 template <typename C,typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
 static Proxy<C>* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6,A7,A8,A9))
 {
-	return (Proxy<C>*)new Proxy09<C,R,A1,A2,A3,A4,A5,A6,A7,A8,A9>(f);
+	return dynamic_cast<Proxy<C>*>(new Proxy09<C,R,A1,A2,A3,A4,A5,A6,A7,A8,A9>(f));
 }
 
 //------------------------------------------------------------
