@@ -62,3 +62,4 @@ luapp 主要的功能有這些:
     lua::Func    這是個 lua function，其內容有可能是個 C 函式繞了一圈又讓 C++ 來呼叫
     lua::Task    這個是 lua thread，只是讓 C++ 這邊代為保管而已，不確定這樣的用法可不可行
     lua::User    用來支援 lua 的 user data 功能，尚未完成實作
+    lua::Map     也是用來保存 lua table 的容器，實體在 lua 這邊，介面跟 lua::Table 只有部份可共用

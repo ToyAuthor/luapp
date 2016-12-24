@@ -63,7 +63,7 @@ int main()
 
 	/*
 	lua.searcher(MySearcher);
-	lua(MainFileScript);
+	lua.run(MainFileScript);
 	*/
 
 	/*

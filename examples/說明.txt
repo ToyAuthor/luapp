@@ -15,7 +15,7 @@ MemberFunctionInjectLua
 	在 lua 這端呼叫 C++ 成員函式，做法是把成員函式綁上物件指標再傳給 lua
 
 CallLuaFunction
-	在 C++ 呼叫 lua 這邊的全域函式
+	在 C++ 這端呼叫 lua 這邊的全域函式
 
 MakeFunctor
 	用 C/C++ 的函式來建立 lua::Func
@@ -28,6 +28,9 @@ MultipleLuaFile
 
 LoadScriptFromBuffer
 	可從記憶體讀取 lua 腳本，因此腳本可以自由的儲存在很多地方，例如壓縮檔
+
+EditTable
+	將一個 lua table 複製到 C++ 這邊做點修改再傳回 lua 蓋掉原先的 table
 
 ExtensionModule
 	協助建立擴充模組(外掛)

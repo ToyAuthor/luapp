@@ -126,24 +126,6 @@ class State
 			if(_lua)drop();
 		}
 
-		/// Convert the function to lua global function.
-		void setFunc(lua::Str name,lua::CFunction func)
-		{
-			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-			wrapper::Wrapper<N>::_lua = this->_lua;
-			#endif
-
-			if ( _moduleMode )
-			{
-				_funcReg.add(name,func);
-			}
-			else
-			{
-				lua::PushFunction(_lua, func);
-				lua::SetGlobal(_lua, name);
-			}
-		}
-
 		/// Let lua script could use given class type.
 		template<typename C>
 		void bindClass(lua::Str class_name)
@@ -208,6 +190,24 @@ class State
 
 			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
 			adapter::Adapter<C,N>::pushPack(myF);
+		}
+
+		/// Convert the standard lua C function to lua global function.
+		void setFunc(lua::Str name,lua::CFunction func)
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			wrapper::Wrapper<N>::_lua = this->_lua;
+			#endif
+
+			if ( _moduleMode )
+			{
+				_funcReg.add(name,func);
+			}
+			else
+			{
+				lua::PushFunction(_lua, func);
+				lua::SetGlobal(_lua, name);
+			}
 		}
 
 		/// Convert C++ function to lua global function.
@@ -302,6 +302,24 @@ class State
 			return result;
 		}
 
+		int runScriptFile(lua::Str script)
+		{
+			if ( _moduleMode )
+			{
+				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::End;
+				return (int)0;
+			}
+
+			int result = lua::DoScript(_lua,script);
+
+			if ( ! result )
+			{
+				lua::Log<<"lua::State::run()"<<lua::End;
+			}
+
+			return result;
+		}
+
 		int run()
 		{
 			if ( _moduleMode )
@@ -346,28 +364,22 @@ class State
 			return result;
 		}
 
-		int run(lua::Str script)
-		{
-			if ( _moduleMode )
-			{
-				lua::Log<<"error:You can't do this. Because module mode didn't run its own script."<<lua::End;
-				return (int)0;
-			}
-
-			int result = lua::DoScript(_lua,script);
-
-			if ( ! result )
-			{
-				lua::Log<<"lua::State::run()"<<lua::End;
-			}
-
-			return result;
-		}
-
 		int run(lua::Str path,lua::Str script)
 		{
 			this->path(path);
-			return this->run(path+"/"+script);
+			return this->runScriptFile(path+"/"+script);
+		}
+
+		void run(lua::Str cmd)
+		{
+			lua::DoString(_lua,cmd);
+		}
+
+		/// Call a standard lua C function without arguments and return values.
+		void run( lua::CFunction func )
+		{
+			lua::PushFunction(_lua, func);
+			lua::PCall(_lua,0,0,0);
 		}
 
 		/// Let luapp know where to read more lua scripts.
@@ -575,11 +587,6 @@ class State
 			return fu;
 		}
 		#endif
-
-		void operator ()(lua::Str cmd)
-		{
-			lua::DoString(_lua,cmd);
-		}
 
 	private:
 

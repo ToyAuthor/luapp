@@ -19,23 +19,17 @@ function func(a, b, c)
 	return x
 end
 
+print("Return value is " .. func(1,2,3))
+
 -----------------------------------------------------
 */
 
 
 int main()
 {
-	using lua::Int;
-
 	lua::State<>    lua;
 
 	lua.run(LUAPP_SCRIPT_PATH,"MultipleLuaFile.lua");
-
-	lua::GlobalFunction<Int(Int,Int,Int)>   func;
-
-	lua.getFunc("func",&func);
-
-	lua::Log<<"Return value is "<<func(1,2,3)<<lua::End;
 
 	return EXIT_SUCCESS;
 }

@@ -12,14 +12,16 @@
 /* MakeFunctor.lua
 -----------------------------------------------------
 
-PrintAgain = function ( cat, pri )
-	print(cat("sss","ttt"))
-	pri(5.6)
+PrintAgain = function ( func1, func2 )
+	print(func1("sss","ttt"))
+	func2(5.6)
 end
 
 -----------------------------------------------------
 */
 
+
+#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 //------------------------------------------------------------------------------
 
 class MyClass
@@ -29,6 +31,7 @@ class MyClass
 		MyClass():id(100.0){}
 		~MyClass(){}
 
+		// It's func2
 		void print(lua::Num num)
 		{
 			std::cout<< id+num <<std::endl;
@@ -37,6 +40,7 @@ class MyClass
 		lua::Num   id;
 };
 
+// It's func1
 static lua::Str MyStrcat(lua::Str a,lua::Str b)
 {
 	return a+b;
@@ -45,23 +49,21 @@ static lua::Str MyStrcat(lua::Str a,lua::Str b)
 //------------------------------------------------------------------------------
 
 template<typename F1,typename F2>
-static void PrintSample(F1 cat,F2 pri)
+static void PrintSample(F1 func1,F2 func2)
 {
 	std::cout<<"-----------------------"<<std::endl;
-	std::cout<< cat("sss","ttt") <<std::endl;
-	pri(5.6);
+	std::cout<< func1("sss","ttt") <<std::endl;
+	func2(5.6);
 }
 
 template<typename F1,typename F2>
-static void PrintSample(lua::State<> *lua,const char* name,F1 cat,F2 pri)
+static void PrintSample(lua::State<> *lua,const char* name,F1 func1,F2 func2)
 {
 	std::cout<<"-----------------------"<<std::endl;
-	lua->call(name,cat,pri);
+	lua->call(name,func1,func2);
 }
 
 //------------------------------------------------------------------------------
-
-#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 
 int main()
 {
@@ -69,13 +71,13 @@ int main()
 
 	lua::State<>    lua;
 
-	lua::Function<lua::Str(lua::Str,lua::Str)>   cat = lua.bind(&MyStrcat);
-	lua::Function<void(lua::Num)>                pri = lua.bind(&MyClass::print,&obj);
+	lua::Function<lua::Str(lua::Str,lua::Str)>   func1 = lua.bind(&MyStrcat);
+	lua::Function<void(lua::Num)>                func2 = lua.bind(&MyClass::print,&obj);
 
 	lua.run(LUAPP_SCRIPT_PATH,"MakeFunctor.lua");
 
-	PrintSample(cat,pri);                       // Call them at C++ side.
-	PrintSample(&lua,"PrintAgain",cat,pri);     // Call them at lua side.
+	PrintSample(func1,func2);                       // Call them at C++ side.
+	PrintSample(&lua,"PrintAgain",func1,func2);     // Call them at lua side.
 
 	return EXIT_SUCCESS;
 }

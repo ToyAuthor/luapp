@@ -19,7 +19,7 @@ test_table=
 	hello  = "abcd",
 	[20]   = false,
 	["15"] = 123,
---	[true] = "no",    Not support boolean index.
+	[true] = "no",
 	sub =
 	{
 		[3.14] = "21",
@@ -133,11 +133,16 @@ static bool PrintKey(lua::Var &key,int *indentation)
 	}
 	else
 	{
-		Print("The key is not a string");
+		Print("Luapp not support such data type of key.");
 		return true;
 	}
 
 	return false;
+}
+
+static bool IsTimeToNewLine(lua::Var &value)
+{
+	return lua::VarType<lua::Nil>(value);
 }
 
 static void PrintValue(lua::Var &value)
@@ -146,10 +151,6 @@ static void PrintValue(lua::Var &value)
 	{
 		lua::Str  value_t = lua::VarCast<lua::Str>(value);
 		std::cout << "\"" << value_t << "\"" << std::endl;
-	}
-	else if ( lua::VarType<lua::Nil>(value) )
-	{
-		std::cout << std::endl;
 	}
 	else if ( lua::VarType<lua::Int>(value) )
 	{
@@ -176,6 +177,10 @@ static void PrintValue(lua::Var &value)
 	else if ( lua::VarType<lua::Ptr>(value) )
 	{
 		Print("pointer");
+	}
+	else if ( IsTimeToNewLine(value) )
+	{
+		std::cout << std::endl;
 	}
 	else
 	{
@@ -220,6 +225,16 @@ void PrintTableItem(lua::Table &table,int *indentation)
 
 			std::cout << tab;
 			Print("}");
+		}
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		else if  ( lua::VarType<lua::Map>(value) )
+		{
+			Print("warning:lua::Map doesn't work in this case.");
+		}
+		#endif
+		else if  ( lua::VarType<lua::Nil>(value) )
+		{
+			Print("error:There is no chance to get nil here. Must be something wrong.");
 		}
 		else
 		{

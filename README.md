@@ -48,15 +48,9 @@ class MyClass
 {
 public:
 
-	MyClass()
-	{
-		printf("do MyClass::MyClass()\n");
-	}
+	MyClass(){}
 
-	~MyClass()
-	{
-		printf("do MyClass::~MyClass()\n");
-	}
+	~MyClass(){}
 
 	lua::Int count( lua::Int num01,
 	                lua::Int num02)

@@ -99,46 +99,35 @@ class Table
 				// Only called by lua::Table
 				Iterator(
 				          #ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-				          std::map<lua::Bool,lua::Var>::iterator itBool,
+				          std::map<lua::Bool,lua::Var>  *mapBool,
 				          #endif
-				          std::map<lua::Int,lua::Var>::iterator itInt,
-				          std::map<lua::Num,lua::Var>::iterator itNum,
-				          std::map<lua::Str,lua::Var>::iterator itStr,
-
-				          #ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-				          std::map<lua::Bool,lua::Var>::iterator endBool,
-				          #endif
-				          std::map<lua::Int,lua::Var>::iterator endInt,
-				          std::map<lua::Num,lua::Var>::iterator endNum,
-				          std::map<lua::Str,lua::Var>::iterator endStr ):_stage(INT_STAGE)
+				          std::map<lua::Int,lua::Var>  *mapInt,
+				          std::map<lua::Num,lua::Var>  *mapNum,
+				          std::map<lua::Str,lua::Var>  *mapStr ):_stage(INT_STAGE)
 				{
-					_itInt = itInt;
-					_itNum = itNum;
-					_itStr = itStr;
+					_mapInt = mapInt;
+					_mapNum = mapNum;
+					_mapStr = mapStr;
 
-					_endInt = endInt;
-					_endNum = endNum;
-					_endStr = endStr;
+					_itInt = _mapInt->begin();
+					_itNum = _mapNum->begin();
+					_itStr = _mapStr->begin();
 
 					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-					_itBool = itBool;
-					_endBool = endBool;
+					_mapBool = mapBool;
+					_itBool = _mapBool->begin();
 					#endif
 
 					_eableList[END_STAGE] = true;     // Always true
 
-					_eableList[0] = ( itInt==endInt ) ? false : true;
-					_eableList[1] = ( itNum==endNum ) ? false : true;
-					_eableList[2] = ( itStr==endStr ) ? false : true;
-
+					_eableList[0] = _mapInt->size()==0 ? false : true;
+					_eableList[1] = _mapNum->size()==0 ? false : true;
+					_eableList[2] = _mapStr->size()==0 ? false : true;
 					#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-					_eableList[3] = ( itBool==endBool ) ? false : true;
+					_eableList[3] = _mapBool->size()==0 ? false : true;
 					#endif
 
-					while ( ! _eableList[_stage] )
-					{
-						_stage++;
-					}
+					updateStage();
 				}
 
 				Iterator operator = (const Iterator &other)
@@ -184,10 +173,7 @@ class Table
 
 				bool isEnd()
 				{
-					while ( ! _eableList[_stage] )
-					{
-						_stage++;
-					}
+					updateStage();
 
 					if ( this->_stage==END_STAGE )
 					{
@@ -211,16 +197,24 @@ class Table
 				std::map<lua::Num,lua::Var>::iterator   _itNum;
 				std::map<lua::Str,lua::Var>::iterator   _itStr;
 
-				std::map<lua::Int,lua::Var>::iterator   _endInt;
-				std::map<lua::Num,lua::Var>::iterator   _endNum;
-				std::map<lua::Str,lua::Var>::iterator   _endStr;
+				std::map<lua::Int,lua::Var>*            _mapInt;
+				std::map<lua::Num,lua::Var>*            _mapNum;
+				std::map<lua::Str,lua::Var>*            _mapStr;
 
 				#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-				std::map<lua::Bool,lua::Var>::iterator   _itBool;
-				std::map<lua::Bool,lua::Var>::iterator   _endBool;
+				std::map<lua::Bool,lua::Var>::iterator  _itBool;
+				std::map<lua::Bool,lua::Var>*           _mapBool;
 				#endif
 
-				inline void copy_mykind(Iterator &other)
+				void updateStage()
+				{
+					while ( this->_eableList[_stage] == false )
+					{
+						this->_stage++;
+					}
+				}
+
+				void copy_mykind(Iterator &other)
 				{
 					_itInt = other._itInt;
 					_itNum = other._itNum;
@@ -239,25 +233,27 @@ class Table
 
 				void it_offset_forward()
 				{
+					updateStage();
+
 					switch ( this->_stage )
 					{
 						case INT_STAGE:
 							_itInt++;
-							if ( _itInt == _endInt )
+							if ( _itInt == _mapInt->end() )
 							{
 								_eableList[INT_STAGE] = false;
 							}
 							break;
 						case NUM_STAGE:
 							_itNum++;
-							if ( _itNum == _endNum )
+							if ( _itNum == _mapNum->end() )
 							{
 								_eableList[NUM_STAGE] = false;
 							}
 							break;
 						case STR_STAGE:
 							_itStr++;
-							if ( _itStr == _endStr )
+							if ( _itStr == _mapStr->end() )
 							{
 								_eableList[STR_STAGE] = false;
 							}
@@ -265,7 +261,7 @@ class Table
 						#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
 						case BOL_STAGE:
 							_itBool++;
-							if ( _itBool == _endBool )
+							if ( _itBool == _mapBool->end() )
 							{
 								_eableList[BOL_STAGE] = false;
 							}
@@ -441,11 +437,9 @@ class Table
 		Iterator getBegin()
 		{
 			#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-			return Iterator( _mapBool.begin(),_mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
-			                 _mapBool.end(),  _mapInt.end(),   _mapNum.end(),   _mapStr.end() );
+			return Iterator( &_mapBool, &_mapInt, &_mapNum, &_mapStr );
 			#else
-			return Iterator( _mapInt.begin(), _mapNum.begin(), _mapStr.begin(),
-			                 _mapInt.end(),   _mapNum.end(),   _mapStr.end() );
+			return Iterator( &_mapInt, &_mapNum, &_mapStr );
 			#endif
 		}
 

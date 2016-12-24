@@ -14,6 +14,15 @@ namespace lua{
 
 
 //------------------------------------------------------------------------------
+inline void _ReportLuaError(NativeState h,lua::Str msg)
+{
+	const char *error_msg = lua_tostring(h,-1);
+
+	lua::Log<<msg<<lua::End;
+	lua::Log<<error_msg<<lua::End;
+	lua_pop(h, 1);  // remove message
+}
+//------------------------------------------------------------------------------
 inline void NewModule(NativeState h,FuncReg &reg)
 {
 	luaL_newlib(h,(luaL_Reg*)(reg._get()));
@@ -29,26 +38,36 @@ inline void DestroyHandle(NativeState h)
 	lua_close(h);
 }
 //------------------------------------------------------------------------------
-inline int PCall(NativeState h,int num01,int num02,int num03)
+inline int PCall(NativeState h,int args,int results,int msg_handler)
 {
-	int  result = lua_pcall(h,num01,num02,num03);
+	int  result = lua_pcall( h, args, results, msg_handler );
 
 	if ( result != LUA_OK )
 	{
-		const char *msg = lua_tostring(h,-1);
-
-		lua::Log<<"error:lua_pcall get error."<<lua::End;
-		lua::Log<<msg<<lua::End;
-		lua_pop(h, 1);  // remove message
+		_ReportLuaError(h,"error:lua_pcall get error.");
 	}
 
 	return result;
 }
 //------------------------------------------------------------------------------
+#ifdef _LUAPP_CHECK_CAREFUL_
+inline int _OpenLibs(NativeState h)
+{
+	luaL_openlibs(h);
+	return 1;
+}
+inline void OpenLibs(NativeState h)
+{
+	//------Maybe luaL_openlibs will report something------
+	lua_pushcfunction(h,_OpenLibs);
+	lua::PCall(h,0,0,0);
+}
+#else
 inline void OpenLibs(NativeState h)
 {
 	luaL_openlibs(h);
 }
+#endif
 //------------------------------------------------------------------------------
 inline int TypeCast(NativeState h,int index)
 {
@@ -57,32 +76,36 @@ inline int TypeCast(NativeState h,int index)
 //------------------------------------------------------------------------------
 inline void DoString(NativeState h,lua::Str code)
 {
-	luaL_dostring(h, code.c_str());
+	if ( luaL_dostring(h, code.c_str()) )
+	{
+		_ReportLuaError(h,"error:DoString");
+	}
 }
 //------------------------------------------------------------------------------
 inline void _PrintScriptLoadingError(NativeState h,int error_code,lua::Str& filename)
 {
+	lua::Str    msg;
+
 	switch ( error_code )
 	{
 		case 0:
-			lua::Log<<"warning:big mistake! It's not a error."<<lua::End;
+			msg = "warning:big mistake! It's not a error.";
 			return;
 		case LUA_ERRFILE:
-			lua::Log<<"error:cannot open the file:"<<filename<<lua::End;
+			msg = "error:cannot open the file:";
+			msg += filename;
 			break;
 		case LUA_ERRSYNTAX:
-			lua::Log<<"error:syntax error during pre-compilation"<<lua::End;
+			msg = "error:syntax error during pre-compilation";
 			break;
 		case LUA_ERRMEM:
-			lua::Log<<"error:memory allocation error"<<lua::End;
+			msg = "error:memory allocation error";
 			break;
 		default:
-			lua::Log<<"error:load script failed for some reason"<<lua::End;
+			msg = "error:load script failed for some reason";
 	}
 
-	const char *msg = lua_tostring(h,-1);
-	lua::Log<<msg<<lua::End;
-	lua_pop(h, 1);  // remove message
+	_ReportLuaError(h,msg);
 }
 //------------------------------------------------------------------------------
 inline int LoadScript(NativeState h,lua::Str name,lua::Str& code)
