@@ -1,6 +1,7 @@
 #pragma once
 
 #include "luapp/Map.hpp"
+#include "luapp/Tag.hpp"
 #include "luapp/Func.hpp"
 #include "luapp/Task.hpp"
 #include "luapp/User.hpp"
@@ -59,6 +60,20 @@ inline void CheckVarFromLua(lua::Handle h,lua::User *t, int i)
 }
 
 inline void PushVarToLua(lua::Handle,lua::User t)
+{
+	t._getItem()->getVar();
+}
+
+//------------------------------------------------------------------------------
+
+inline void CheckVarFromLua(lua::Handle h,lua::Tag *t, int i)
+{
+	lua::PushValue(h,i);
+	t->_set(h,h->_register->newItem());
+	t->_getItem()->setVar();
+}
+
+inline void PushVarToLua(lua::Handle,lua::Tag t)
 {
 	t._getItem()->getVar();
 }
@@ -895,5 +910,219 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Function<F> *t, int i)
 }
 
 //--------------------------It work for lua::Func--------------------------end
+
+//--------------------------It work for lua::Tag--------------------------start
+
+inline Var& Var::operator = (lua::Tag &t)
+{
+	t._getItem()->getVar();
+	lua::CheckVarFromLua(t._lua,this,-1);
+	lua::Pop(t._lua,1);
+
+	return *this;
+}
+
+inline Var::Var(lua::Tag &t)
+{
+	t._getItem()->getVar();
+	lua::CheckVarFromLua(t._lua,this,-1);
+	lua::Pop(t._lua,1);
+}
+
+template<typename T> struct _LuaTypeFilte{};
+
+template<>
+struct _LuaTypeFilte<lua::Int>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TNUMBER )
+		{
+			                                    // ... [Num]
+			lua::PushValue(handle,-1);          // ... [Num] [Num]
+
+			if ( lua_isinteger(handle->_lua, -1) )
+			{
+				lua::Pop(handle,2);             // ...
+				return 1;
+			}
+			lua::Pop(handle,2);// ...
+			return 0;
+		}
+		lua::Pop(handle,1);// ...
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Num>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TNUMBER )
+		{
+			                                    // ... [Num]
+			lua::PushValue(handle,-1);          // ... [Num] [Num]
+
+			if ( lua_isnumber(handle->_lua, -1) )
+			{
+				lua::Pop(handle,2);             // ...
+				return 1;
+			}
+			lua::Pop(handle,2);// ...
+			return 0;
+		}
+		lua::Pop(handle,1);// ...
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Bool>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TBOOLEAN )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Str>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TSTRING )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Nil>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TNIL )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Ptr>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TLIGHTUSERDATA )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Table>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TTABLE )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Func>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TFUNCTION )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::Task>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TTHREAD )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<>
+struct _LuaTypeFilte<lua::User>
+{
+	static bool type( lua::Handle handle, lua::Register::Item item)
+	{
+		item->getVar();    // ... [?]
+
+		if ( lua::TypeCast(handle,-1)==LUA_TUSERDATA )
+		{
+			lua::Pop(handle,1);
+			return 1;
+		}
+		lua::Pop(handle,1);
+		return 0;
+	}
+};
+
+template<typename T>
+bool Tag::type()
+{
+	return _LuaTypeFilte<T>::type(this->_lua,this->_item);
+}
+
+//--------------------------It work for lua::Tag--------------------------end
 
 }//namespace lua

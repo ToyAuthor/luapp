@@ -287,6 +287,17 @@ class Var
 		Var(lua::_Map_Address &t);
 		#endif
 
+		//---------------------Tag---------------------
+		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+		// They implemented at luapp/Tag.hpp
+		Var(const lua::Tag &t);
+		Var& operator = (const lua::Tag &t);
+
+		// They implemented at luapp/MorePushAndPull.hpp
+		Var& operator = (lua::Tag &t);
+		Var(lua::Tag &t);
+		#endif
+
 		//---------------------Func---------------------
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 		// They implemented at luapp/Func.hpp
