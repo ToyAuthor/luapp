@@ -26,32 +26,21 @@
 
 <font class="title">自動刪除區域變數</font>
 區域變數不像<a href="global.html" target="_self">全域變數</a>需要手動刪除
-當時機一到
-區域變數會自動刪除自己
+當所屬 scope 結束時
+區域變數會自動被刪除(不過你要搶在被自動刪除之前進行手動刪除也沒問題)
 
 
-區域變數自動刪除的地點有兩個：
-	1.遇到關鍵字 end，但不是任何一個 end 都可以
-	2.程式碼最後一行的結尾
-
-
-要說明區域變數遇到哪一個 end 才會自動刪除
-而哪一種區域變數要等到最後一行的結尾才會自動刪除
-用縮排來解釋是最簡單容易理解的
-
-下面兩個範例只使用 do 跟 end 這兩個關鍵字來造成縮排
-do 跟 end 之間的每行程式碼都右移一個 tab 的長度
-這就是縮排
+下面兩個範例只使用 do 跟 end 這兩個關鍵字來圍出一段 scope
 
 <div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">g</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">8</span><span class="sc0">      </span><span class="sc2">-- 下面每一行都讀的到這變數
 </span><span class="sc0">
-</span><span class="sc2">-- 這裡簡單的用 do end 來造成縮排
-</span><span class="sc5">do</span><span class="sc0">
+</span><span class="sc2">-- 這裡簡單的用 do end 來產生 scope
+</span><span class="sc5">do</span><span class="sc0"></span><span class="sc2">-- scope 開始
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出8
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出nil，因為此時 x 不存在
 </span><span class="sc0">    </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">4</span><span class="sc0">  </span><span class="sc2">-- 建立區域變數 x
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出4
-</span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc5">end</span><span class="sc0"></span><span class="sc2">-- scope 結束
 </span><span class="sc0">
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">g</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出8
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">   </span><span class="sc2">-- 印出ni，因為此時 x 已自動刪除了
@@ -68,9 +57,7 @@ do 跟 end 之間的每行程式碼都右移一個 tab 的長度
 
 
 
-只要縮排有整理好
-再多層縮排也不會搞混區域變數的刪除時機
-下面範例已經清楚的告訴你何時遇到 end 會自動刪除
+下面範例已經清楚的告訴你何時遇到 end 會刪除區域變數
 
 <div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">  </span><span class="sc2">-- 下面每一行都能讀的到 x 這個值
 </span><span class="sc0">
@@ -90,15 +77,18 @@ do 跟 end 之間的每行程式碼都右移一個 tab 的長度
 </span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
 </span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 2
 </span><span class="sc0">        </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 3
-</span><span class="sc0">    </span><span class="sc5">end</span><span class="sc0">
+</span><span class="sc0">    </span><span class="sc5">end</span><span class="sc0"></span><span class="sc2">-- 此時 z 被刪除了
     </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 2
 </span><span class="sc0">    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil，因為已經自動刪除了
-</span><span class="sc5">end</span><span class="sc0">
-</span><span class="sc2">-- y 也自動刪除了，又只剩下 x 能讀到了
+</span><span class="sc5">end</span><span class="sc0"></span><span class="sc2">-- 此時 y 被刪除了
+</span><span class="sc0">
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 1
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">y</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
-</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil</span></div>
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">z</span><span class="sc10">)</span><span class="sc0">     </span><span class="sc2">-- 印出 nil
+</span><span class="sc0">
+</span><span class="sc2">-- x 會活到程式碼的最後一行才被刪除
+</span></div>
 
 
 
@@ -121,26 +111,23 @@ do 跟 end 之間的每行程式碼都右移一個 tab 的長度
 
 
 
+
+
+
+自己寫程式試一試就能搞懂這個機制了
 
 
 <font class="title">被刪除的變數</font>
 那些變數雖然被刪除了
 但是它們未必已經把佔用的記憶體歸還給電腦了
+因為 Lua 的做法是會選個時機來一口氣歸還所有記憶體
 
 
-Lua 會找個時間歸還記憶體
-
-或者你可以呼叫這個函式來要求 Lua 立刻進行歸還動作
+你可以呼叫這個函式來要求 Lua 立刻進行歸還動作
 collectgarbage("collect")
 
-有時被刪除的變數積太多會讓歸還行為花很多時間
-所以你自己定期去要求 Lua 進行歸還可能會比較好
 
-但是太頻繁的要求進行歸還動作也有可能會浪費更多時間
-
-
-
-<font class="title">變數離開了範圍卻還沒被刪除</font>
+<font class="title">變數離開了 scope 卻還沒被刪除</font>
 這在<a href="function.html" target="_self">閉包</a>的情況下的確會發生
 因為閉包活了下來
 被閉包引用的變數因此沒有消失
