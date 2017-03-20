@@ -54,6 +54,7 @@ inline int NewMetaTable(Handle h,lua::Str tname) { return NewMetaTable(h->_lua,t
 inline void* NewUserData(Handle h,size_t size) { return NewUserData(h->_lua,size); }
 inline void RemoveGlobal(Handle h,lua::Str var) { RemoveGlobal(h->_lua,var); }
 inline void SetGlobal(Handle h,lua::Str var) { SetGlobal(h->_lua,var); }
+inline bool IsGlobal(Handle h,lua::Str var) { return IsGlobal(h->_lua,var); }
 inline void GetGlobal(Handle h,lua::Str var) { GetGlobal(h->_lua,var); }
 inline void SetTable(Handle h,int index) { SetTable(h->_lua,index); }
 inline void GetTable(Handle h,int index) { GetTable(h->_lua,index); }

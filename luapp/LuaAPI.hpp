@@ -251,6 +251,20 @@ inline void SetGlobal(NativeState h,lua::Str var)
 	lua_setglobal(h,var.c_str());
 }
 //------------------------------------------------------------------------------
+inline bool IsGlobal(NativeState h,lua::Str var)
+{
+	lua_getglobal(h,var.c_str());
+
+	if ( lua_type(h, -1)!=LUA_TNIL )
+	{
+		lua_pop(h,1);
+		return true;
+	}
+
+	lua_pop(h,1);
+	return false;
+}
+//------------------------------------------------------------------------------
 inline void GetGlobal(NativeState h,lua::Str var)
 {
 	lua_getglobal(h,var.c_str());
