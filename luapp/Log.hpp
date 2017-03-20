@@ -33,7 +33,9 @@ class Printer
 
 		const Printer& operator << (const long long num) const
 		{
-			#ifdef _WIN32
+			#ifdef _WIN64
+			std::printf("%lld",num);
+			#elif defined(_WIN32)
 			std::printf("%I64d",num);
 			#else
 			std::printf("%lld",num);
