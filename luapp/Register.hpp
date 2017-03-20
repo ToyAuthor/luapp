@@ -45,7 +45,10 @@ class Register
 
 		Register(lua::NativeState h):_lua(h)
 		{
-			buildDataBase();
+			if ( ! lua::IsGlobal(h,"_luapp_data") )
+			{
+				buildDataBase();
+			}
 		}
 
 		~Register(){}
@@ -80,21 +83,31 @@ class Register
 
 		void _remove(lua::Int id)
 		{
-			if ( id>=(lua::Int)_list.size() )
-			{
-				lua::Log<<"error:can't remove a id that doesn't exist."<<lua::End;
-				return;
-			}
-
 			lua::GetGlobal(_lua, "_luapp_data");        // ... [data]
 			lua::GetField(_lua,-1, "temp_variable");    // ... [data] [temp]
 
 			lua::PushInteger(_lua,id);                  // ... [data] [temp] [id]
 			lua::PushNil(_lua);                         // ... [data] [temp] [id] [nil]
 			lua::SetTable(_lua,-3);                     // ... [data] [temp]
-			lua::Pop(_lua,2);                           // ...
+			lua::Pop(_lua,1);                           // ... [data]
 
-			_list[id] = false;
+			lua::GetField(_lua,-1, "id_count");         // ... [data] [count]
+
+			lua::Int    count = lua::CheckInteger(_lua,-1);
+			lua::Pop(_lua,1);                           // ... [data]
+
+			if ( id>count )
+			{
+				lua::Log<<"error:can't remove a id that doesn't exist."<<lua::End;
+				lua::Pop(_lua,1);                       // ...
+				return;
+			}
+
+			lua::GetField(_lua,-1, "unused_id_list");   // ... [data] [list]
+			lua::PushInteger(_lua,id);                  // ... [data] [list] [key]
+			lua::PushBoolean(_lua,true);                // ... [data] [list] [key] [value]
+			lua::SetTable(_lua,-3);                     // ... [data] [list]
+			lua::Pop(_lua,2);                           // ...
 		}
 
 	private:
@@ -102,99 +115,63 @@ class Register
 		void buildDataBase()
 		{
 			lua::NewTable(_lua);                       // ... [T]
+
 			lua::PushString(_lua,"temp_variable");     // ... [T] [temp]
 			lua::NewTable(_lua);                       // ... [T] [temp] [value]
 			lua::SetTable(_lua,-3);                    // ... [T]
+
+			lua::PushString(_lua,"unused_id_list");    // ... [T] [name]
+			lua::NewTable(_lua);                       // ... [T] [name] [list]
+			lua::SetTable(_lua,-3);                    // ... [T]
+
+			lua::PushString(_lua,"id_count");          // ... [T] [name]
+			lua::PushInteger(_lua,0);                  // ... [T] [name] 0
+			lua::SetTable(_lua,-3);                    // ... [T]
+
 			lua::SetGlobal(_lua, "_luapp_data");       // ...
 		}
 
 		lua::Int createUniqueID()
 		{
-			const lua::Int   ID_NOT_FOUND = -1;
+			lua::GetGlobal(_lua, "_luapp_data");       // ... [data]
+			lua::GetField(_lua,-1, "unused_id_list");  // ... [data] [list]
 
-			lua::Int    id = ID_NOT_FOUND;
-			lua::Int    size = _list.size();
+			lua::Int    id = -1;
 
-			if ( size!=0 )
+			lua::PushNil(_lua);                        // ... [data] [list] [nil]
+
+			while ( lua_next(_lua, -2) != 0 )
 			{
-				for ( lua::Int i=0 ; i<size ; i++ )
-				{
-					if ( _list[i]==false )
-					{
-						_list[i] = true;
-						id = i;
-						break;
-					}
-				}
+				                                       // ... [data] [list] [key] [value]
+				id = lua::CheckInteger(_lua,-2);
+
+				// Remove ID from unused list.
+				lua::Pop(_lua,1);                      // ... [data] [list] [key]
+				lua::PushNil(_lua);                    // ... [data] [list] [key] [nil]
+				lua::SetTable(_lua,-3);                // ... [data] [list]
+				break;
+			}
+			                                           // ... [data] [list]
+			if ( id==-1 )
+			{
+				lua::Int    count = 0;
+				lua::GetField(_lua,-2, "id_count");    // ... [data] [list] [count]
+				count = lua::CheckInteger(_lua,-1);
+				lua::Pop(_lua,1);                      // ... [data] [list]
+				count++;
+				id = count;
+
+				lua::PushString(_lua,"id_count");      // ... [data] [list] [name]
+				lua::PushInteger(_lua,count);          // ... [data] [list] [name] [count]
+				lua::SetTable(_lua,-4);                // ... [data] [list]
 			}
 
-			if ( id==ID_NOT_FOUND )
-			{
-				_list.push_back(true);
-				id = size;
-			}
-
-			#ifdef _LUAPP_CHECK_CAREFUL_
-			if ( nameExist(id) )
-			{
-				lua::Log<<"error:create name already exist."<<lua::End;
-			}
-			#endif
+			lua::Pop(_lua,2);                          // ...
 
 			return id;
 		}
 
-		#ifdef _LUAPP_CHECK_CAREFUL_
-		bool isNil()
-		{
-			lua::Var   var;
-			lua::CheckVarFromLua(_lua,&var,-1);
-
-			if ( lua::VarType<lua::Nil>(var) )
-			{
-				return true;
-			}
-
-			return false;
-		}
-
-		bool nameExist(lua::Int id)
-		{
-			lua::GetGlobal(_lua, "_luapp_data");        // ... [data]
-
-			if ( isNil() )
-			{
-				lua::Log<<"error:_G._luapp_data not exist."<<lua::End;
-				lua::Pop(_lua,1);
-				return false;
-			}
-
-			lua::GetField(_lua,-1, "temp_variable");    // ... [data] [temp]
-
-			if ( isNil() )
-			{
-				lua::Log<<"error:_G._luapp_data.temp_variable not exist."<<lua::End;
-				lua::Pop(_lua,2);
-				return false;
-			}
-
-			lua::PushInteger(_lua,id);                  // ... [data] [temp] [id]
-			lua::GetTable(_lua,-2);                     // ... [data] [temp] [value]
-
-			if ( isNil() )
-			{
-				lua::Pop(_lua,3);
-				return false;
-			}
-
-			lua::Pop(_lua,3);
-			return true;
-		}
-		#endif
-
 		lua::NativeState    _lua;
-		lua::Str            _name;  // Globle name
-		std::vector<bool>   _list;
 };
 
 
