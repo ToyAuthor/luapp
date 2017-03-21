@@ -52,6 +52,18 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 		}
 
+		static void registerClass1ArgEx(lua::Handle L,lua::Str& className)
+		{
+			set_class_name(className);                              // ...
+
+			//--------Setup a global function to lua--------
+			lua::PushFunction(L, &Adapter<C,N>::constructor1ArgEx); // ... [F]
+			lua::SetGlobal(L, _className);                          // ...
+
+			buildMetaTableForUserdata(L);
+			buildMetaTableForMemberFunction(L);
+		}
+
 		static lua::CFunction getConstructor(lua::Handle L,lua::Str& className)
 		{
 			set_class_name(className);
@@ -67,6 +79,16 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 
 			return &Adapter<C,N>::constructorEx;
+		}
+
+		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& className)
+		{
+			set_class_name(className);
+
+			buildMetaTableForUserdata(L);
+			buildMetaTableForMemberFunction(L);
+
+			return &Adapter<C,N>::constructor1ArgEx;
 		}
 
 		static void pushPack(struct Pack pak)
@@ -195,6 +217,31 @@ class Adapter
 			lua::PushNumber(L, 0);                             // ... [T] [0]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
+			lua::SetTable(L, -3);                              // ... [T]
+
+			return 1;
+		}
+
+		static int constructor1ArgEx(lua::NativeState L)
+		{
+			                                                   // ... [Arg]
+			lua::Var   arg1;
+			lua::CheckVarFromLua(L,&arg1,1);
+			lua::Pop(L,1);                                     // ...
+
+			lua::NewTable(L);                                  // ... [T]
+
+			//-----------Setup member function-----------
+			lua::GetMetaTable(L, _className);                  // ... [T] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T]
+
+			//-----------New a object and setup destructor-----------
+			lua::PushNumber(L, 0);                             // ... [T] [0]
+			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
+
+			*a = new C(arg1);
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
