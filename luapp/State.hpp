@@ -164,7 +164,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua,class_name));
 			}
 			else
 			{

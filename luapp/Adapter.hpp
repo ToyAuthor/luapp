@@ -45,7 +45,7 @@ class Adapter
 			set_class_name(className);                         // ...
 
 			//--------Setup a global function to lua--------
-			lua::PushFunction(L, &Adapter<C,N>::constructor2); // ... [F]
+			lua::PushFunction(L, &Adapter<C,N>::constructorEx);// ... [F]
 			lua::SetGlobal(L, _className);                     // ...
 
 			buildMetaTableForUserdata(L);
@@ -59,14 +59,14 @@ class Adapter
 			return &Adapter<C,N>::constructor;
 		}
 
-		static lua::CFunction getConstructor2(lua::Handle L,lua::Str& className)
+		static lua::CFunction getConstructorEx(lua::Handle L,lua::Str& className)
 		{
 			set_class_name(className);
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 
-			return &Adapter<C,N>::constructor2;
+			return &Adapter<C,N>::constructorEx;
 		}
 
 		static void pushPack(struct Pack pak)
@@ -183,7 +183,7 @@ class Adapter
 
 		// It's a faster way to build object(table).
 		// Lua have to store a big metatable that include every each member function.
-		static int constructor2(lua::NativeState L)
+		static int constructorEx(lua::NativeState L)
 		{
 			lua::NewTable(L);                                  // ... [T]
 

@@ -8,8 +8,8 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - [x] Read/Write/Add/Remove lua global variable at C++ side.
 - [x] Lua could send any variable to C++, and C++ could send then back.
 - [x] Support to create C extension module.
-- [x] Design a C++ container to simulate lua table.
-- [x] Design a class whose instances can hold instances of any type supported by luapp.
+- [x] Implement a C++ container to simulate lua table.
+- [x] Implement a class whose instances can hold instances of any type supported by luapp.
 - [x] Let lua script embedded in C++.
 - [x] Be able to search lua script by custom rule.
 - [ ] Support to call lua function that has multiple return value.
