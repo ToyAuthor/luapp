@@ -5,12 +5,16 @@
 
 namespace lua{
 
-template<typename T,typename A>
-void CopyVar(A &target,const lua::Var &data)
+template<typename T>
+void CopyVar(T &target,const lua::Var &data)
 {
 	if ( lua::VarType<T>(data) )
 	{
 		target = lua::VarCast<T>(data);
+	}
+	else
+	{
+		lua::Log<<"error:wrong type! lua::CopyVar() at Auxiliary.hpp"<<lua::End;
 	}
 }
 
