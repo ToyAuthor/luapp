@@ -17,12 +17,10 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 ### Requirements
 - CMake 2.8+
 - Lua 5.3+
-- C++03+
-- Visual Studio 2010+
 
 ### Information
 Item        | Description
-------------|----------
+------------|-------------
 **Author**  | Yan Xin Wu
 **License** | MIT
 **Version** | 2.1.0 (using Semantic Versioning 2.0.0)
