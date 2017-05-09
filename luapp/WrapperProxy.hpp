@@ -8,6 +8,7 @@
 
 
 #include "luapp/Standard.hpp"
+#include "luapp/stl/functional.hpp"
 
 
 namespace lua{
@@ -1261,6 +1262,608 @@ static Proxy* GetProxy(R(C::*f)(A1,A2,A3,A4,A5,A6,A7,A8,A9),C *obj)
 
 //------------------------------------------------------------
 
+template<typename R>
+struct ProxyFunctor00 : public ProxyReturn<R>
+{
+	typedef std::function<R()> Func;
+
+	ProxyFunctor00(){}
+	ProxyFunctor00(Func fn):func00(fn){}
+
+	Func    func00;
+
+	int Do(lua::Handle L)
+	{
+		this->returnValue(L,func00());
+		return (int)1;
+	}
+};
+
+template<>
+struct ProxyFunctor00<void> : public Proxy
+{
+	typedef void R;
+	typedef std::function<R()> Func;
+
+	ProxyFunctor00(){}
+	ProxyFunctor00(Func fn):func00(fn){}
+
+	Func    func00;
+
+	int Do(lua::Handle)
+	{
+		func00();
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1>
+struct ProxyFunctor01 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1)> Func;
+
+	ProxyFunctor01(){}
+	ProxyFunctor01(Func fn):func01(fn){}
+
+	Func    func01;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		lua::CheckVarFromLua(L,&p1,1);
+		this->returnValue(L,func01(p1));
+		return (int)1;
+	}
+};
+
+template<typename A1>
+struct ProxyFunctor01<void,A1> : public Proxy
+{
+	typedef std::function<void(A1)> Func;
+
+	ProxyFunctor01(){}
+	ProxyFunctor01(Func fn):func01(fn){}
+
+	Func    func01;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		lua::CheckVarFromLua(L,&p1,1);
+		func01(p1);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2>
+struct ProxyFunctor02 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2)> Func;
+
+	ProxyFunctor02(){}
+	ProxyFunctor02(Func fn):func02(fn){}
+
+	Func    func02;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		this->returnValue(L,func02(p1,p2));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2>
+struct ProxyFunctor02<void,A1,A2> : public Proxy
+{
+	typedef std::function<void(A1,A2)> Func;
+
+	ProxyFunctor02(){}
+	ProxyFunctor02(Func fn):func02(fn){}
+
+	Func    func02;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		func02(p1,p2);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3>
+struct ProxyFunctor03 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3)> Func;
+
+	ProxyFunctor03(){}
+	ProxyFunctor03(Func fn):func03(fn){}
+
+	Func    func03;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		this->returnValue(L,func03(p1,p2,p3));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3>
+struct ProxyFunctor03<void,A1,A2,A3> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3)> Func;
+
+	ProxyFunctor03(){}
+	ProxyFunctor03(Func fn):func03(fn){}
+
+	Func    func03;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		func03(p1,p2,p3);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4>
+struct ProxyFunctor04 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4)> Func;
+
+	ProxyFunctor04(){}
+	ProxyFunctor04(Func fn):func04(fn){}
+
+	Func    func04;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		this->returnValue(L,func04(p1,p2,p3,p4));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4>
+struct ProxyFunctor04<void,A1,A2,A3,A4> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4)> Func;
+
+	ProxyFunctor04(){}
+	ProxyFunctor04(Func fn):func04(fn){}
+
+	Func    func04;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		func04(p1,p2,p3,p4);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5>
+struct ProxyFunctor05 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4,A5)> Func;
+
+	ProxyFunctor05(){}
+	ProxyFunctor05(Func fn):func05(fn){}
+
+	Func    func05;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		this->returnValue(L,func05(p1,p2,p3,p4,p5));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4,typename A5>
+struct ProxyFunctor05<void,A1,A2,A3,A4,A5> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4,A5)> Func;
+
+	ProxyFunctor05(){}
+	ProxyFunctor05(Func fn):func05(fn){}
+
+	Func    func05;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		func05(p1,p2,p3,p4,p5);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+struct ProxyFunctor06 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4,A5,A6)> Func;
+
+	ProxyFunctor06(){}
+	ProxyFunctor06(Func fn):func06(fn){}
+
+	Func    func06;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		this->returnValue(L,func06(p1,p2,p3,p4,p5,p6));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+struct ProxyFunctor06<void,A1,A2,A3,A4,A5,A6> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4,A5,A6)> Func;
+
+	ProxyFunctor06(){}
+	ProxyFunctor06(Func fn):func06(fn){}
+
+	Func    func06;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		func06(p1,p2,p3,p4,p5,p6);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+struct ProxyFunctor07 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4,A5,A6,A7)> Func;
+
+	ProxyFunctor07(){}
+	ProxyFunctor07(Func fn):func07(fn){}
+
+	Func    func07;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		this->returnValue(L,func07(p1,p2,p3,p4,p5,p6,p7));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+struct ProxyFunctor07<void,A1,A2,A3,A4,A5,A6,A7> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4,A5,A6,A7)> Func;
+
+	ProxyFunctor07(){}
+	ProxyFunctor07(Func fn):func07(fn){}
+
+	Func    func07;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		func07(p1,p2,p3,p4,p5,p6,p7);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+struct ProxyFunctor08 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4,A5,A6,A7,A8)> Func;
+
+	ProxyFunctor08(){}
+	ProxyFunctor08(Func fn):func08(fn){}
+
+	Func    func08;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		A8      p8;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		lua::CheckVarFromLua(L,&p8,8);
+		this->returnValue(L,func08(p1,p2,p3,p4,p5,p6,p7,p8));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+struct ProxyFunctor08<void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4,A5,A6,A7,A8)> Func;
+
+	ProxyFunctor08(){}
+	ProxyFunctor08(Func fn):func08(fn){}
+
+	Func    func08;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		A8      p8;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		lua::CheckVarFromLua(L,&p8,8);
+		func08(p1,p2,p3,p4,p5,p6,p7,p8);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template<typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+struct ProxyFunctor09 : public ProxyReturn<R>
+{
+	typedef std::function<R(A1,A2,A3,A4,A5,A6,A7,A8,A9)> Func;
+
+	ProxyFunctor09(){}
+	ProxyFunctor09(Func fn):func09(fn){}
+
+	Func    func09;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		A8      p8;
+		A9      p9;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		lua::CheckVarFromLua(L,&p8,8);
+		lua::CheckVarFromLua(L,&p9,9);
+		this->returnValue(L,func09(p1,p2,p3,p4,p5,p6,p7,p8,p9));
+		return (int)1;
+	}
+};
+
+template<typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+struct ProxyFunctor09<void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy
+{
+	typedef std::function<void(A1,A2,A3,A4,A5,A6,A7,A8,A9)> Func;
+
+	ProxyFunctor09(){}
+	ProxyFunctor09(Func fn):func09(fn){}
+
+	Func    func09;
+
+	int Do(lua::Handle L)
+	{
+		A1      p1;
+		A2      p2;
+		A3      p3;
+		A4      p4;
+		A5      p5;
+		A6      p6;
+		A7      p7;
+		A8      p8;
+		A9      p9;
+		lua::CheckVarFromLua(L,&p1,1);
+		lua::CheckVarFromLua(L,&p2,2);
+		lua::CheckVarFromLua(L,&p3,3);
+		lua::CheckVarFromLua(L,&p4,4);
+		lua::CheckVarFromLua(L,&p5,5);
+		lua::CheckVarFromLua(L,&p6,6);
+		lua::CheckVarFromLua(L,&p7,7);
+		lua::CheckVarFromLua(L,&p8,8);
+		lua::CheckVarFromLua(L,&p9,9);
+		func09(p1,p2,p3,p4,p5,p6,p7,p8,p9);
+		return (int)1;
+	}
+};
+
+//------------------------------------------------------------
+
+template <typename R>
+static Proxy* GetProxy(std::function<R()> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor00<R>(f));
+}
+
+template <typename R,typename A1>
+static Proxy* GetProxy(std::function<R(A1)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor01<R,A1>(f));
+}
+
+template <typename R,typename A1,typename A2>
+static Proxy* GetProxy(std::function<R(A1,A2)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor02<R,A1,A2>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3>
+static Proxy* GetProxy(std::function<R(A1,A2,A3)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor03<R,A1,A2,A3>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor04<R,A1,A2,A3,A4>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4,A5)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor05<R,A1,A2,A3,A4,A5>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4,A5,A6)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor06<R,A1,A2,A3,A4,A5,A6>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4,A5,A6,A7)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor07<R,A1,A2,A3,A4,A5,A6,A7>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4,A5,A6,A7,A8)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor08<R,A1,A2,A3,A4,A5,A6,A7,A8>(f));
+}
+
+template <typename R,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
+static Proxy* GetProxy(std::function<R(A1,A2,A3,A4,A5,A6,A7,A8,A9)> f)
+{
+	return dynamic_cast<Proxy*>(new ProxyFunctor09<R,A1,A2,A3,A4,A5,A6,A7,A8,A9>(f));
+}
+
+//------------------------------------------------------------
 
 }//namespace wrapper
 }//namespace lua
