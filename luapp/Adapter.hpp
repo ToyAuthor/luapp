@@ -123,9 +123,9 @@ class Adapter
 				}
 		};
 
-		static Str         _className;
+		static Str         _className;     // Name of global function.
 		static Str         _classNameUD;   // For user data.
-	//	static Str         _classNameMT;   // For meta table.    Maybe I need this!
+		static Str         _classNameMT;   // For meta table.
 		static PackList    _list;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
@@ -139,7 +139,7 @@ class Adapter
 
 		static void buildMetaTableForMemberFunction(lua::Handle L)
 		{
-			lua::NewMetaTable(L, _className);                  // ... [T]
+			lua::NewMetaTable(L, _classNameMT);                // ... [T]
 			lua::PushString(L, "__index");                     // ... [T] ["__index"]
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
 			lua::SetTable(L,-3);                               // ... [T]
@@ -212,7 +212,7 @@ class Adapter
 			lua::NewTable(L);                                  // ... [T]
 
 			//-----------Setup member function-----------
-			lua::GetMetaTable(L, _className);                  // ... [T] [MT]
+			lua::GetMetaTable(L, _classNameMT);                // ... [T] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------
@@ -237,7 +237,7 @@ class Adapter
 			lua::NewTable(L);                                  // ... [T]
 
 			//-----------Setup member function-----------
-			lua::GetMetaTable(L, _className);                  // ... [T] [MT]
+			lua::GetMetaTable(L, _classNameMT);                // ... [T] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------
@@ -271,12 +271,14 @@ class Adapter
 		static void set_class_name(lua::Str &name)
 		{
 			_className   = name;
-			_classNameUD = _className + "_luapp_ud";
+			_classNameUD = lua::CreateBindingCoreName<C>();
+			_classNameMT = lua::CreateBindingMethodName<C>();
 		}
 };
 
 template <typename C,int N>Str                                  Adapter<C,N>::_className;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
+template <typename C,int N>Str                                  Adapter<C,N>::_classNameMT;
 template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
