@@ -18,6 +18,15 @@ void CopyVar(T &target,const lua::Var &data)
 	}
 }
 
+template<typename T>
+void TryCopyVar(T &target,const lua::Var &data)
+{
+	if ( lua::VarType<T>(data) )
+	{
+		target = lua::VarCast<T>(data);
+	}
+}
+
 inline lua::Str GetPrintTableFuncScript()
 {
 	lua::Str   str("= function(name,t)\n");

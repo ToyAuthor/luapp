@@ -205,7 +205,7 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Var *t,int i)
 	}
 	else if ( type==LUA_TNONE )
 	{
-		lua::Log<<"error:No one know what type is it. That's new"<<lua::End;
+		lua::Log<<"error:The type is none. Maybe you try to catch a variable that doesn't exist."<<lua::End;
 	}
 	else if ( type==LUA_TLIGHTUSERDATA )
 	{

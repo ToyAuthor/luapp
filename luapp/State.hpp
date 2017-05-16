@@ -222,7 +222,7 @@ class State
 
 		/**
 		 * Let lua script could use given member function.
-		 * Don't use it without bindClass() or bindClassEx().
+		 * Don't use it without bindClass/bindClassEx/bindClass(n)ArgEx.
 		 */
 		template<typename F>
 		void bindMethod(lua::Str name,F fn)

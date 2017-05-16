@@ -207,10 +207,10 @@ class Adapter
 		{
 			lua::NewTable(L);                                  // ... [T]
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
+			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
-			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
 			/*
@@ -257,10 +257,10 @@ class Adapter
 
 			//-----------New a object and setup destructor-----------
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
+			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
 			*a = new C;
-			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
-			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
 			return 1;
@@ -282,11 +282,11 @@ class Adapter
 
 			//-----------New a object and setup destructor-----------
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
+			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
 
 			*a = new C(arg1);
-			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
-			lua::SetMetaTable(L, -2);                          // ... [T] [0] [UD]
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
 			return 1;
