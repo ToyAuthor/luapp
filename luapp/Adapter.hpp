@@ -206,7 +206,7 @@ class Adapter
 		static int constructor(lua::NativeState L)
 		{
 			lua::NewTable(L);                                  // ... [T]
-			lua::PushNumber(L, 0);                             // ... [T] [0]
+			lua::_PushCoreKey(L);                              // ... [T] [key]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
@@ -256,7 +256,7 @@ class Adapter
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------
-			lua::PushNumber(L, 0);                             // ... [T] [0]
+			lua::_PushCoreKey(L);                              // ... [T] [key]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 			*a = new C;
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [0] [UD] [MT]
@@ -281,7 +281,7 @@ class Adapter
 			lua::SetMetaTable(L, -2);                          // ... [T]
 
 			//-----------New a object and setup destructor-----------
-			lua::PushNumber(L, 0);                             // ... [T] [0]
+			lua::_PushCoreKey(L);                              // ... [T] [key]
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [0] [UD]
 
 			*a = new C(arg1);
@@ -296,7 +296,7 @@ class Adapter
 		{
 			                                                        // [this] [arg1] [arg2] ... [argN]
 			int id = lua::CheckInteger(L, lua::UpValueIndex(1));
-			lua::PushNumber(L, 0);                                  // [this] [arg1] [arg2] ... [argN] [0]
+			lua::_PushCoreKey(L);                                   // [this] [arg1] [arg2] ... [argN] [key]
 			lua::GetTable(L, 1);                                    // [this] [arg1] [arg2] ... [argN] [UD]
 			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
 			lua::Pop(L, 1);                                         // [this] [arg1] [arg2] ... [argN]
