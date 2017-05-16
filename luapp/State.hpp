@@ -186,7 +186,7 @@ class State
 			return adapter::Adapter<C,N>::getConstructorEx(_lua,name);
 		}
 
-		template<typename C>
+		template<typename C,typename A1>
 		void bindClass1ArgEx(lua::Str class_name)
 		{
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
@@ -198,11 +198,11 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name,(A1*)0));
 			}
 			else
 			{
-				adapter::Adapter<C,N>::registerClass1ArgEx(_lua,class_name);
+				adapter::Adapter<C,N>::registerClass1ArgEx(_lua,class_name,(A1*)0);
 			}
 		}
 

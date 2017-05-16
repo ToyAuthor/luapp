@@ -52,13 +52,14 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 		}
 
-		static void registerClass1ArgEx(lua::Handle L,lua::Str& className)
+		template<typename A1>
+		static void registerClass1ArgEx(lua::Handle L,lua::Str& className,A1*)
 		{
-			set_class_name(className);                              // ...
+			set_class_name(className);                                  // ...
 
 			//--------Setup a global function to lua--------
-			lua::PushFunction(L, &Adapter<C,N>::constructor1ArgEx); // ... [F]
-			lua::SetGlobal(L, _className);                          // ...
+			lua::PushFunction(L, &Adapter<C,N>::constructor1ArgEx<A1>); // ... [F]
+			lua::SetGlobal(L, _className);                              // ...
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -81,14 +82,15 @@ class Adapter
 			return &Adapter<C,N>::constructorEx;
 		}
 
-		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& className)
+		template<typename A1>
+		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& className,A1*)
 		{
 			set_class_name(className);
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 
-			return &Adapter<C,N>::constructor1ArgEx;
+			return &Adapter<C,N>::constructor1ArgEx<A1>;
 		}
 
 		static void pushPack(struct Pack pak)
@@ -224,10 +226,11 @@ class Adapter
 			return 1;
 		}
 
+		template<typename A1>
 		static int constructor1ArgEx(lua::NativeState L)
 		{
 			                                                   // ... [Arg]
-			lua::Var   arg1;
+			A1   arg1;
 			lua::CheckVarFromLua(L,&arg1,1);
 			lua::Pop(L,1);                                     // ...
 
