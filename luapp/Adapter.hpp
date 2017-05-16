@@ -27,6 +27,14 @@ class Adapter
 			Proxy<C>*      _proxy;
 		};
 
+		struct NFunc
+		{
+			NFunc(Str name,lua::CFunction func):_name(name),_func(func){}
+
+			Str            _name;
+			lua::CFunction _func;
+		};
+
 		// It's a general way to register class.
 		static void registerClass(lua::Handle L,lua::Str& className)
 		{
@@ -98,6 +106,11 @@ class Adapter
 			Adapter<C,N>::_list.push_back(pak);
 		}
 
+		static void pushNFunc(struct NFunc func)
+		{
+			Adapter<C,N>::_nlist.push_back(func);
+		}
+
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 		#ifdef _LUAPP_CLEAN_LUA_HANDLE_
 		static void cleanPtr()
@@ -123,10 +136,13 @@ class Adapter
 				}
 		};
 
+		typedef std::vector<struct NFunc> NFuncList;
+
 		static Str         _className;     // Name of global function.
 		static Str         _classNameUD;   // For user data.
 		static Str         _classNameMT;   // For meta table.
 		static PackList    _list;
+		static NFuncList   _nlist;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
@@ -159,6 +175,18 @@ class Adapter
 				lua::PushInteger(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
+			}
+
+			if ( ! Adapter<C,N>::_nlist.empty() )
+			{
+				for (int i = Adapter<C,N>::_nlist.size()-1; i>=0; i--)
+				{
+					lua::PushString(L, Adapter<C,N>::_nlist[i]._name);
+					lua::PushFunction(L, Adapter<C,N>::_nlist[i]._func);
+					lua::SetTable(L, -3);
+				}
+				NFuncList   nlist;
+				Adapter<C,N>::_nlist.swap(nlist); // Make sure memory was released.
 			}
 
 			lua::Pop(L,1);                                     // ...
@@ -200,6 +228,18 @@ class Adapter
 				lua::PushInteger(L, i);
 				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
 				lua::SetTable(L, -3);
+			}
+
+			if ( ! Adapter<C,N>::_nlist.empty() )
+			{
+				for (int i = Adapter<C,N>::_nlist.size()-1; i>=0; i--)
+				{
+					lua::PushString(L, Adapter<C,N>::_nlist[i]._name);
+					lua::PushFunction(L, Adapter<C,N>::_nlist[i]._func);
+					lua::SetTable(L, -3);
+				}
+				NFuncList   nlist;
+				Adapter<C,N>::_nlist.swap(nlist); // Make sure memory was released.
 			}
 
 			return 1;
@@ -280,6 +320,7 @@ template <typename C,int N>Str                                  Adapter<C,N>::_c
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameMT;
 template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
+template <typename C,int N>typename Adapter<C,N>::NFuncList     Adapter<C,N>::_nlist;
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 template <typename C,int N>Handle                               Adapter<C,N>::_lua;

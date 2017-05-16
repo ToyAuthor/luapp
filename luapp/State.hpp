@@ -240,6 +240,13 @@ class State
 			adapter::Adapter<C,N>::pushPack(myF);
 		}
 
+		template<typename C>
+		void bindFunc(lua::Str name,lua::CFunction func)
+		{
+			struct adapter::Adapter<C,N>::NFunc     myF( name, func );
+			adapter::Adapter<C,N>::pushNFunc(myF);
+		}
+
 		/// Convert the standard lua C function to lua global function.
 		void setFunc(lua::Str name,lua::CFunction func)
 		{
