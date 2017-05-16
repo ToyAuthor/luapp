@@ -173,6 +173,20 @@ class State
 		}
 
 		template<typename C>
+		lua::CFunction bindClassEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			lua::Str  name = lua::CreateUserType<C>();
+			return adapter::Adapter<C,N>::getConstructorEx(_lua,name);
+		}
+
+		template<typename C>
 		void bindClass1ArgEx(lua::Str class_name)
 		{
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_

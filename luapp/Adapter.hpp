@@ -6,7 +6,7 @@
 #pragma once
 
 #include "luapp/AdapterProxy.hpp"
-
+#include "luapp/TypeString.hpp"
 
 namespace lua{
 namespace adapter{
