@@ -4,6 +4,7 @@
 #include "luapp/LuaAPI.hpp"
 #include "luapp/PushToStack.hpp"
 #include "luapp/CopyFromStack.hpp"
+#include "luapp/VarBridgeExtra.hpp"
 
 namespace lua{
 
@@ -109,6 +110,15 @@ inline void PushVarToLua(lua::Handle h,lua::Int    t) { PushVarToLua(h->_lua,t);
 inline void PushVarToLua(lua::Handle h,int         t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,long int    t) { PushVarToLua(h->_lua,t); }
 inline void PushVarToLua(lua::Handle h,long long   t) { PushVarToLua(h->_lua,t); }
+
+template<typename T>
+inline void PushVarToLua(lua::Handle h,lua::Type<T> t) { PushVarToLua(h->_lua,t); }
+
+template<typename T>
+inline void CheckVarFromLua(Handle h,lua::Type<T> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
+
+template<typename C>
+inline void CheckVarFromLua(Handle h,lua::Object<C> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
 
 #else
 
