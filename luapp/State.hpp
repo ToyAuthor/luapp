@@ -206,6 +206,20 @@ class State
 			}
 		}
 
+		template<typename C,typename A1>
+		lua::CFunction bindClass1ArgEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			lua::Str  name = lua::CreateUserType<C>();
+			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,name,(A1*)0);
+		}
+
 		/**
 		 * Let lua script could use given member function.
 		 * Don't use it without bindClass() or bindClassEx().
