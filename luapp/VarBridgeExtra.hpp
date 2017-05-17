@@ -223,6 +223,25 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Type<T> *t, int i)
 
 //------------------------------------------------------------------------------
 
+template<typename T>
+class Obj
+{
+	public:
+
+		Obj(){}
+		~Obj(){}
+
+		T   *ptr;
+};
+
+template<typename C>
+inline void CheckVarFromLua(lua::NativeState hLua,lua::Obj<C> *obj, int i)
+{
+	lua::CheckClassFromLua(hLua,&(obj->ptr),i);
+}
+
+//------------------------------------------------------------------------------
+
 inline void _PushCoreKey(lua::NativeState L)
 {
 	lua::PushInteger(L, 0);

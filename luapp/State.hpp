@@ -93,7 +93,6 @@ class State
 				else
 				{
 					_lua = std::make_shared<HandleClass>();
-					//this->init();
 				}
 
 				wrapper::Wrapper<N>::_lua = this->_lua;

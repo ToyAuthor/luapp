@@ -120,6 +120,9 @@ inline void CheckVarFromLua(Handle h,lua::Type<T> *t, int i) { CheckVarFromLua(h
 template<typename C>
 inline void CheckVarFromLua(Handle h,lua::Object<C> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
 
+template<typename C>
+inline void CheckVarFromLua(Handle h,lua::Obj<C> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
+
 #else
 
 typedef lua_State* Handle;
