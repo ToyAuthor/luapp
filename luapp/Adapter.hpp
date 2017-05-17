@@ -160,21 +160,15 @@ class Adapter
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
 			lua::SetTable(L,-3);                               // ... [T]
 
-			/*
-			visit( every element of _list[] )
+			if ( ! Adapter<C,N>::_list.empty() )
 			{
-				... [T] [member func name]
-				... [T] [member func name] [member func ID]
-				... [T] [member func name] [closure]
-				... [T]
-			}
-			*/
-			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
-			{
-				lua::PushString(L, Adapter<C,N>::_list[i]._name);
-				lua::PushInteger(L, i);
-				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
-				lua::SetTable(L, -3);
+				for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
+				{
+					lua::PushString(L, Adapter<C,N>::_list[i]._name);  // ... [T] [member func name]
+					lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
+					lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
+					lua::SetTable(L, -3);                              // ... [T]
+				}
 			}
 
 			if ( ! Adapter<C,N>::_nlist.empty() )
@@ -213,21 +207,15 @@ class Adapter
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
-			/*
-			visit( every element of _list[] )
+			if ( ! Adapter<C,N>::_list.empty() )
 			{
-				... [T] [member func name]
-				... [T] [member func name] [member func ID]
-				... [T] [member func name] [closure]
-				... [T]
-			}
-			*/
-			for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
-			{
-				lua::PushString(L, Adapter<C,N>::_list[i]._name);
-				lua::PushInteger(L, i);
-				lua::PushClosure(L, &Adapter<C,N>::thunk, 1);
-				lua::SetTable(L, -3);
+				for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
+				{
+					lua::PushString(L, Adapter<C,N>::_list[i]._name);  // ... [T] [member func name]
+					lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
+					lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
+					lua::SetTable(L, -3);                              // ... [T]
+				}
 			}
 
 			if ( ! Adapter<C,N>::_nlist.empty() )
