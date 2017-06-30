@@ -1,7 +1,6 @@
 
 #pragma once
 
-#include <typeinfo>
 #include <cstring>
 
 #include "luapp/LuaAPI.hpp"
@@ -223,6 +222,7 @@ inline void CheckVarFromLua(lua::NativeState hLua,lua::Type<T> *t, int i)
 
 //------------------------------------------------------------------------------
 
+// May be I should remove it.
 template<typename T>
 class Obj
 {
@@ -260,6 +260,25 @@ class Object
 
 		T   *ptr;
 };
+
+template<typename C>
+inline void PushVarToLua(lua::NativeState L,lua::Object<C> t)
+{
+	lua::Str  name = lua::CreateBindingCoreName<C>();
+
+	lua::NewTable(L);                                  // ... [T]
+
+	//-----------New a object and setup destructor-----------
+	lua::_PushCoreKey(L);                              // ... [T] [key]
+	C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
+	*a = t.ptr;
+
+	lua::_ClassZone<C>::registerType(L,name);
+
+	lua::GetMetaTable(L, name);                        // ... [T] [key] [UD] [MT]
+	lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
+	lua::SetTable(L, -3);                              // ... [T]
+}
 
 template<typename C>
 inline void CheckVarFromLua(lua::NativeState hLua,lua::Object<C> *obj, int i)
