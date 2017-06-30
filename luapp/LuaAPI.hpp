@@ -25,7 +25,7 @@ inline void _ReportLuaError(NativeState h,lua::Str msg)
 //------------------------------------------------------------------------------
 inline void NewModule(NativeState h,FuncReg &reg)
 {
-	luaL_newlib(h,(luaL_Reg*)(reg._get()));
+	luaL_newlib(h,reinterpret_cast<luaL_Reg*>(reg._get()));
 }
 //------------------------------------------------------------------------------
 inline NativeState CreateHandle()

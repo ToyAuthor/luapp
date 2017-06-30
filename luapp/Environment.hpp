@@ -143,7 +143,7 @@
 
 #if defined(TOY_MSVC)
 
-	#if (_MSC_VER == 2000)
+	#if (_MSC_VER == 1910)
 		#define TOY_VC_2017
 	#elif (_MSC_VER == 1900)
 		#define TOY_VC_2015
