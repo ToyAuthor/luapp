@@ -6,7 +6,7 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 - [x] To register C++ class into lua.
 - [x] C++ and lua could call each other's function.
 - [x] Read/Write/Add/Remove lua global variable at C++ side.
-- [x] Lua could send any variable to C++, and C++ could send then back.
+- [x] Lua could send any variable to C++, and C++ could send them back.
 - [x] Support to create C extension module.
 - [x] Implement a C++ container to simulate lua table.
 - [x] Implement a class whose instances can hold instances of any type supported by luapp.

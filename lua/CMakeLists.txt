@@ -36,6 +36,9 @@ if(UNIX)
 endif()
 
 if(MSVC)
+	# It need CMake version newer than v2.8
+	target_compile_definitions(lua PRIVATE "LUA_BUILD_AS_DLL")
+
 	set_target_properties( lua PROPERTIES
 		LIBRARY_OUTPUT_DIRECTORY            ${LUAPP_BINARY_DIR}
 		LIBRARY_OUTPUT_DIRECTORY_DEBUG      ${LUAPP_BINARY_DIR}
@@ -47,4 +50,8 @@ if(MSVC)
 		ARCHIVE_OUTPUT_DIRECTORY_DEBUG      ${PROJECT_BINARY_DIR}
 		ARCHIVE_OUTPUT_DIRECTORY_RELEASE    ${PROJECT_BINARY_DIR}
 	)
+else()
+	if(MINGW)
+		set_target_properties(lua PROPERTIES LINK_FLAGS "-shared-libgcc -shared-libstdc++")
+	endif()
 endif()
