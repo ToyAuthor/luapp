@@ -152,6 +152,14 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Nil>(t);
 			return *this;
 		}
+		operator lua::Nil()
+		{
+			if ( this->getType()!=typeid(lua::Nil) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Nil()\""<<lua::End;
+			}
+			return lua::Nil();
+		}
 
 		//---------------------Integer---------------------
 		Var(const int t):_ptr(0)
@@ -184,6 +192,15 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Int>(t);
 			return *this;
 		}
+		operator lua::Int()
+		{
+			if ( this->getType()!=typeid(lua::Int) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Int()\""<<lua::End;
+				return 0;
+			}
+			return *(reinterpret_cast<lua::Int*>(this->getPtr()));
+		}
 
 		//---------------------String---------------------
 		Var(const lua::Str t):_ptr(0)
@@ -206,35 +223,50 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Str>(lua::Str(t));
 			return *this;
 		}
+		operator lua::Str()
+		{
+			if ( this->getType()!=typeid(lua::Str) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Str()\""<<lua::End;
+				return lua::Str();
+			}
+			return *(reinterpret_cast<lua::Str*>(this->getPtr()));
+		}
 
 		//---------------------Pointer---------------------
 		Var(const lua::Ptr t):_ptr(0)
 		{
-			#ifdef _LUAPP_CPP11_
-			if ( t==nullptr ) {
-			#else
-			if ( t==NULL ) {
-			#endif
-				this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
+			if ( ! t )
+			{
+				lua::Log<<"warning: set a null pointer for lua::Ptr"<<lua::End;
 			}
-			else{
-				this->_ptr = new lua::_VarType<lua::Ptr>(t);
-			}
+
+			this->_ptr = new lua::_VarType<lua::Ptr>(t);
 		}
 		Var& operator = (const lua::Ptr t)
 		{
+			if ( ! t )
+			{
+				lua::Log<<"warning: set a null pointer for lua::Ptr"<<lua::End;
+			}
+
 			free_ptr();
-			#ifdef _LUAPP_CPP11_
-			if ( t==nullptr ) {
-			#else
-			if ( t==NULL ) {
-			#endif
-				this->_ptr = new lua::_VarType<lua::Nil>(lua::Nil());
-			}
-			else {
-				this->_ptr = new lua::_VarType<lua::Ptr>(t);
-			}
+
+			this->_ptr = new lua::_VarType<lua::Ptr>(t);
 			return *this;
+		}
+		operator lua::Ptr()
+		{
+			if ( this->getType()!=typeid(lua::Ptr) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Ptr()\""<<lua::End;
+				#ifdef _LUAPP_CPP11_
+				return nullptr;
+				#else
+				return NULL;
+				#endif
+			}
+			return *(reinterpret_cast<lua::Ptr*>(this->getPtr()));
 		}
 
 		//---------------------Real---------------------
@@ -258,6 +290,15 @@ class Var
 			this->_ptr = new lua::_VarType<lua::Num>(t);
 			return *this;
 		}
+		operator lua::Num()
+		{
+			if ( this->getType()!=typeid(lua::Num) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Num()\""<<lua::End;
+				return (lua::Num)0.0;
+			}
+			return *(reinterpret_cast<lua::Num*>(this->getPtr()));
+		}
 
 		//---------------------Table---------------------
 		// They are implemented at luapp/Table.hpp
@@ -274,6 +315,15 @@ class Var
 			free_ptr();
 			this->_ptr = new lua::_VarType<lua::Bool>(t);
 			return *this;
+		}
+		operator lua::Bool()
+		{
+			if ( this->getType()!=typeid(lua::Bool) )
+			{
+				lua::Log<<"error: see luapp/Var.hpp \"lua::Var::operator lua::Bool()\""<<lua::End;
+				return true;
+			}
+			return *(reinterpret_cast<lua::Bool*>(this->getPtr()));
 		}
 
 		//---------------------Map---------------------
