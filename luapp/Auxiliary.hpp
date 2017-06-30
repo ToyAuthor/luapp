@@ -2,6 +2,7 @@
 #pragma once
 
 #include "luapp/State.hpp"
+#include "luapp/PullArgs.hpp"
 
 namespace lua{
 
