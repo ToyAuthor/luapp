@@ -65,6 +65,14 @@ class FuncReg
 			}
 		}
 
+		Item* _get()
+		{
+			refresh();
+			return _data;
+		}
+
+	private:
+
 		void refresh()
 		{
 			for ( int i=0 ; i<_index ; i++ )
@@ -72,13 +80,6 @@ class FuncReg
 				_data[i].name = _nameList[i].c_str();
 			}
 		}
-
-		Item* _get()
-		{
-			return _data;
-		}
-
-	private:
 
 		void get_more_memory()
 		{

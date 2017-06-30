@@ -659,7 +659,6 @@ class State
 
 		void build_module()
 		{
-			_funcReg.refresh();
 			lua::NewModule(_lua,_funcReg);
 		}
 
