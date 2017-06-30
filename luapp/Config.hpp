@@ -1,7 +1,7 @@
 #pragma once
 
 #define LUAPP_VERSION_MAJOR "2"
-#define LUAPP_VERSION_MINOR "1"
+#define LUAPP_VERSION_MINOR "2"
 #define LUAPP_VERSION_PATCH "0"
 #define LUAPP_AUTHOR "Yan Xin Wu"
 
