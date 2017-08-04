@@ -219,6 +219,40 @@ class State
 			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,name,(A1*)0);
 		}
 
+		template<typename C,typename A1,typename A2>
+		void bindClass2ArgEx(lua::Str class_name)
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			if ( _moduleMode )
+			{
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,class_name,(A1*)0,(A2*)0));
+			}
+			else
+			{
+				adapter::Adapter<C,N>::registerClass2ArgEx(_lua,class_name,(A1*)0,(A2*)0);
+			}
+		}
+
+		template<typename C,typename A1,typename A2>
+		lua::CFunction bindClass2ArgEx()
+		{
+			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
+			adapter::Adapter<C,N>::_lua = this->_lua;
+			#ifdef _LUAPP_CLEAN_LUA_HANDLE_
+			pushClean(&adapter::Adapter<C,N>::cleanPtr);
+			#endif
+			#endif
+
+			lua::Str  name = lua::CreateUserType<C>();
+			return adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,name,(A1*)0,(A2*)0);
+		}
+
 		/**
 		 * Let lua script could use given member function.
 		 * Don't use it without bindClass/bindClassEx/bindClass(n)ArgEx.

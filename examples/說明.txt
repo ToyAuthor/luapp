@@ -18,7 +18,7 @@ CallLuaFunction
 	在 C++ 這端呼叫 lua 這邊的全域函式
 
 MakeFunctor
-	用 C/C++ 的函式來建立 lua::Func
+	將 C/C++ 一般/成員函式包裝成 functor，接下來它們可以在 C++ 以及 lua 之間四處傳遞、呼叫使用
 
 ClassInjectLua
 	將類別導入 lua 裡面，如此便可以在 lua 宣告使用 C++ 物件了

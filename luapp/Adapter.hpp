@@ -73,6 +73,19 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 		}
 
+		template<typename A1,typename A2>
+		static void registerClass2ArgEx(lua::Handle L,lua::Str& className,A1*,A2*)
+		{
+			set_class_name(className);                                     // ...
+
+			//--------Setup a global function to lua--------
+			lua::PushFunction(L, &Adapter<C,N>::constructor2ArgEx<A1,A2>); // ... [F]
+			lua::SetGlobal(L, _className);                                 // ...
+
+			buildMetaTableForUserdata(L);
+			buildMetaTableForMemberFunction(L);
+		}
+
 		static lua::CFunction getConstructor(lua::Handle L,lua::Str& className)
 		{
 			set_class_name(className);
@@ -99,6 +112,17 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 
 			return &Adapter<C,N>::constructor1ArgEx<A1>;
+		}
+
+		template<typename A1,typename A2>
+		static lua::CFunction getConstructor2ArgEx(lua::Handle L,lua::Str& className,A1*,A2*)
+		{
+			set_class_name(className);
+
+			buildMetaTableForUserdata(L);
+			buildMetaTableForMemberFunction(L);
+
+			return &Adapter<C,N>::constructor2ArgEx<A1,A2>;
 		}
 
 		static void pushPack(struct Pack pak)
@@ -155,6 +179,8 @@ class Adapter
 
 		static void buildMetaTableForMemberFunction(lua::Handle L)
 		{
+			if ( Adapter<C,N>::_list.empty() && Adapter<C,N>::_nlist.empty() ) return;
+
 			lua::NewMetaTable(L, _classNameMT);                // ... [T]
 			lua::PushString(L, "__index");                     // ... [T] ["__index"]
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
@@ -257,10 +283,10 @@ class Adapter
 		template<typename A1>
 		static int constructor1ArgEx(lua::NativeState L)
 		{
-			                                                   // ... [Arg]
+			                                                   // [Arg] [LUA_TNONE]   I don't know why.
 			A1   arg1;
 			lua::CheckVarFromLua(L,&arg1,1);
-			lua::Pop(L,1);                                     // ...
+			lua::Pop(L,2);                                     // ...
 
 			lua::NewTable(L);                                  // ... [T]
 
@@ -273,6 +299,34 @@ class Adapter
 			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
 
 			*a = new C(arg1);
+			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
+			lua::SetTable(L, -3);                              // ... [T]
+
+			return 1;
+		}
+
+		template<typename A1,typename A2>
+		static int constructor2ArgEx(lua::NativeState L)
+		{
+			                                                   // [Arg1] [Arg2] [LUA_TNONE]   I don't know why.
+			A1   arg1;
+			A2   arg2;
+			lua::CheckVarFromLua(L,&arg1,1);
+			lua::CheckVarFromLua(L,&arg2,2);
+			lua::Pop(L,3);                                     // ...
+
+			lua::NewTable(L);                                  // ... [T]
+
+			//-----------Setup member function-----------
+			lua::GetMetaTable(L, _classNameMT);                // ... [T] [MT]
+			lua::SetMetaTable(L, -2);                          // ... [T]
+
+			//-----------New a object and setup destructor-----------
+			lua::_PushCoreKey(L);                              // ... [T] [key]
+			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
+
+			*a = new C(arg1,arg2);
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
