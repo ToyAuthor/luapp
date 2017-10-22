@@ -59,7 +59,7 @@
     </span><span class="sc2">// NewObject 這個名字會變成 lua 裡的全域函式名稱
 </span><span class="sc0">    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">bindClassEx</span><span class="sc10">&lt;</span><span class="sc11">MyClass</span><span class="sc10">&gt;(</span><span class="sc6">"NewObject"</span><span class="sc10">);</span><span class="sc0">
 
-    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc6">"ClassIntoLua.lua"</span><span class="sc10">);</span><span class="sc0">
+    </span><span class="sc11">lua</span><span class="sc10">.</span><span class="sc11">run</span><span class="sc10">(</span><span class="sc6">"."</span><span class="sc10">,</span><span class="sc6">"ClassIntoLua.lua"</span><span class="sc10">);</span><span class="sc0">
 
     </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">0</span><span class="sc10">;</span><span class="sc0">
 </span><span class="sc10">}</span><span class="sc0">
