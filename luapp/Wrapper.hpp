@@ -20,16 +20,7 @@ class Wrapper
 {
 	public:
 
-		struct Pack
-		{
-			Pack():_proxy(0){}
-			Pack(Str name,Proxy *param):_name(name),_proxy(param){}
-
-			Str         _name;
-			Proxy*      _proxy;
-		};
-
-		class PackList : public std::vector<struct Pack>
+		class PackList : public std::vector< ::lua::wrapper::Proxy*>
 		{
 			public:
 
@@ -37,7 +28,7 @@ class Wrapper
 				{
 					for(int i =this->size()-1;i>=0;i--)
 					{
-						delete (*this)[i]._proxy;
+						delete (*this)[i];
 					}
 				}
 		};
@@ -49,8 +40,7 @@ class Wrapper
 		                              F              fn
 		                              )
 		{
-			struct Pack         func(name,GetProxy(fn));
-			_funcList.push_back(func);
+			_funcList.push_back(GetProxy(fn));
 
 			lua::PushInteger(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
@@ -65,8 +55,7 @@ class Wrapper
 		                              C*             obj
 		                              )
 		{
-			struct Pack         func(name,GetProxy(fn,obj));
-			_funcList.push_back(func);
+			_funcList.push_back(GetProxy(fn,obj));
 
 			lua::PushInteger(L, _funcList.size()-1);
 			lua::PushClosure(L, &thunk, 1);
@@ -86,9 +75,9 @@ class Wrapper
 			int id = lua::CheckInteger(L, lua::UpValueIndex(1));
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-			return _funcList[id]._proxy->Do(Wrapper<N>::_lua);
+			return _funcList[id]->Do(Wrapper<N>::_lua);
 			#else
-			return _funcList[id]._proxy->Do(L);
+			return _funcList[id]->Do(L);
 			#endif
 		}
 };
