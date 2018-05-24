@@ -36,25 +36,21 @@ class Adapter
 		};
 
 		// It's a general way to register class.
-		static void registerClass(lua::Handle L,lua::Str& className)
+		static void registerClass(lua::Handle L,const lua::Str& className)
 		{
-			set_class_name(className);                         // ...
-
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
-			lua::SetGlobal(L, _className);                     // ...
+			lua::SetGlobal(L, className);                      // ...
 
 			buildMetaTableForUserdata(L);
 		}
 
 		// Call it after every member function was registed at _list[].
-		static void registerClassEx(lua::Handle L,lua::Str& className)
+		static void registerClassEx(lua::Handle L,const lua::Str& className)
 		{
-			set_class_name(className);                         // ...
-
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructorEx);// ... [F]
-			lua::SetGlobal(L, _className);                     // ...
+			lua::SetGlobal(L, className);                      // ...
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -63,11 +59,9 @@ class Adapter
 		template<typename A1>
 		static void registerClass1ArgEx(lua::Handle L,lua::Str& className,A1*)
 		{
-			set_class_name(className);                                  // ...
-
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor1ArgEx<A1>); // ... [F]
-			lua::SetGlobal(L, _className);                              // ...
+			lua::SetGlobal(L, className);                               // ...
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -76,27 +70,22 @@ class Adapter
 		template<typename A1,typename A2>
 		static void registerClass2ArgEx(lua::Handle L,lua::Str& className,A1*,A2*)
 		{
-			set_class_name(className);                                     // ...
-
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor2ArgEx<A1,A2>); // ... [F]
-			lua::SetGlobal(L, _className);                                 // ...
+			lua::SetGlobal(L, className);                                  // ...
 
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 		}
 
-		static lua::CFunction getConstructor(lua::Handle L,lua::Str& className)
+		static lua::CFunction getConstructor(lua::Handle L,lua::Str& )
 		{
-			set_class_name(className);
 			buildMetaTableForUserdata(L);
 			return &Adapter<C,N>::constructor;
 		}
 
-		static lua::CFunction getConstructorEx(lua::Handle L,lua::Str& className)
+		static lua::CFunction getConstructorEx(lua::Handle L,lua::Str& )
 		{
-			set_class_name(className);
-
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 
@@ -104,10 +93,8 @@ class Adapter
 		}
 
 		template<typename A1>
-		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& className,A1*)
+		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& ,A1*)
 		{
-			set_class_name(className);
-
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 
@@ -115,10 +102,8 @@ class Adapter
 		}
 
 		template<typename A1,typename A2>
-		static lua::CFunction getConstructor2ArgEx(lua::Handle L,lua::Str& className,A1*,A2*)
+		static lua::CFunction getConstructor2ArgEx(lua::Handle L,lua::Str& ,A1*,A2*)
 		{
-			set_class_name(className);
-
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
 
@@ -162,7 +147,6 @@ class Adapter
 
 		typedef std::vector<struct NFunc> NFuncList;
 
-		static Str         _className;     // Name of global function.
 		static Str         _classNameUD;   // For user data.
 		static Str         _classNameMT;   // For meta table.
 		static PackList    _list;
@@ -170,6 +154,10 @@ class Adapter
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
+			if ( ! _classNameUD.empty() ) return;
+
+			_classNameUD = lua::CreateBindingCoreName<C>();
+
 			lua::NewMetaTable(L, _classNameUD);                // ... [T]
 			lua::PushString(L, "__gc");                        // ... [T] ["__gc"]
 			lua::PushFunction(L, &Adapter<C,N>::gc_obj);       // ... [T] ["__gc"] [F]
@@ -180,6 +168,10 @@ class Adapter
 		static void buildMetaTableForMemberFunction(lua::Handle L)
 		{
 			if ( Adapter<C,N>::_list.empty() && Adapter<C,N>::_nlist.empty() ) return;
+
+			if ( ! _classNameMT.empty() ) return;
+
+			_classNameMT = lua::CreateBindingMethodName<C>();
 
 			lua::NewMetaTable(L, _classNameMT);                // ... [T]
 			lua::PushString(L, "__index");                     // ... [T] ["__index"]
@@ -349,16 +341,8 @@ class Adapter
 			return	Adapter<C,N>::_list[id]._proxy->Do(L,*obj);
 			#endif
 		}
-
-		static void set_class_name(lua::Str &name)
-		{
-			_className   = name;
-			_classNameUD = lua::CreateBindingCoreName<C>();
-			_classNameMT = lua::CreateBindingMethodName<C>();
-		}
 };
 
-template <typename C,int N>Str                                  Adapter<C,N>::_className;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameMT;
 template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
