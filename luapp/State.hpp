@@ -10,6 +10,7 @@
 #include "luapp/Wrapper.hpp"
 #include "luapp/GlobalFunction.hpp"
 #include "luapp/Searcher.hpp"
+#include "luapp/PointerTypeFilter.hpp"
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 #include "luapp/Func.hpp"
@@ -17,64 +18,6 @@
 #endif
 
 namespace lua{
-
-
-//-----------------ClassTypeFilter-----------------start
-template<typename F>
-struct ClassTypeFilter{};
-
-template<typename R,typename C>
-struct ClassTypeFilter<R (C::*)()>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1>
-struct ClassTypeFilter<R (C::*)(A1)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2>
-struct ClassTypeFilter<R (C::*)(A1,A2)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8)>
-{
-	typedef C ClassType;
-};
-template<typename R,typename C,typename A1,typename A2,typename A3,typename A4,typename A5,typename A6,typename A7,typename A8,typename A9>
-struct ClassTypeFilter<R (C::*)(A1,A2,A3,A4,A5,A6,A7,A8,A9)>
-{
-	typedef C ClassType;
-};
-//-----------------ClassTypeFilter-----------------end
-
 
 /// The main interface of luapp.
 template<int N=0>
@@ -257,7 +200,7 @@ class State
 		template<typename F>
 		void bindMethod(lua::Str name,F fn)
 		{
-			typedef typename ClassTypeFilter<F>::ClassType C;
+			typedef typename lua::PointerTypeFilter<F>::ClassType C;
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
 			adapter::Adapter<C,N>::_lua = this->_lua;
