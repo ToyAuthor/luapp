@@ -138,7 +138,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor(_lua));
 			}
 			else
 			{
@@ -163,7 +163,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua,class_name));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructorEx(_lua));
 			}
 			else
 			{
@@ -181,8 +181,7 @@ class State
 			#endif
 			#endif
 
-			lua::Str  name = lua::CreateUserType<C>();
-			return adapter::Adapter<C,N>::getConstructorEx(_lua,name);
+			return adapter::Adapter<C,N>::getConstructorEx(_lua);
 		}
 
 		template<typename C,typename A1>
@@ -197,7 +196,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,class_name,(A1*)0));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,(A1*)0));
 			}
 			else
 			{
@@ -215,8 +214,7 @@ class State
 			#endif
 			#endif
 
-			lua::Str  name = lua::CreateUserType<C>();
-			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,name,(A1*)0);
+			return adapter::Adapter<C,N>::getConstructor1ArgEx(_lua,(A1*)0);
 		}
 
 		template<typename C,typename A1,typename A2>
@@ -231,7 +229,7 @@ class State
 
 			if ( _moduleMode )
 			{
-				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,class_name,(A1*)0,(A2*)0));
+				_funcReg.add(class_name,adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,(A1*)0,(A2*)0));
 			}
 			else
 			{
@@ -249,8 +247,7 @@ class State
 			#endif
 			#endif
 
-			lua::Str  name = lua::CreateUserType<C>();
-			return adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,name,(A1*)0,(A2*)0);
+			return adapter::Adapter<C,N>::getConstructor2ArgEx(_lua,(A1*)0,(A2*)0);
 		}
 
 		/**

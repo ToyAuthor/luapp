@@ -78,13 +78,13 @@ class Adapter
 			buildMetaTableForMemberFunction(L);
 		}
 
-		static lua::CFunction getConstructor(lua::Handle L,lua::Str& )
+		static lua::CFunction getConstructor(lua::Handle L)
 		{
 			buildMetaTableForUserdata(L);
 			return &Adapter<C,N>::constructor;
 		}
 
-		static lua::CFunction getConstructorEx(lua::Handle L,lua::Str& )
+		static lua::CFunction getConstructorEx(lua::Handle L)
 		{
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -93,7 +93,7 @@ class Adapter
 		}
 
 		template<typename A1>
-		static lua::CFunction getConstructor1ArgEx(lua::Handle L,lua::Str& ,A1*)
+		static lua::CFunction getConstructor1ArgEx(lua::Handle L,A1*)
 		{
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
@@ -102,7 +102,7 @@ class Adapter
 		}
 
 		template<typename A1,typename A2>
-		static lua::CFunction getConstructor2ArgEx(lua::Handle L,lua::Str& ,A1*,A2*)
+		static lua::CFunction getConstructor2ArgEx(lua::Handle L,A1*,A2*)
 		{
 			buildMetaTableForUserdata(L);
 			buildMetaTableForMemberFunction(L);
