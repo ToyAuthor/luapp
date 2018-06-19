@@ -209,8 +209,7 @@ class State
 			#endif
 			#endif
 
-			struct adapter::Adapter<C,N>::Pack     myF( name,adapter::GetProxy(fn));
-			adapter::Adapter<C,N>::pushPack(myF);
+			adapter::Adapter<C,N>::pushPack( name,adapter::GetProxy(fn));
 		}
 
 		template<typename C>
@@ -304,6 +303,12 @@ class State
 			#endif
 
 			_lua = NULL;
+		}
+
+		template<typename C>
+		void cleanUnusedResource()
+		{
+			adapter::Adapter<C,N>::cleanUpUnusedResource();
 		}
 
 		int load(lua::Str name,lua::Str& code)

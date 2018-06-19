@@ -11,21 +11,44 @@
 namespace lua{
 namespace adapter{
 
+class StaticBool
+{
+	public:
 
+		StaticBool():_flag(false)
+		{
+			;
+		}
+
+		~StaticBool()
+		{
+			;
+		}
+
+		void set(bool flag)
+		{
+			_flag = flag;
+		}
+
+		bool isTrue()
+		{
+			return _flag;
+		}
+
+		bool isFalse()
+		{
+			return ! _flag;
+		}
+
+	private:
+
+		bool  _flag;
+};
 
 template<typename C,int N>
 class Adapter
 {
 	public:
-
-		struct Pack
-		{
-			Pack():_proxy(0){}
-			Pack(Str name,Proxy<C> *param):_name(name),_proxy(param){}
-
-			Str            _name;
-			Proxy<C>*      _proxy;
-		};
 
 		struct NFunc
 		{
@@ -38,6 +61,8 @@ class Adapter
 		// It's a general way to register class.
 		static void registerClass(lua::Handle L,const lua::Str& className)
 		{
+			Adapter<C,N>::_isGeneralConstructorEnable.set(true);
+
 			//--------Setup a global function to lua--------
 			lua::PushFunction(L, &Adapter<C,N>::constructor);  // ... [F]
 			lua::SetGlobal(L, className);                      // ...
@@ -45,7 +70,7 @@ class Adapter
 			buildMetaTableForUserdata(L);
 		}
 
-		// Call it after every member function was registed at _list[].
+		// Call it after every member function was registed at _listName[] & _listProxy[].
 		static void registerClassEx(lua::Handle L,const lua::Str& className)
 		{
 			//--------Setup a global function to lua--------
@@ -80,6 +105,7 @@ class Adapter
 
 		static lua::CFunction getConstructor(lua::Handle L)
 		{
+			Adapter<C,N>::_isGeneralConstructorEnable.set(true);
 			buildMetaTableForUserdata(L);
 			return &Adapter<C,N>::constructor;
 		}
@@ -110,14 +136,24 @@ class Adapter
 			return &Adapter<C,N>::constructor2ArgEx<A1,A2>;
 		}
 
-		static void pushPack(struct Pack pak)
+		static void pushPack( ::lua::Str str, ::lua::adapter::Proxy<C>* proxy)
 		{
-			Adapter<C,N>::_list.push_back(pak);
+			Adapter<C,N>::_listName.push_back(str);
+			Adapter<C,N>::_listProxy.push_back(proxy);
 		}
 
 		static void pushNFunc(struct NFunc func)
 		{
 			Adapter<C,N>::_nlist.push_back(func);
+		}
+
+		static void cleanUpUnusedResource()
+		{
+			if ( Adapter<C,N>::_isGeneralConstructorEnable.isFalse() )
+			{
+				NFuncList().swap( Adapter<C,N>::_nlist );
+				StringList().swap( Adapter<C,N>::_listName );
+			}
 		}
 
 		#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
@@ -132,7 +168,7 @@ class Adapter
 
 	private:
 
-		class PackList : public std::vector<struct Pack>
+		class PackList : public std::vector< ::lua::adapter::Proxy<C>*>
 		{
 			public:
 
@@ -140,17 +176,21 @@ class Adapter
 				{
 					for(int i =this->size()-1;i>=0;i--)
 					{
-						delete (*this)[i]._proxy;
+						delete ((*this)[i]);
 					}
 				}
 		};
 
+		typedef std::vector< ::lua::Str>  StringList;
 		typedef std::vector<struct NFunc> NFuncList;
 
 		static Str         _classNameUD;   // For user data.
 		static Str         _classNameMT;   // For meta table.
-		static PackList    _list;
+		static StringList  _listName;
+		static PackList    _listProxy;
 		static NFuncList   _nlist;
+
+		static StaticBool  _isGeneralConstructorEnable;
 
 		static void buildMetaTableForUserdata(lua::Handle L)
 		{
@@ -167,7 +207,7 @@ class Adapter
 
 		static void buildMetaTableForMemberFunction(lua::Handle L)
 		{
-			if ( Adapter<C,N>::_list.empty() && Adapter<C,N>::_nlist.empty() ) return;
+			if ( Adapter<C,N>::_listProxy.empty() && Adapter<C,N>::_nlist.empty() ) return;
 
 			if ( ! _classNameMT.empty() ) return;
 
@@ -178,14 +218,21 @@ class Adapter
 			lua::PushValue(L,-2);                              // ... [T] ["__index"] [T]
 			lua::SetTable(L,-3);                               // ... [T]
 
-			if ( ! Adapter<C,N>::_list.empty() )
+			if ( Adapter<C,N>::_listName.size() != Adapter<C,N>::_listProxy.size() )
 			{
-				for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
+				lua::Log<<"error:Something is wrong when building meta table."<<lua::End;
+			}
+			else
+			{
+				if ( ! Adapter<C,N>::_listName.empty() )
 				{
-					lua::PushString(L, Adapter<C,N>::_list[i]._name);  // ... [T] [member func name]
-					lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
-					lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
-					lua::SetTable(L, -3);                              // ... [T]
+					for (int i = Adapter<C,N>::_listName.size()-1; i>=0; i--)
+					{
+						lua::PushString(L, Adapter<C,N>::_listName[i]);    // ... [T] [member func name]
+						lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
+						lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
+						lua::SetTable(L, -3);                              // ... [T]
+					}
 				}
 			}
 
@@ -197,8 +244,6 @@ class Adapter
 					lua::PushFunction(L, Adapter<C,N>::_nlist[i]._func);
 					lua::SetTable(L, -3);
 				}
-				NFuncList   nlist;
-				Adapter<C,N>::_nlist.swap(nlist); // Make sure memory was released.
 			}
 
 			lua::Pop(L,1);                                     // ...
@@ -225,14 +270,21 @@ class Adapter
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
 
-			if ( ! Adapter<C,N>::_list.empty() )
+			if ( Adapter<C,N>::_listName.size() != Adapter<C,N>::_listProxy.size() )
 			{
-				for (int i = Adapter<C,N>::_list.size()-1; i>=0; i--)
+				lua::Log<<"error:Something is wrong when building meta table in Adapter::constructor."<<lua::End;
+			}
+			else
+			{
+				if ( ! Adapter<C,N>::_listName.empty() )
 				{
-					lua::PushString(L, Adapter<C,N>::_list[i]._name);  // ... [T] [member func name]
-					lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
-					lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
-					lua::SetTable(L, -3);                              // ... [T]
+					for (int i = Adapter<C,N>::_listName.size()-1; i>=0; i--)
+					{
+						lua::PushString(L, Adapter<C,N>::_listName[i]);    // ... [T] [member func name]
+						lua::PushInteger(L, i);                            // ... [T] [member func name] [member func ID]
+						lua::PushClosure(L, &Adapter<C,N>::thunk, 1);      // ... [T] [member func name] [closure]
+						lua::SetTable(L, -3);                              // ... [T]
+					}
 				}
 			}
 
@@ -244,8 +296,6 @@ class Adapter
 					lua::PushFunction(L, Adapter<C,N>::_nlist[i]._func);
 					lua::SetTable(L, -3);
 				}
-				NFuncList   nlist;
-				Adapter<C,N>::_nlist.swap(nlist); // Make sure memory was released.
 			}
 
 			return 1;
@@ -336,16 +386,18 @@ class Adapter
 			lua::Pop(L, 1);                                         // [this] [arg1] [arg2] ... [argN]
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-			return	Adapter<C,N>::_list[id]._proxy->Do(Adapter<C,N>::_lua,*obj);
+			return	(Adapter<C,N>::_listProxy[id])->Do(Adapter<C,N>::_lua,*obj);
 			#else
-			return	Adapter<C,N>::_list[id]._proxy->Do(L,*obj);
+			return	(Adapter<C,N>::_listProxy[id])->Do(L,*obj);
 			#endif
 		}
 };
 
+template <typename C,int N>StaticBool                           Adapter<C,N>::_isGeneralConstructorEnable;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameUD;
 template <typename C,int N>Str                                  Adapter<C,N>::_classNameMT;
-template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_list;
+template <typename C,int N>typename Adapter<C,N>::StringList    Adapter<C,N>::_listName;
+template <typename C,int N>typename Adapter<C,N>::PackList      Adapter<C,N>::_listProxy;
 template <typename C,int N>typename Adapter<C,N>::NFuncList     Adapter<C,N>::_nlist;
 
 #ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
