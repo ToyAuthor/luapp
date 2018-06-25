@@ -71,10 +71,31 @@
 
 
 程式跟數學一樣有先乘除後加減的規則
-不過只要用括號分清楚就好了
-不用特別去記哪個運算符號比較優先
-程式碼的可讀性也會比較好
-不要逼讀者去記運算符優先權
+優先權比較高的運算符號會先做計算
+也跟數學一樣可以用括號讓優先權低的地方先算
+
+
+<div class="code"><span class="sc11">ans</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">ans</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 會印出 2
+</span><span class="sc0">
+</span><span class="sc11">ans</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc10">+</span><span class="sc4">2</span><span class="sc10">*</span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">ans</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 會印出 8
+</span><span class="sc0">
+</span><span class="sc11">ans</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">2</span><span class="sc10">+(</span><span class="sc4">2</span><span class="sc10">*</span><span class="sc4">3</span><span class="sc10">)</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">ans</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 會印出 8
+</span><span class="sc0">
+</span><span class="sc11">ans</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc10">(</span><span class="sc4">2</span><span class="sc10">+</span><span class="sc4">2</span><span class="sc10">)*</span><span class="sc4">3</span><span class="sc0">
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">ans</span><span class="sc10">)</span><span class="sc0"> </span><span class="sc2">-- 會印出 12</span></div>
+
+
+
+
+
+
+
+
+
+
 
 
 

@@ -226,6 +226,7 @@ f(x) = x+1
 
 依照<a href="scope.html" target="_self">區域變數</a>的原則
 func 裡面的 c 應該不能活到 foo() 執行的這一步
+在離開 func 的時候就應該無法聯絡了
 但因為 func 裡面的 f 函式是個閉包
 f 將 c 給包了進來
 所以 c 沒被清除
