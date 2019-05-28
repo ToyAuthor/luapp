@@ -44,7 +44,7 @@ int main()
 	}
 
 //	var = table["C"]["E"];      // Don't do this. It may change structure of table.
-	var = table>>"C">>"E";      // I recommand you search value by this way.
+	var = table>>"C">>"E";      // I recommend you search value by this way.
 
 	if ( lua::VarType<lua::Nil>(var) )
 	{

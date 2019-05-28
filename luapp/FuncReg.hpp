@@ -46,7 +46,11 @@ class FuncReg
 		void add(std::string name, CFunction func)
 		{
 			#ifdef _LUAPP_CHECK_CAREFUL_
-			if ( func ==NULL )
+			#ifdef _LUAPP_CPP11_
+			if ( func == nullptr )
+			#else
+			if ( func == NULL )
+			#endif
 			{
 				lua::Log<<"error:never enter null pointer to lua::FuncReg"<<lua::End;
 				return;

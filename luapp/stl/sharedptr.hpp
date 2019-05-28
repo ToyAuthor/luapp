@@ -87,7 +87,7 @@ class shared_ptr
 		}
 
 		#ifdef _LUAPP_CPP11_
-		// I recommand you include real std::shared_ptr.
+		// I recommend you include real std::shared_ptr.
 		void operator = (std::nullptr_t)
 		{
 			releaseRef();
