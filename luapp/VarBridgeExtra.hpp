@@ -21,9 +21,9 @@ class _ClassZone
 
 		static int destructor(lua::NativeState L)
 		{
-			T* obj = static_cast<T*>(lua::CheckUserData(L, -1, lua::CreateUserType<T>()));
+			T** obj = static_cast<T**>(lua::CheckUserData(L, -1, lua::CreateBindingCoreName<T>()));
 
-			obj->~T();
+			delete (*obj);
 
 			return 0;
 		}
@@ -283,16 +283,24 @@ inline void PushVarToLua(lua::NativeState L,lua::Object<C> t)
 template<typename C>
 inline void CheckVarFromLua(lua::NativeState hLua,lua::Object<C> *obj, int i)
 {
-	                           // ... [var] ...
-	lua::_PushCoreKey(hLua);   // ... [var] ... [key]
-	lua::GetTable(hLua, i);    // ... [var] ... [UD]
+	                               // ... [var] ...
+	lua::_PushCoreKey(hLua);       // ... [var] ... [key]
+
+	if (i<0)
+	{
+		lua::GetTable(hLua, i-1);  // ... [var] ... [UD]
+	}
+	else
+	{
+		lua::GetTable(hLua, i);    // ... [var] ... [UD]
+	}
 
 	lua::Str    name = lua::CreateBindingCoreName<C>();
 
 	C** ptr = static_cast<C**>(lua::CheckUserData(hLua, -1, name));
 	obj->ptr = *ptr;
 
-	lua::Pop(hLua, 1);         // ... [var] ...
+	lua::Pop(hLua, 1);             // ... [var] ...
 }
 
 //------------------------------------------------------------------------------
