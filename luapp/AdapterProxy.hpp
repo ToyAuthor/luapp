@@ -61,7 +61,7 @@ struct Proxy00<C,void> : public Proxy<C>
 	int Do(lua::Handle,C *obj)
 	{
 		(obj->*func)();
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -99,7 +99,7 @@ struct Proxy01<C,void,A1> : public Proxy<C>
 		A1      p1;
 		lua::CheckVarFromLua(L,&p1,2);
 		(obj->*func)(p1);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -143,7 +143,7 @@ struct Proxy02<C,void,A1,A2> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p1,2);
 		lua::CheckVarFromLua(L,&p2,3);
 		(obj->*func)(p1,p2);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -191,7 +191,7 @@ struct Proxy03<C,void,A1,A2,A3> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p2,3);
 		lua::CheckVarFromLua(L,&p3,4);
 		(obj->*func)(p1,p2,p3);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -243,7 +243,7 @@ struct Proxy04<C,void,A1,A2,A3,A4> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p3,4);
 		lua::CheckVarFromLua(L,&p4,5);
 		(obj->*func)(p1,p2,p3,p4);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -299,7 +299,7 @@ struct Proxy05<C,void,A1,A2,A3,A4,A5> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p4,5);
 		lua::CheckVarFromLua(L,&p5,6);
 		(obj->*func)(p1,p2,p3,p4,p5);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -359,7 +359,7 @@ struct Proxy06<C,void,A1,A2,A3,A4,A5,A6> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p5,6);
 		lua::CheckVarFromLua(L,&p6,7);
 		(obj->*func)(p1,p2,p3,p4,p5,p6);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -423,7 +423,7 @@ struct Proxy07<C,void,A1,A2,A3,A4,A5,A6,A7> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p6,7);
 		lua::CheckVarFromLua(L,&p7,8);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -491,7 +491,7 @@ struct Proxy08<C,void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p7,8);
 		lua::CheckVarFromLua(L,&p8,9);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7,p8);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -563,7 +563,7 @@ struct Proxy09<C,void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy<C>
 		lua::CheckVarFromLua(L,&p8,9);
 		lua::CheckVarFromLua(L,&p9,10);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7,p8,p9);
-		return (int)1;
+		return (int)0;
 	}
 };
 

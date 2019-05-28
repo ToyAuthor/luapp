@@ -67,7 +67,7 @@ struct Proxy00<void> : public Proxy
 	int Do(lua::Handle)
 	{
 		func00();
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -107,7 +107,7 @@ struct Proxy01<void,A1> : public Proxy
 		A1      p1;
 		lua::CheckVarFromLua(L,&p1,1);
 		func01(p1);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -151,7 +151,7 @@ struct Proxy02<void,A1,A2> : public Proxy
 		lua::CheckVarFromLua(L,&p1,1);
 		lua::CheckVarFromLua(L,&p2,2);
 		func02(p1,p2);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -199,7 +199,7 @@ struct Proxy03<void,A1,A2,A3> : public Proxy
 		lua::CheckVarFromLua(L,&p2,2);
 		lua::CheckVarFromLua(L,&p3,3);
 		func03(p1,p2,p3);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -251,7 +251,7 @@ struct Proxy04<void,A1,A2,A3,A4> : public Proxy
 		lua::CheckVarFromLua(L,&p3,3);
 		lua::CheckVarFromLua(L,&p4,4);
 		func04(p1,p2,p3,p4);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -307,7 +307,7 @@ struct Proxy05<void,A1,A2,A3,A4,A5> : public Proxy
 		lua::CheckVarFromLua(L,&p4,4);
 		lua::CheckVarFromLua(L,&p5,5);
 		func05(p1,p2,p3,p4,p5);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -367,7 +367,7 @@ struct Proxy06<void,A1,A2,A3,A4,A5,A6> : public Proxy
 		lua::CheckVarFromLua(L,&p5,5);
 		lua::CheckVarFromLua(L,&p6,6);
 		func06(p1,p2,p3,p4,p5,p6);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -431,7 +431,7 @@ struct Proxy07<void,A1,A2,A3,A4,A5,A6,A7> : public Proxy
 		lua::CheckVarFromLua(L,&p6,6);
 		lua::CheckVarFromLua(L,&p7,7);
 		func07(p1,p2,p3,p4,p5,p6,p7);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -499,7 +499,7 @@ struct Proxy08<void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy
 		lua::CheckVarFromLua(L,&p7,7);
 		lua::CheckVarFromLua(L,&p8,8);
 		func08(p1,p2,p3,p4,p5,p6,p7,p8);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -571,7 +571,7 @@ struct Proxy09<void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy
 		lua::CheckVarFromLua(L,&p8,8);
 		lua::CheckVarFromLua(L,&p9,9);
 		func09(p1,p2,p3,p4,p5,p6,p7,p8,p9);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -672,7 +672,7 @@ struct ProxyBind00<C,void> : public Proxy
 	int Do(lua::Handle)
 	{
 		(obj->*func)();
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -714,7 +714,7 @@ struct ProxyBind01<C,void,A1> : public Proxy
 		A1      p1;
 		lua::CheckVarFromLua(L,&p1,1);
 		(obj->*func)(p1);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -760,7 +760,7 @@ struct ProxyBind02<C,void,A1,A2> : public Proxy
 		lua::CheckVarFromLua(L,&p1,1);
 		lua::CheckVarFromLua(L,&p2,2);
 		(obj->*func)(p1,p2);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -810,7 +810,7 @@ struct ProxyBind03<C,void,A1,A2,A3> : public Proxy
 		lua::CheckVarFromLua(L,&p2,2);
 		lua::CheckVarFromLua(L,&p3,3);
 		(obj->*func)(p1,p2,p3);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -864,7 +864,7 @@ struct ProxyBind04<C,void,A1,A2,A3,A4> : public Proxy
 		lua::CheckVarFromLua(L,&p3,3);
 		lua::CheckVarFromLua(L,&p4,4);
 		(obj->*func)(p1,p2,p3,p4);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -922,7 +922,7 @@ struct ProxyBind05<C,void,A1,A2,A3,A4,A5> : public Proxy
 		lua::CheckVarFromLua(L,&p4,4);
 		lua::CheckVarFromLua(L,&p5,5);
 		(obj->*func)(p1,p2,p3,p4,p5);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -984,7 +984,7 @@ struct ProxyBind06<C,void,A1,A2,A3,A4,A5,A6> : public Proxy
 		lua::CheckVarFromLua(L,&p5,5);
 		lua::CheckVarFromLua(L,&p6,6);
 		(obj->*func)(p1,p2,p3,p4,p5,p6);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1050,7 +1050,7 @@ struct ProxyBind07<C,void,A1,A2,A3,A4,A5,A6,A7> : public Proxy
 		lua::CheckVarFromLua(L,&p6,6);
 		lua::CheckVarFromLua(L,&p7,7);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1120,7 +1120,7 @@ struct ProxyBind08<C,void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy
 		lua::CheckVarFromLua(L,&p7,7);
 		lua::CheckVarFromLua(L,&p8,8);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7,p8);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1194,7 +1194,7 @@ struct ProxyBind09<C,void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy
 		lua::CheckVarFromLua(L,&p8,8);
 		lua::CheckVarFromLua(L,&p9,9);
 		(obj->*func)(p1,p2,p3,p4,p5,p6,p7,p8,p9);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1293,7 +1293,7 @@ struct ProxyFunctor00<void> : public Proxy
 	int Do(lua::Handle)
 	{
 		func00();
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1333,7 +1333,7 @@ struct ProxyFunctor01<void,A1> : public Proxy
 		A1      p1;
 		lua::CheckVarFromLua(L,&p1,1);
 		func01(p1);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1377,7 +1377,7 @@ struct ProxyFunctor02<void,A1,A2> : public Proxy
 		lua::CheckVarFromLua(L,&p1,1);
 		lua::CheckVarFromLua(L,&p2,2);
 		func02(p1,p2);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1425,7 +1425,7 @@ struct ProxyFunctor03<void,A1,A2,A3> : public Proxy
 		lua::CheckVarFromLua(L,&p2,2);
 		lua::CheckVarFromLua(L,&p3,3);
 		func03(p1,p2,p3);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1477,7 +1477,7 @@ struct ProxyFunctor04<void,A1,A2,A3,A4> : public Proxy
 		lua::CheckVarFromLua(L,&p3,3);
 		lua::CheckVarFromLua(L,&p4,4);
 		func04(p1,p2,p3,p4);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1533,7 +1533,7 @@ struct ProxyFunctor05<void,A1,A2,A3,A4,A5> : public Proxy
 		lua::CheckVarFromLua(L,&p4,4);
 		lua::CheckVarFromLua(L,&p5,5);
 		func05(p1,p2,p3,p4,p5);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1593,7 +1593,7 @@ struct ProxyFunctor06<void,A1,A2,A3,A4,A5,A6> : public Proxy
 		lua::CheckVarFromLua(L,&p5,5);
 		lua::CheckVarFromLua(L,&p6,6);
 		func06(p1,p2,p3,p4,p5,p6);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1657,7 +1657,7 @@ struct ProxyFunctor07<void,A1,A2,A3,A4,A5,A6,A7> : public Proxy
 		lua::CheckVarFromLua(L,&p6,6);
 		lua::CheckVarFromLua(L,&p7,7);
 		func07(p1,p2,p3,p4,p5,p6,p7);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1725,7 +1725,7 @@ struct ProxyFunctor08<void,A1,A2,A3,A4,A5,A6,A7,A8> : public Proxy
 		lua::CheckVarFromLua(L,&p7,7);
 		lua::CheckVarFromLua(L,&p8,8);
 		func08(p1,p2,p3,p4,p5,p6,p7,p8);
-		return (int)1;
+		return (int)0;
 	}
 };
 
@@ -1797,7 +1797,7 @@ struct ProxyFunctor09<void,A1,A2,A3,A4,A5,A6,A7,A8,A9> : public Proxy
 		lua::CheckVarFromLua(L,&p8,8);
 		lua::CheckVarFromLua(L,&p9,9);
 		func09(p1,p2,p3,p4,p5,p6,p7,p8,p9);
-		return (int)1;
+		return (int)0;
 	}
 };
 
