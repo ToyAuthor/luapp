@@ -29,7 +29,7 @@ inline lua::Str CreateBindingCoreName()
 template<typename T>
 inline lua::Str CreateBindingMethodName()
 {
-	return lua::_CreateUserTypeName<T>("_luapp_ud_obj_mt_");
+	return lua::_CreateUserTypeName<T>("_luapp_ud_member_");
 }
 
 }//namespace lua

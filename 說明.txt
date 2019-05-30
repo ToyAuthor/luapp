@@ -28,14 +28,6 @@ luapp 主要的功能有這些:
 
 
 該注意的陷阱:
-    .lua 無法得知 C++ 物件的真實記憶體大小
-        在 lua 這邊建立的 C++ 物件是由 table 加上 user data 模擬的
-        雖然在 user data 被清除的時候會去釋放 C++ 物件
-        但是對 lua 而言這 user data 只佔了一個指標的記憶體空間
-        所以 lua 的垃圾回收機制無法查覺到廢棄 C++ 物件已經佔用太多空間
-        你可以等 lua 自己的周期性清理工作來處理
-        或者自己定期執行 collectgarbage("collect") 來解決這個隱憂
-
     .lua 裡的 C++ 物件禁止修改 index 0
         C++ 物件在 lua 裡是以 table 模擬而成的存在
         這個 table 的 index 0 是禁用的

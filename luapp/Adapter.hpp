@@ -252,8 +252,8 @@ class Adapter
 		// As destructor.
 		static int gc_obj(lua::NativeState L)
 		{
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
-			delete (*obj);
+			C* obj = static_cast<C*>(lua::CheckUserData(L, -1, _classNameUD));
+			obj->~C();
 
 			return 0;
 		}
@@ -264,8 +264,8 @@ class Adapter
 		{
 			lua::NewTable(L);                                  // ... [T]
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
-			*a = new C;
+			C* a = (C*)lua::NewUserData(L, sizeof(C));         // ... [T] [key] [UD]
+			new (a) C();
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -313,8 +313,8 @@ class Adapter
 
 			//-----------New a object and setup destructor-----------
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
-			*a = new C;
+			C* a = (C*)lua::NewUserData(L, sizeof(C));         // ... [T] [key] [UD]
+			new (a) C();
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -338,9 +338,9 @@ class Adapter
 
 			//-----------New a object and setup destructor-----------
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
+			C* a = (C*)lua::NewUserData(L, sizeof(C));         // ... [T] [key] [UD]
 
-			*a = new C(arg1);
+			new (a) C(arg1);
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -366,9 +366,9 @@ class Adapter
 
 			//-----------New a object and setup destructor-----------
 			lua::_PushCoreKey(L);                              // ... [T] [key]
-			C** a = (C**)lua::NewUserData(L, sizeof(C*));      // ... [T] [key] [UD]
+			C* a = (C*)lua::NewUserData(L, sizeof(C));         // ... [T] [key] [UD]
 
-			*a = new C(arg1,arg2);
+			new (a) C(arg1,arg2);
 			lua::GetMetaTable(L, _classNameUD);                // ... [T] [key] [UD] [MT]
 			lua::SetMetaTable(L, -2);                          // ... [T] [key] [UD]
 			lua::SetTable(L, -3);                              // ... [T]
@@ -382,13 +382,13 @@ class Adapter
 			int id = lua::CheckInteger(L, lua::UpValueIndex(1));
 			lua::_PushCoreKey(L);                                   // [this] [arg1] [arg2] ... [argN] [key]
 			lua::GetTable(L, 1);                                    // [this] [arg1] [arg2] ... [argN] [UD]
-			C** obj = static_cast<C**>(lua::CheckUserData(L, -1, _classNameUD));
+			C* obj = static_cast<C*>(lua::CheckUserData(L, -1, _classNameUD));
 			lua::Pop(L, 1);                                         // [this] [arg1] [arg2] ... [argN]
 
 			#ifdef _LUAPP_KEEP_LOCAL_LUA_VARIABLE_
-			return	(Adapter<C,N>::_listProxy[id])->Do(Adapter<C,N>::_lua,*obj);
+			return	(Adapter<C,N>::_listProxy[id])->Do(Adapter<C,N>::_lua,obj);
 			#else
-			return	(Adapter<C,N>::_listProxy[id])->Do(L,*obj);
+			return	(Adapter<C,N>::_listProxy[id])->Do(L,obj);
 			#endif
 		}
 };
