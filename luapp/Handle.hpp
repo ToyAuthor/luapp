@@ -123,6 +123,9 @@ inline void PushVarToLua(lua::Handle h,lua::Object<T> t) { PushVarToLua(h->_lua,
 template<typename C>
 inline void CheckVarFromLua(Handle h,lua::Object<C> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
 
+template<typename T>
+inline void PushVarToLua(lua::Handle h,lua::Obj<T> t) { PushVarToLua(h->_lua,t); }
+
 template<typename C>
 inline void CheckVarFromLua(Handle h,lua::Obj<C> *t, int i) { CheckVarFromLua(h->_lua,t,i); }
 

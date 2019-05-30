@@ -49,11 +49,65 @@ class _ClassZone
 };
 
 template<typename T>
+class _ClassZone2
+{
+	public:
+
+		_ClassZone2(){}
+		~_ClassZone2(){}
+
+		static int destructor(lua::NativeState L)
+		{
+			T* obj = static_cast<T*>(lua::CheckUserData(L, -1, lua::CreateBindingCoreName<T>()));
+
+			obj->~T();
+
+			return 0;
+		}
+
+		static void registerType(lua::NativeState hLua,lua::Str &userType)
+		{
+			lua::GetMetaTable(hLua,userType);                                // ... [?]
+
+			if ( lua::TypeCast(hLua,-1)==LUA_TNIL )
+			{
+				lua::NewMetaTable(hLua, userType);                           // ... [nil] [T]
+
+				lua::PushString(hLua, "__gc");                               // ... [nil] [T] ["__gc"]
+				lua::PushFunction(hLua, &lua::_ClassZone2<T>::destructor);   // ... [nil] [T] ["__gc"] [F]
+				lua::SetTable(hLua, -3);                                     // ... [nil] [T]
+				lua::Pop(hLua,2);                                            // ...
+			}
+			else
+			{
+				lua::Pop(hLua,1);                                            // ...
+			}
+		}
+};
+
+template<typename T>
+inline void PushClassToLua(lua::NativeState hLua,const T &t)
+{
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
+
+	lua::_ClassZone2<T>::registerType(hLua,userType);
+
+	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
+
+	new (ptr) T();
+
+	*ptr = t;
+
+	lua::GetMetaTable(hLua, userType);                               // ... [UD] [MT]
+	lua::SetMetaTable(hLua, -2);                                     // ... [UD]
+}
+
+template<typename T>
 inline void PushClassToLua(lua::NativeState hLua)
 {
-	lua::Str   userType = lua::CreateUserType<T>();
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
-	lua::_ClassZone<T>::registerType(hLua,userType);
+	lua::_ClassZone2<T>::registerType(hLua,userType);
 
 	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
 
@@ -66,9 +120,9 @@ inline void PushClassToLua(lua::NativeState hLua)
 template<typename T,typename A1>
 inline void PushClassToLua(lua::NativeState hLua,A1 a1)
 {
-	lua::Str   userType = lua::CreateUserType<T>();
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
-	lua::_ClassZone<T>::registerType(hLua,userType);
+	lua::_ClassZone2<T>::registerType(hLua,userType);
 
 	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
 
@@ -81,9 +135,9 @@ inline void PushClassToLua(lua::NativeState hLua,A1 a1)
 template<typename T,typename A1,typename A2>
 inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2)
 {
-	lua::Str   userType = lua::CreateUserType<T>();
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
-	lua::_ClassZone<T>::registerType(hLua,userType);
+	lua::_ClassZone2<T>::registerType(hLua,userType);
 
 	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
 
@@ -96,9 +150,9 @@ inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2)
 template<typename T,typename A1,typename A2,typename A3>
 inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2,A3 a3)
 {
-	lua::Str   userType = lua::CreateUserType<T>();
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
-	lua::_ClassZone<T>::registerType(hLua,userType);
+	lua::_ClassZone2<T>::registerType(hLua,userType);
 
 	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
 
@@ -111,9 +165,9 @@ inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2,A3 a3)
 template<typename T,typename A1,typename A2,typename A3,typename A4>
 inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2,A3 a3,A4 a4)
 {
-	lua::Str   userType = lua::CreateUserType<T>();
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
-	lua::_ClassZone<T>::registerType(hLua,userType);
+	lua::_ClassZone2<T>::registerType(hLua,userType);
 
 	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [UD]
 
@@ -127,7 +181,7 @@ inline void PushClassToLua(lua::NativeState hLua,A1 a1,A2 a2,A3 a3,A4 a4)
 template<typename T>
 inline void CheckClassFromLua(lua::NativeState hLua,T **t,int i)
 {
-	T*  obj = static_cast<T*>(lua::CheckUserData(hLua, i, lua::CreateUserType<T>()));
+	T*  obj = static_cast<T*>(lua::CheckUserData(hLua, i, lua::CreateBindingCoreName<T>()));
 	*t = obj;
 }
 
@@ -196,7 +250,7 @@ inline void CheckUserDataFromLua(lua::NativeState hLua,void *output,size_t size,
 
 //------------------------------------------------------------------------------
 
-// Type T must be able to copied by std::memcpy().
+// Type T must be able to copied by operator "=".
 template<typename T>
 class Type
 {
@@ -233,6 +287,12 @@ class Obj
 
 		T   *ptr;
 };
+
+template<typename T>
+inline void PushVarToLua(lua::NativeState hLua,lua::Obj<T> t)
+{
+	lua::PushClassToLua(hLua,*(t.ptr));
+}
 
 template<typename C>
 inline void CheckVarFromLua(lua::NativeState hLua,lua::Obj<C> *obj, int i)
