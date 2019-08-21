@@ -39,7 +39,8 @@ Lua 的字串有下面幾種寫法
 
 <div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">str</span><span class="sc10">=</span><span class="sc6">"It is a string"</span><span class="sc0">
 </span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">str</span><span class="sc10">=</span><span class="sc7">'It is a string'</span><span class="sc0">
-</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">str</span><span class="sc10">=</span><span class="sc8">[[It is a string]]</span></div>
+</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">str</span><span class="sc10">=</span><span class="sc8">[[It is a string]]</span>   <span class="sc2">-- 這是raw string</span>
+</div>
 
 
 
@@ -60,7 +61,19 @@ Lua 的字串有下面幾種寫法
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc8">[[
 image01
 image02
-image03]]</span><span class="sc10">)</span></div>
+image03]]</span><span class="sc10">)</span><span class="sc0">
+
+</span><span class="sc2">-- 兩邊可以安插一樣數量的等號，數量不限
+</span><span class="sc2">-- 所以字串裡面要寫什麼都沒問題
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc8">[===[
+image01
+image02
+image03]===]</span><span class="sc10">)</span></div>
+
+
+
+
+
 
 
 

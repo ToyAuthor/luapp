@@ -150,7 +150,8 @@ span {
 	color: #FF8000;
 }
 .sc5 {
-	color: #0000FF;/* key word */
+	/*font-weight: bold;*/
+	color: #0055FF;/* key word */
 }
 .sc6 {
 	color: #FF0000;/* 字串 */
@@ -166,12 +167,12 @@ span {
 }
 .sc10 {
 	/*font-weight: bold;*/
-	color: #000080;
+	color: #000080;/*運算元*/
 }
 .sc11 {
 }
 .sc13 {
-	color: #0080C0;/* 特定API */
+	color: #FF00FF;/* 特定API */
 }
 .sc16 {
 	color: #0000FF;/* key word */

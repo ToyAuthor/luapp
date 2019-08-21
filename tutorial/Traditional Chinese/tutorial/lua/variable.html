@@ -17,7 +17,7 @@ Lua 裡的變數跟數學上的變數在功能上差很多
 
 Lua 變數的特徵：
 	1. 一直都可以修改變數內容，直到變數被刪除為止
-	2. 除了數字還能裝另外<a href="#tag">7種變數內容</a>
+	2. 除了數字還能裝另外<a href="#tag">8種變數內容</a>
 	3. 變數何時被刪除要看你怎麼使用
 
 
@@ -32,16 +32,14 @@ Lua 對於變數何時被刪除有著兩套規則
 能使用區域變數的情況就不要使用全域變數
 
 
-<font class="title" id="vtag">區域變數</font>
+<font class="title" id="tag2">區域變數</font>
 先寫 local 再寫變數名稱就是區域變數了
 這裡使用 lua 內建的 print 函式來將一些變數內容給印出來
 
 <div class="code"><span class="sc5">local</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc4">10</span><span class="sc0">
 </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出10
 </span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc11">x</span><span class="sc10">+</span><span class="sc4">1</span><span class="sc0">
-</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出11
-</span><span class="sc11">x</span><span class="sc0"> </span><span class="sc10">=</span><span class="sc0"> </span><span class="sc5">nil</span><span class="sc0">   </span><span class="sc2">-- 刪除此變數
-</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出 nil</span></div>
+</span><span class="sc13">print</span><span class="sc10">(</span><span class="sc11">x</span><span class="sc10">)</span><span class="sc0">  </span><span class="sc2">-- 會印出11</span></div>
 
 
 
@@ -78,39 +76,36 @@ Lua 對於變數何時被刪除有著兩套規則
 	這個類型只擁有 true 跟 false 兩種值
 
 3. <a href="string.html" target="_self">字串</a>
-	用來讓變數可以儲存一段文字或一篇文章
+	用來讓變數可以儲存一段文字甚至一篇文章
 
-4. <a href="table.html" target="_self">table</a>
-	這是 Lua 唯一可以容納多個變數的類型
-	行為像個資料夾一樣可以裝很多變數以及其他資料夾
-	但是變數不是直接裝上整個資料夾
-	真正裝進來的是類似資料夾捷徑的東西
-	你用等號複製變數是無法複製整個資料夾的
-	就只會複製到捷徑
-	打開來都會是同一個地方
-
-5. user data
-	有時其他語言會把資料寄放在 Lua 這裡
-	這些代為保管的資料就以 user data 的身份暫存在 Lua 這裡
+4. user data
+	有時其他語言會把數據資料寄放在 Lua 這裡
+	這些代為保管的資料就以 user data 的身份儲存在 Lua 這裡
 	Lua 不懂如何使用這些資料
 	只能夠代為保管
+	(user data 的用法牽涉到C語言的使用，已超出本系列教學的範疇)
 
-7. <a href="function.html" target="_self">函式</a>
+5. <a href="function.html" target="_self">函式</a>
 	程式是由數據跟算式所組成的
 	上面的類型都是用來記錄數據
 	只有函式是用來記錄算式
 
-6. thread
+6. <a href="table.html" target="_self">table</a>
+	這是 Lua 唯一可以容納多個變數的類型
+	行為像個資料夾一樣可以裝很多變數以及其他資料夾
+	確切的講，table 比較像是個資料夾捷徑
+
+7. thread
 	這個並非真正的多執行緒
 	是 Lua 用純軟體實作出的多工效果
 
-8. nil
+8. <font id="tag3">nil</font>
 	此類型只有一個值
 	你可以把 nil 當作是一種標籤
 	代表著 none
 	想要刪除一個變數就替它貼上這標籤
 	讀取一個不存在的變數會讀到 nil
-	如同上面<a href="#vtag">區域變數那段</a>已經出現過的用法
+	如同上面<a href="#tag2">區域變數那段</a>已經出現過的用法
 
 
 

@@ -95,35 +95,6 @@ f(x) = x+1
 
 
 
-
-<font class="title">return 的用法</font>
-有回傳值的函式就一定會用到 return
-而且 return 一定要寫在函式的最下面
-這點跟其他程式語言不同
-
-<div class="code"><span class="sc2">-- 錯誤寫法
-</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">
-    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"reurn 1"</span><span class="sc10">)</span><span class="sc0">
-</span><span class="sc5">end</span><span class="sc0">
-
-</span><span class="sc2">-- 正確寫法
-</span><span class="sc5">local</span><span class="sc0"> </span><span class="sc5">function</span><span class="sc0"> </span><span class="sc11">foo</span><span class="sc10">()</span><span class="sc0">
-    </span><span class="sc13">print</span><span class="sc10">(</span><span class="sc6">"reurn 1"</span><span class="sc10">)</span><span class="sc0">
-    </span><span class="sc5">return</span><span class="sc0"> </span><span class="sc4">1</span><span class="sc0">        </span><span class="sc2">-- return 必須是最後一個動作才行
-</span><span class="sc5">end</span></div>
-
-
-
-
-
-
-
-
-
-
-
-
 <font class="title">建立函式的地點</font>
 等號的後面都可以寫函式
 函式本來就是變數能裝填的內容物之一
