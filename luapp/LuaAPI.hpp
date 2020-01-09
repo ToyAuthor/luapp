@@ -38,6 +38,11 @@ inline void DestroyHandle(NativeState h)
 	lua_close(h);
 }
 //------------------------------------------------------------------------------
+inline void Call(NativeState h,int args,int results)
+{
+	lua_call( h, args, results );
+}
+//------------------------------------------------------------------------------
 inline int PCall(NativeState h,int args,int results,int msg_handler)
 {
 	int  result = lua_pcall( h, args, results, msg_handler );
@@ -487,6 +492,11 @@ inline void SetTop(NativeState h,int num)
 inline int GetTop(NativeState h)
 {
 	return lua_gettop(h);
+}
+//------------------------------------------------------------------------------
+inline int RaiseError(NativeState h)
+{
+	return lua_error(h);
 }
 //------------------------------------------------------------------------------
 

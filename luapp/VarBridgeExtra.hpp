@@ -56,29 +56,6 @@ inline void _PushCoreKey(lua::NativeState L)
 }
 
 template<typename T>
-inline void PushClassToLua(lua::NativeState hLua,T *t)
-{
-	lua::Str   userType = lua::CreateBindingCoreName<T>();
-
-	lua::NewTable(hLua);                                             // ... [T]
-
-	lua::_PushCoreKey(hLua);                                         // ... [T] [key]
-
-	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [T] [key] [UD]
-
-	new (ptr) T();
-
-	*ptr = *t;
-	delete t;
-
-	lua::_ClassZone<T>::registerType(hLua,userType);
-
-	lua::GetMetaTable(hLua, userType);                               // ... [T] [key] [UD] [MT]
-	lua::SetMetaTable(hLua, -2);                                     // ... [T] [key] [UD]
-	lua::SetTable(hLua, -3);                                         // ... [T]
-}
-
-template<typename T>
 inline void PushClassToLua(lua::NativeState hLua)
 {
 	lua::Str   userType = lua::CreateBindingCoreName<T>();
@@ -296,22 +273,86 @@ class Obj
 {
 	public:
 
-		Obj(){}
 		~Obj(){}
 
-		T   *ptr;
+		Obj():_ptr((T*)0),_isComeFromLua(true)
+		{
+			;
+		}
+
+		Obj(T *pointerFromCppSide):_ptr(pointerFromCppSide),_isComeFromLua(false)
+		{
+			if ( _ptr==(T*)0 )
+			{
+				lua::Log<<"Error:the C++ object pull from lua can't push back to lua."<<lua::End;
+			}
+		}
+
+		T* ptr()
+		{
+			return _ptr;
+		}
+
+		T* operator ->()
+		{
+			return _ptr;
+		}
+
+		T& ref()
+		{
+			return *_ptr;
+		}
+
+		bool isComeFromLua()
+		{
+			return _isComeFromLua;
+		}
+
+	private:
+
+		T*     _ptr;
+		bool   _isComeFromLua;
+
+	public:
+
+		T** _getPointerAddress()
+		{
+			return &_ptr;
+		}
 };
 
 template<typename T>
 inline void PushVarToLua(lua::NativeState hLua,lua::Obj<T> t)
 {
-	lua::PushClassToLua(hLua,t.ptr);
+	if (t.isComeFromLua())
+	{
+		lua::Log<<"Error:the C++ object pull from lua can't push back to lua."<<lua::End;
+	}
+
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
+
+	lua::NewTable(hLua);                                             // ... [T]
+
+	lua::_PushCoreKey(hLua);                                         // ... [T] [key]
+
+	T*  ptr = static_cast<T*>(lua::NewUserData(hLua, sizeof(T)));    // ... [T] [key] [UD]
+
+	new (ptr) T();
+
+	*ptr = t.ref();
+	delete (t.ptr());
+
+	lua::_ClassZone<T>::registerType(hLua,userType);
+
+	lua::GetMetaTable(hLua, userType);                               // ... [T] [key] [UD] [MT]
+	lua::SetMetaTable(hLua, -2);                                     // ... [T] [key] [UD]
+	lua::SetTable(hLua, -3);                                         // ... [T]
 }
 
 template<typename C>
 inline void CheckVarFromLua(lua::NativeState hLua,lua::Obj<C> *obj, int i)
 {
-	lua::CheckClassFromLua(hLua,&(obj->ptr),i);
+	lua::CheckClassFromLua(hLua,obj->_getPointerAddress(),i);
 }
 
 //------------------------------------------------------------------------------

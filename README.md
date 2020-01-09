@@ -23,7 +23,7 @@ Item        | Description
 ------------|-------------
 **Author**  | Yan Xin Wu
 **License** | MIT
-**Version** | 2.2.0.x (using Semantic Versioning 2.0.0)
+**Version** | 2.3.0 (using Semantic Versioning 2.0.0)
 
 ### Example
 
