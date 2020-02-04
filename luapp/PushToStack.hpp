@@ -180,7 +180,7 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Var &t)
 	}
 	else if ( lua::VarType<lua::Nil>(t) )
 	{
-		lua_pushnil(hLua);
+		lua::PushNil(hLua);
 	}
 	else if ( lua::VarType<lua::Ptr>(t) )
 	{
@@ -197,12 +197,12 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Var &t)
 	          lua::VarType<lua::User>(t) )
 	{
 		lua::Log<<"error:ignore unsupported data type"<<lua::End;
-		lua_pushnil(hLua);
+		lua::PushNil(hLua);
 	}
 	else
 	{
 		lua::Log<<"error:you push unknown data type"<<lua::End;
-		lua_pushnil(hLua);
+		lua::PushNil(hLua);
 	}
 }
 //------------------------------------------------------------------------------

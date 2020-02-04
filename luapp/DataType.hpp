@@ -14,12 +14,6 @@ namespace lua{
 typedef bool            Bool;
 typedef lua_Number      Num;
 typedef lua_Integer     Int;
-/*
-typedef double          Num;
-typedef long long       Int;
-typedef long int        Int;
-typedef int             Int;
-*/
 typedef std::string     Str;
 typedef void*           Ptr;
 

@@ -280,14 +280,14 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 
 	int   type = lua::TypeCast(hLua, -1);
 
-	if ( type==LUA_TSTRING )
+	if ( type==lua::TypeID<lua::Str>() )
 	{
 		lua::Str   _value;
 		CheckVarFromLua(hLua,&_value,-1);
 		lua::Var   value(_value);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TTABLE )
+	else if ( type==lua::TypeID<lua::Table>() )
 	{
 		lua::Table   subTable;
 		_VisitTable(hLua,&subTable);
@@ -296,27 +296,27 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		(*table)[key] = value;
 	}
 	// Just in case.
-	else if ( type==LUA_TNIL )
+	else if ( type==lua::TypeID<lua::Nil>() )
 	{
 		// This element is not exist.
 	}
-	else if ( type==LUA_TNONE )
+	else if ( type==lua::_GetTypeNone() )
 	{
 		lua::Log<<"error:No one know what type is it"<<lua::End;
 	}
-	else if ( type==LUA_TLIGHTUSERDATA )
+	else if ( type==lua::_GetTypeLightUserData() )
 	{
 		lua::Ptr   value;
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TBOOLEAN )
+	else if ( type==lua::TypeID<lua::Bool>() )
 	{
 		lua::Bool   value;
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TFUNCTION )
+	else if ( type==lua::TypeID<lua::Func>() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::Func   value;
@@ -325,7 +325,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		value._set(hLua,item);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TUSERDATA )
+	else if ( type==lua::_GetTypeUserData() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::User   value;
@@ -334,7 +334,7 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		value._set(hLua,item);
 		(*table)[key] = value;
 	}
-	else if ( type==LUA_TTHREAD )
+	else if ( type==lua::_GetTypeThread() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::Task   value;
@@ -343,13 +343,13 @@ inline void _SaveTableValue(lua::Handle hLua,lua::Table *table,T key)
 		value._set(hLua,item);
 		(*table)[key] = value;
 	}
-	else if ( lua_isinteger(hLua->_lua, -1) )
+	else if ( type==lua::TypeID<lua::Int>() )
 	{
 		lua::Int   value;
 		CheckVarFromLua(hLua,&value,-1);
 		(*table)[key] = value;
 	}
-	else if ( lua_isnumber(hLua->_lua, -1) )
+	else if ( type==lua::TypeID<lua::Num>() )
 	{
 		lua::Num   value;
 		CheckVarFromLua(hLua,&value,-1);
@@ -367,35 +367,35 @@ inline void _SwitchTableKey(lua::Handle hLua,lua::Table *table)
 {
 	                                       // ... [T] [key] [value] [key]
 
-	if ( lua::TypeCast(hLua, -1)==LUA_TSTRING )
+	if ( lua::TypeCast(hLua, -1)==lua::_GetTypeString() )
 	{
 		lua::Str   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
-		_SaveTableValue(hLua,table,key);
+		lua::_SaveTableValue(hLua,table,key);
 	}
 	#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
-	else if ( lua::TypeCast(hLua, -1)==LUA_TBOOLEAN )
+	else if ( lua::TypeCast(hLua, -1)==lua::_GetTypeBool() )
 	{
 		lua::Bool  key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
-		_SaveTableValue(hLua,table,key);
+		lua::_SaveTableValue(hLua,table,key);
 	}
 	#endif
-	else if ( lua_isinteger(hLua->_lua, -1) )
+	else if ( lua::IsTypeInteger(hLua->_lua, -1) )
 	{
 		lua::Int   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
-		_SaveTableValue(hLua,table,key);
+		lua::_SaveTableValue(hLua,table,key);
 	}
-	else if ( lua_isnumber(hLua->_lua, -1) )
+	else if ( lua::IsTypeNumber(hLua->_lua, -1) )
 	{
 		lua::Num   key;
 		lua::CheckVarFromLua(hLua,&key,-1);
 		lua::Pop(hLua, 1);                 // ... [T] [key] [value]
-		_SaveTableValue(hLua,table,key);
+		lua::_SaveTableValue(hLua,table,key);
 	}
 	else// Just in case.
 	{
@@ -410,7 +410,7 @@ inline void _VisitTable(lua::Handle hLua,lua::Table *table)
 	                                    // ... [T]
 	lua::PushNil(hLua);                 // ... [T] [nil]
 
-	while ( lua_next(hLua->_lua, -2) != 0 )
+	while ( lua::_VisitTableNext(hLua->_lua, -2) )
 	{
 		                                // ... [T] [key] [value]
 		/*
@@ -437,39 +437,39 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 {
 	int   type = lua::TypeCast(hLua, i);
 
-	if ( type==LUA_TSTRING )
+	if ( type==lua::_GetTypeString() )
 	{
 		lua::Str   var;
 		CheckVarFromLua(hLua,&var,i);
 		*t = var;
 	}
-	else if ( type==LUA_TBOOLEAN )
+	else if ( type==lua::_GetTypeBool() )
 	{
 		lua::Bool   var;
 		CheckVarFromLua(hLua,&var,i);
 		*t = var;
 	}
-	else if ( type==LUA_TNIL )
+	else if ( type==lua::_GetTypeNil() )
 	{
 		*t = lua::Var();
 	}
-	else if ( type==LUA_TNONE )
+	else if ( type==lua::_GetTypeNone() )
 	{
 		lua::Log<<"error:No one know what type is it. That's new"<<lua::End;
 	}
-	else if ( type==LUA_TLIGHTUSERDATA )
+	else if ( type==lua::_GetTypeLightUserData() )
 	{
 		lua::Ptr   var;
 		CheckVarFromLua(hLua,&var,i);
 		*t = var;
 	}
-	else if ( type==LUA_TTABLE )
+	else if ( type==lua::_GetTypeTable() )
 	{
 		lua::Table   table;
 		CheckVarFromLua(hLua,&table,i);
 		*t = table;
 	}
-	else if ( type==LUA_TFUNCTION )
+	else if ( type==lua::_GetTypeFunc() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::Func   func;
@@ -479,7 +479,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 
 		*t = func;
 	}
-	else if ( type==LUA_TUSERDATA )
+	else if ( type==lua::_GetTypeUserData() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::User   func;
@@ -489,7 +489,7 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 
 		*t = func;
 	}
-	else if ( type==LUA_TTHREAD )
+	else if ( type==lua::_GetTypeThread() )
 	{
 		lua::PushValue(hLua,-1);
 		lua::Task   func;
@@ -499,13 +499,13 @@ inline void CheckVarFromLua(lua::Handle hLua,lua::Var *t,int i)
 
 		*t = func;
 	}
-	else if ( lua_isinteger(hLua->_lua, i) )
+	else if ( lua::IsTypeInteger(hLua->_lua, i) )
 	{
 		lua::Int   var;
 		CheckVarFromLua(hLua,&var,i);
 		*t = var;
 	}
-	else if ( lua_isnumber(hLua->_lua, i) )
+	else if ( lua::IsTypeNumber(hLua->_lua, i) )
 	{
 		lua::Num   var;
 		CheckVarFromLua(hLua,&var,i);
@@ -540,7 +540,7 @@ lua::_Map_Address& lua::_Map_Address::operator >> (const T key)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(this->_lua,-1)!=LUA_TTABLE )
+	if ( lua::TypeCast(this->_lua,-1)!=lua::_GetTypeTable() )
 	{
 		lua::Pop(this->_lua,1);        // ...
 		lua::PushNil(this->_lua);      // ... [nil]
@@ -651,7 +651,7 @@ inline lua::Nil Map::_Value::operator = (lua::Nil value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -671,7 +671,7 @@ inline lua::Str Map::_Value::operator = (lua::Str value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -691,7 +691,7 @@ inline lua::Int Map::_Value::operator = (lua::Int value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -711,7 +711,7 @@ inline lua::Num Map::_Value::operator = (lua::Num value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -731,7 +731,7 @@ inline lua::Ptr Map::_Value::operator = (lua::Ptr value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -751,7 +751,7 @@ inline lua::Var Map::_Value::operator = (lua::Var value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -771,7 +771,7 @@ inline lua::Map Map::_Value::operator = (lua::Map value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -791,7 +791,7 @@ inline lua::Bool Map::_Value::operator = (lua::Bool value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -811,7 +811,7 @@ inline lua::Func Map::_Value::operator = (lua::Func value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -831,7 +831,7 @@ inline lua::Task Map::_Value::operator = (lua::Task value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -851,7 +851,7 @@ inline lua::User Map::_Value::operator = (lua::User value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -871,7 +871,7 @@ inline lua::Table Map::_Value::operator = (lua::Table value)
 {
 	// ... [?]
 
-	if ( lua::TypeCast(_map->_lua, -1)==LUA_TNIL )
+	if ( lua::TypeCast(_map->_lua, -1)==lua::_GetTypeNil() )
 	{
 		return value;
 	}
@@ -938,12 +938,12 @@ struct _LuaTypeFilte<lua::Int>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TNUMBER )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeNumber() )
 		{
 			                                    // ... [Num]
 			lua::PushValue(handle,-1);          // ... [Num] [Num]
 
-			if ( lua_isinteger(handle->_lua, -1) )
+			if ( lua::IsTypeInteger(handle->_lua, -1) )
 			{
 				lua::Pop(handle,2);             // ...
 				return 1;
@@ -963,12 +963,12 @@ struct _LuaTypeFilte<lua::Num>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TNUMBER )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeNumber() )
 		{
 			                                    // ... [Num]
 			lua::PushValue(handle,-1);          // ... [Num] [Num]
 
-			if ( lua_isnumber(handle->_lua, -1) )
+			if ( lua::IsTypeNumber(handle->_lua, -1) )
 			{
 				lua::Pop(handle,2);             // ...
 				return 1;
@@ -988,7 +988,7 @@ struct _LuaTypeFilte<lua::Bool>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TBOOLEAN )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeBool() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1005,7 +1005,7 @@ struct _LuaTypeFilte<lua::Str>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TSTRING )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeString() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1022,7 +1022,7 @@ struct _LuaTypeFilte<lua::Nil>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TNIL )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeNil() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1039,7 +1039,7 @@ struct _LuaTypeFilte<lua::Ptr>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TLIGHTUSERDATA )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeLightUserData() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1056,7 +1056,7 @@ struct _LuaTypeFilte<lua::Table>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TTABLE )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeTable() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1073,7 +1073,7 @@ struct _LuaTypeFilte<lua::Func>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TFUNCTION )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeFunc() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1090,7 +1090,7 @@ struct _LuaTypeFilte<lua::Task>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TTHREAD )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeThread() )
 		{
 			lua::Pop(handle,1);
 			return 1;
@@ -1107,7 +1107,7 @@ struct _LuaTypeFilte<lua::User>
 	{
 		item->getVar();    // ... [?]
 
-		if ( lua::TypeCast(handle,-1)==LUA_TUSERDATA )
+		if ( lua::TypeCast(handle,-1)==lua::_GetTypeUserData() )
 		{
 			lua::Pop(handle,1);
 			return 1;

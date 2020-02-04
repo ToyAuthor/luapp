@@ -31,7 +31,7 @@ class _ClassZone
 		{
 			lua::GetMetaTable(hLua,userType);                                // ... [?]
 
-			if ( lua::TypeCast(hLua,-1)==LUA_TNIL )
+			if ( lua::IsType<lua::Nil>(hLua,-1) )
 			{
 				lua::NewMetaTable(hLua, userType);                           // ... [nil] [T]
 
@@ -186,7 +186,7 @@ inline void PushStructToLua(lua::NativeState hLua,const T &t)
 
 	lua::GetMetaTable(hLua,userType);                              // ... [?]
 
-	if ( lua::TypeCast(hLua,-1)==LUA_TNIL )
+	if ( lua::IsType<lua::Nil>(hLua,-1) )
 	{
 		lua::NewMetaTable(hLua, userType);                         // ... [nil] [T]
 		lua::Pop(hLua,2);                                          // ...
@@ -215,7 +215,7 @@ inline void PushUserDataToLua(lua::NativeState hLua,void *input,size_t size,lua:
 {
 	lua::GetMetaTable(hLua,userType);            // ... [?]
 
-	if ( lua::TypeCast(hLua,-1)==LUA_TNIL )
+	if ( lua::IsType<lua::Nil>(hLua,-1) )
 	{
 		lua::NewMetaTable(hLua, userType);       // ... [nil] [T]
 		lua::Pop(hLua,2);                        // ...

@@ -518,6 +518,22 @@ inline T VarCast(const lua::Var &var)
 	return *(reinterpret_cast<T*>(const_cast<lua::Var&>(var).getPtr()));
 }
 
+template<typename T>
+inline T* VarPtr(lua::Var *var)
+{
+	if ( ! lua::VarType<T>(*var) )
+	{
+		lua::Log<<"error: see luapp/Var.hpp"<<lua::End;
+		#ifdef _LUAPP_CPP11_
+		return nullptr;
+		#else
+		return NULL;
+		#endif
+	}
+
+	return reinterpret_cast<T*>(var->getPtr());
+}
+
 //-----------------------------------------------------
 
 }//namespace lua

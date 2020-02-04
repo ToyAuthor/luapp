@@ -140,7 +140,7 @@ class Register
 
 			lua::PushNil(_lua);                        // ... [data] [list] [nil]
 
-			while ( lua_next(_lua, -2) != 0 )
+			while ( lua::_VisitTableNext(_lua, -2) )
 			{
 				                                       // ... [data] [list] [key] [value]
 				id = lua::CheckInteger(_lua,-2);

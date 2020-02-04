@@ -125,7 +125,7 @@ inline void CheckVarFromLua(Handle h,lua::Obj<C> *t, int i) { CheckVarFromLua(h-
 
 #else
 
-typedef lua_State* Handle;
+typedef NativeState Handle;
 
 #endif
 
