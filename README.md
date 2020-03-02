@@ -21,9 +21,9 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 ### Information
 Item        | Description
 ------------|-------------
-**Author**  | Yan Xin Wu
+**Author**  | Yan-Xin Wu
 **License** | MIT
-**Version** | 2.4.0 (using Semantic Versioning 2.0.0)
+**Version** | 2.4.0.x (using Semantic Versioning 2.0.0)
 
 ### Example
 
