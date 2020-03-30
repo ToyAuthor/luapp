@@ -379,10 +379,10 @@ class Table
 
 			if ( it == _mapInt.end() )
 			{
-				return true;
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 
 		bool isExist(lua::Num key)
@@ -391,10 +391,10 @@ class Table
 
 			if ( it == _mapNum.end() )
 			{
-				return true;
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 
 		bool isExist(lua::Str key)
@@ -403,10 +403,10 @@ class Table
 
 			if ( it == _mapStr.end() )
 			{
-				return true;
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 
 		#ifdef _LUAPP_ENABLE_BOOLEAN_INDEX_OF_TABLE_
@@ -416,10 +416,10 @@ class Table
 
 			if ( it == _mapBool.end() )
 			{
-				return true;
+				return false;
 			}
 
-			return false;
+			return true;
 		}
 		#endif
 
