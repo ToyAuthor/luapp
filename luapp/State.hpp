@@ -195,6 +195,7 @@ class State
 
 		/**
 		 * Let lua script could use given member function.
+		 * Don't use "__index" as member name.
 		 * Don't use it without bindClass/bindClassEx/bindClass(n)ArgEx.
 		 */
 		template<typename F>

@@ -16,14 +16,14 @@ It's a useful tool for lua. To help you use lua in C++ style and work better wit
 
 ### Requirements
 - CMake 2.8+
-- Lua 5.3+
+- Lua 5.4+
 
 ### Information
 Item        | Description
 ------------|-------------
 **Author**  | Yan-Xin Wu
 **License** | MIT
-**Version** | 2.4.1 (using Semantic Versioning 2.0.0)
+**Version** | 2.4.1.x (using Semantic Versioning 2.0.0)
 
 ### Example
 
