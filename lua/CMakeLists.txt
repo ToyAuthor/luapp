@@ -1,6 +1,9 @@
 
 project(lua)
 
+# Allow Unicode identifiers
+add_definitions(-DLUA_UCID)
+
 if(WIN32)
 	add_definitions(-DLUA_BUILD_AS_DLL)
 endif()

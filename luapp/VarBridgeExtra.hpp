@@ -329,9 +329,18 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Obj<T> t)
 		lua::Log<<"Error:the C++ object pull from lua can't push back to lua."<<lua::End;
 	}
 
-	lua::Str   userType = lua::CreateBindingCoreName<T>();
-
 	lua::NewTable(hLua);                                             // ... [T]
+
+	lua::GetMetaTable(hLua, lua::CreateBindingMethodName<T>());      // ... [T] [?]
+
+	if ( lua::IsType<lua::Nil>(hLua,-1) )
+	{
+		lua::Pop(hLua,1);
+	}
+	else
+	{
+		lua::SetMetaTable(hLua, -2);
+	}
 
 	lua::_PushCoreKey(hLua);                                         // ... [T] [key]
 
@@ -341,6 +350,8 @@ inline void PushVarToLua(lua::NativeState hLua,lua::Obj<T> t)
 
 	*ptr = t.ref();
 	delete (t.ptr());
+
+	lua::Str   userType = lua::CreateBindingCoreName<T>();
 
 	lua::_ClassZone<T>::registerType(hLua,userType);
 
