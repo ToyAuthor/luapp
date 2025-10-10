@@ -3,7 +3,7 @@ project(LoadScriptFromBuffer)
 
 if(MINGW)
 #	add_definitions(-O2 -g -Wall -Wextra -Werror -std=c++11)
-	add_definitions(-O2 -g -Wall -Wextra -Werror)
+	add_definitions(-O2 -g -Wall -Wextra -Werror -Wno-sizeof-pointer-div)
 elseif(UNIX)
 #	add_definitions(-O2 -g -Wall -Wextra -Werror -std=c++11)
 	add_definitions(-O2 -g -Wall -Wextra -Werror)
