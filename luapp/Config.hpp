@@ -3,13 +3,13 @@
 #define LUAPP_VERSION_MAJOR "2"
 #define LUAPP_VERSION_MINOR "5"
 #define LUAPP_VERSION_PATCH "0"
-#define LUAPP_AUTHOR "Yan-Xin Wu"
+#define LUAPP_AUTHOR "Wu Yan-Xin"
 
 
 #include "luapp/Environment.hpp"
 
 // if ( version >= C++11 )
-#if (__cplusplus > 201100L) || defined(TOY_VC_2013) || defined(TOY_VC_2015) || defined(TOY_VC_2017)
+#if (__cplusplus > 201100L) || defined(TOY_VC_2013) || defined(TOY_VC_2015) || defined(TOY_VC_2017) || defined(TOY_VC_2022)
 	#define _LUAPP_CPP11_
 #endif
 

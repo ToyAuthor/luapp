@@ -4,8 +4,9 @@
  * @author    ToyAuthor
  * @copyright Public Domain
  * <pre>
- * https://github.com/ToyAuthor/ToyBox
  * https://bitbucket.org/ToyAuthor/toybox
+ * https://github.com/ToyAuthor/ToyBox
+ * https://gitlab.com/ToyAuthor/ToyBox
  * </pre>
  */
 
@@ -143,23 +144,27 @@
 
 #if defined(TOY_MSVC)
 
-	#if (_MSC_VER == 1910)
+	#if (_MSC_VER >= 1930)
+		#define TOY_VC_2022
+	#elif (_MSC_VER >= 1920)
+		#define TOY_VC_2019
+	#elif (_MSC_VER >= 1910)
 		#define TOY_VC_2017
-	#elif (_MSC_VER == 1900)
+	#elif (_MSC_VER >= 1900)
 		#define TOY_VC_2015
-	#elif (_MSC_VER == 1800)
+	#elif (_MSC_VER >= 1800)
 		#define TOY_VC_2013
-	#elif (_MSC_VER == 1700)
+	#elif (_MSC_VER >= 1700)
 		#define TOY_VC_2012
-	#elif (_MSC_VER == 1600)
+	#elif (_MSC_VER >= 1600)
 		#define TOY_VC_2010
-	#elif (_MSC_VER == 1500)
+	#elif (_MSC_VER >= 1500)
 		#define TOY_VC_2008
-	#elif (_MSC_VER == 1400)
+	#elif (_MSC_VER >= 1400)
 		#define TOY_VC_2005
-	#elif (_MSC_VER == 1310)
+	#elif (_MSC_VER >= 1310)
 		#define TOY_VC_2003
-	#elif (_MSC_VER == 1200)
+	#elif (_MSC_VER >= 1200)
 		#define TOY_VC_6
 	#elif (_MSC_VER <  1200)
 		#error "Too old"

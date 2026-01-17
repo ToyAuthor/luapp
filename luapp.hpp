@@ -1,7 +1,7 @@
 /**
  * @file   luapp.hpp
  * @brief  Using lua in C++ style.
- * @author Wu Yan Xin
+ * @author Wu Yan-Xin
  *
  * https://toyauthor.github.io/luapp
  * https://github.com/ToyAuthor/luapp
